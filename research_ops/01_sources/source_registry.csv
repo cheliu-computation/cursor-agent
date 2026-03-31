@@ -1,0 +1,46 @@
+source_id,source_name,source_type,layer,role,priority,signal_notes,noise_notes,license_notes,base_url_or_pattern,bulkability,parseability,redownloadable_default,notes
+SRC001,MICCAI proceedings,conference,A,domain_core,P1,Imaging ML flagship,venue-only noise without filters,Copyright by publisher; use official open lists where provided,https://www.miccai.org/,low,metadata_high,varies,Prefer official metadata/API over scraping
+SRC002,MIDL conference,conference,A,domain_core,P1,Medical imaging deep learning,Overlaps with MICCAI,Open access proceedings often CC-BY,https://midl.io/,medium,metadata_high,true,Good OA full-text availability
+SRC003,IPMI proceedings,conference,A,domain_core,P2,Foundational imaging math/ML,Older corpus,Publisher-dependent,https://ipmi-society.org/,low,metadata_medium,varies,
+SRC004,ISBI proceedings,conference,A,domain_core,P1,Broad biomedical imaging,Mixed clinical depth,IEEE Xplore terms,https://ieee-isbi.org/,low,metadata_medium,varies,
+SRC005,Medical Image Analysis journal,journal,A,domain_core,P1,High-signal methods,Not all OA,Elsevier/user license,https://www.journals.elsevier.com/medical-image-analysis,low,metadata_high,false,Use DOI metadata; PDF often paywalled
+SRC006,IEEE TMI,journal,A,domain_core,P1,Core imaging methods venue,Volume high,IEEE terms,https://ieee-tmi.org/,low,metadata_high,false,
+SRC007,Radiology,journal,A,clinical_imaging,P1,Clinical translation signal,Not ML-first,RSNA subscription,https://pubs.rsna.org/journal/radiology,low,metadata_high,false,
+SRC008,Radiology Artificial Intelligence,journal,A,clinical_imaging,P1,Clinical AI imaging,Young venue,RSNA terms,https://pubs.rsna.org/journal/ai,low,metadata_high,false,
+SRC009,NeurIPS proceedings,conference,B,method_frontier,P1,Top ML methods,Clinical relevance variable,PMLR / OpenReview subsets OA,https://neurips.cc/,medium,metadata_high,true,Use OpenReview + DBLP for structure
+SRC010,ICML proceedings,conference,B,method_frontier,P1,ML theory and systems,Medical subset needs filtering,PMLR OA proceedings,https://icml.cc/,medium,metadata_high,true,
+SRC011,ICLR proceedings,conference,B,method_frontier,P1,Representation and agents,Noisy rapid releases,OpenReview OA,https://iclr.cc/,high,metadata_high,true,
+SRC012,CVPR proceedings,conference,B,method_frontier,P1,Vision transfer source,Huge volume,CVF open access,https://cvpr.thecvf.com/,high,metadata_high,true,
+SRC013,ICCV proceedings,conference,B,method_frontier,P2,3D and video transfer,Volume,CVF OA,https://iccv2023.thecvf.com/,high,metadata_high,true,
+SRC014,ECCV proceedings,conference,B,method_frontier,P2,European vision,Volume,Springer/CVF mix,https://eccv.ecva.net/,medium,metadata_high,varies,
+SRC015,Nature,journal,C,high_impact_science,P1,Problem framing,Access friction,Subscription; some OA articles,https://www.nature.com/,low,metadata_high,false,
+SRC016,Science,journal,C,high_impact_science,P1,Broad breakthrough signal,Access friction,AAAS terms,https://www.science.org/journal/science,low,metadata_high,false,
+SRC017,Cell,journal,C,high_impact_science,P2,Biomedical mechanism,Access friction,Elsevier terms,https://www.cell.com/cell/,low,metadata_high,false,
+SRC018,Nature Medicine,journal,C,clinical_translational,P1,Clinical translation norms,Access friction,SpringerNature,https://www.nature.com/nm/,low,metadata_high,false,
+SRC019,Nature Biomedical Engineering,journal,C,clinical_translational,P2,Engineering medicine,Access friction,SpringerNature,https://www.nature.com/natbiomedeng/,low,metadata_high,false,
+SRC020,npj Digital Medicine,journal,C,clinical_translational,P1,Digital health OA focus,Hype risk,Nature partner OA CC,https://www.nature.com/npjdigitalmed/,low,metadata_high,true,
+SRC021,JAMA,journal,C,clinical_high_impact,P1,Clinical evidence standards,Access friction,AMA terms,https://jamanetwork.com/journals/jama,low,metadata_high,false,
+SRC022,NEJM,journal,C,clinical_high_impact,P1,Trial and practice impact,Access friction,NEJM terms,https://www.nejm.org/,low,metadata_high,false,
+SRC023,Lancet Digital Health,journal,C,clinical_high_impact,P1,Digital health trials,Access friction,Elsevier,https://www.thelancet.com/digital-health,low,metadata_high,false,
+SRC024,Grand Challenge,platform,D,tasks_data,P1,Benchmark hub,Stale challenges,Platform ToS,https://grand-challenge.org/,medium,api_medium,true,Use official API for challenges/datasets
+SRC025,TCIA,repository,D,imaging_data,P1,DICOM collections,Curation variance,TCIA data usage policy,https://www.cancerimagingarchive.net/,medium,metadata_high,true,De-identified research use
+SRC026,PhysioNet,repository,D,multimodal_clinical,P1,Signals and clinical data,Credentialing for some sets,PhysioNet Credentialed Access rules,https://physionet.org/,high,metadata_high,true,Respect credentialing for restricted data
+SRC027,ClinicalTrials.gov,registry,D,trials,P1,Trial metadata API,Not full results,US gov public data,https://clinicaltrials.gov/,high,xml_json_high,true,Bulk XML available
+SRC028,OpenAlex,graph_api,D,bibliographic_graph,P0,Open scholarly graph,Coverage gaps,CC0 data,https://openalex.org/,high,json_high,true,Primary work ID spine
+SRC029,arXiv,preprint,F,frontier_fast,P1,Rapid method papers,Unreviewed,arXiv nonexclusive license,https://arxiv.org/,high,xml_high,true,Use arXiv API; respect robots
+SRC030,OpenReview,platform,F,peer_review_artifacts,P1,ICLR etc reviews,Forum noise,OpenReview ToS,https://openreview.net/,medium,json_medium,true,
+SRC031,bioRxiv,preprint,F,biology_preprints,P2,Biology methods,Unreviewed,bioRxiv license,https://www.biorxiv.org/,medium,xml_medium,true,
+SRC032,medRxiv,preprint,F,medicine_preprints,P2,Clinical preprints,Unreviewed,medRxiv license,https://www.medrxiv.org/,medium,xml_medium,true,
+SRC033,Europe PMC,repository,G,literature_fulltext,P0,OA full text bulk,Not all articles OA,Europe PMC terms,https://europepmc.org/,high,xml_high,true,REST + OA subset
+SRC034,PMC Open Access Subset,dump,G,oa_fulltext,P0,Bulk OA XML,FTP size,License varies per article in PMC-OA,https://www.ncbi.nlm.nih.gov/pmc/tools/ftp/,high,xml_high,true,Check per-article license fields
+SRC035,PubMed / NCBI E-utilities,api,G,metadata,P0,Bibliographic backbone,Rate limits,NCBI policies,https://www.ncbi.nlm.nih.gov/books/NBK25501/,high,xml_high,true,Respect API key and rate limits
+SRC036,PubTator Central,api,G,text_mined_annotations,P1,Entity annotations,Model errors,NCBI,https://www.ncbi.nlm.nih.gov/research/pubtator/,medium,bioc_json,true,Great for entity linking
+SRC037,SemMedDB,database,G,predicate_graph,P2,Semantic predications,Noise in predicates,UMLS terms apply,https://lhncbc.nlm.nih.gov/semmeddb/,medium,sql_dump,true,Requires UMLS compliance
+SRC038,GitHub,code_host,E,repro,P2,Code and issues,Repo drift,Repo licenses vary,https://github.com/,high,api_json,true,Mine issues for repro blockers
+SRC039,Hugging Face Hub,model_host,E,artifacts,P2,Models and datasets cards,Version churn,Dataset/model cards,https://huggingface.co/,high,json_high,true,
+SRC040,Zenodo,repository,E,datasets_supplements,P2,Supplements and data,Metadata quality mixed,CC and open licenses common,https://zenodo.org/,high,json_high,true,
+SRC041,Papers with Code,aggregator,E,leaderboards,P2,Benchmark mapping,Coverage bias,Site ToS,https://paperswithcode.com/,medium,json_medium,true,
+SRC042,Crossref,api,D,doi_metadata,P1,DOI resolution metadata,Requires polite use,Crossref terms,https://api.crossref.org/,high,json_high,true,
+SRC043,Semantic Scholar,api,D,citations_graph,P2,Citations and TLDRs,API limits,S2 terms,https://www.semanticscholar.org/product/api,medium,json_high,true,
+SRC044,WHO ICTRP (via partners),registry,D,global_trials,P2,International trial aggregation,Access varies,Partner-specific,https://trialsearch.who.int/,low,html_medium,varies,Use as cross-check to CT.gov
+SRC045,Google Dataset Search (discovery),search,D,dataset_discovery,P3,Find dataset landing pages,Not authoritative,N/A,https://datasetsearch.research.google.com/,low,html_low,true,Use only as pointer to primary

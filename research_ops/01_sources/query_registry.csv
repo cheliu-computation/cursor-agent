@@ -1,0 +1,11 @@
+query_id,family,tags,template,example_use,notes
+Q001,task_family,"segmentation,lesion,detection",(medical OR clinical) AND (segmentation OR detection) AND (CT OR MRI OR ultrasound),seed domain-core harvest,
+Q002,modality_family,"MRI,CT,pathology,multimodal",(multimodal OR foundation model) AND (radiology OR pathology) AND (medical imaging),cross-modal transfer,
+Q003,method_family,"ssl,foundation,uncertainty",(self-supervised OR foundation model) AND (medical image analysis OR radiology),method migration,
+Q004,clinical_family,"trials,workflow,reader_study",(reader study OR multi-reader) AND (AI OR deep learning) AND (diagnostic accuracy),clinical evidence patterns,
+Q005,frontier_family,"agent,RAG",(agent OR multi-agent OR tool use) AND (biomedical OR clinical OR medicine),frontier radar,
+Q006,frontier_family,discovery,(AI scientist OR scientific discovery) AND (LLM OR agent),discovery agents,
+Q007,frontier_family,self_improve,(self-improving OR self-evolving OR skill acquisition) AND agent,self-evolution mining,
+Q008,case_family,rare_disease,(case report) AND (rare disease OR orphan disease) AND (LLM OR retrieval OR diagnosis),case lake seed,
+Q009,safety_family,AE_mining,(adverse event OR side effect) AND (case report OR pharmacovigilance) AND (NLP OR LLM),specialized mining,
+Q010,data_family,datasets,(benchmark OR dataset) AND (medical imaging) AND (public OR open),dataset discovery,

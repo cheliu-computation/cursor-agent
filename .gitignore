@@ -1,0 +1,7 @@
+# Raw download cache — do not commit bulk artifacts
+research_ops/cache/**/*
+!research_ops/cache/**/.gitkeep
+
+# Parsed temp blobs (if any large binaries land here)
+research_ops/parsed/**/*.bin
+research_ops/parsed/**/*.pdf
