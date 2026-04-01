@@ -1,1 +1,3 @@
 queue_id,manifest_id_or_url,failure_type,attempt_count,last_attempt_utc,next_action,notes
+RQ-TEMPLATE-01,,download,0,,retry_with_backoff,T099 template row — replace with real manifest_id on failure
+RQ-TEMPLATE-02,,parse,0,,retry_after_parser_fix,T099 template row
