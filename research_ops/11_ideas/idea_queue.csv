@@ -1,1 +1,6 @@
 idea_id,title,hypothesis_summary,priority,risk_notes,notes
+I001,Clinical inbox co-pilot,H001: triage + guideline-aware drafts,P1,safety+liability,Pair with AH001 checks
+I002,Rare case retrieval service,H002: embedding index over case lake,P1,label noise,Needs curator loop
+I003,Challenge revival benchmark,H003: publish refreshed leaderboard,P2,data shift,Use GC+papers_master methods
+I004,Trial matcher MVP,H004: structured criteria + notes NLP,P1,regulatory,Start with CT.gov API only
+I005,Oncology packet generator,H005: multimodal summarization,P1,hallucination,Human-in-loop required

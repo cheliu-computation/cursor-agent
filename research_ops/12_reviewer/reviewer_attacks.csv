@@ -1,1 +1,6 @@
 attack_id,idea_id,attack_vector,mitigation_hint,notes
+A001,I001,Autonomous diagnosis creep vs decision support,Hard scope boundary + logging + human sign-off,AH001
+A002,I002,Selection bias in OA case corpus,Stratify by journal + geography + report PRISMA flow,
+A003,I003,Apples-to-oranges metrics across years,Document metric + test set version per row in benchmark_tables,
+A004,I004,Wrong trial arms due to NLP errors,Confidence thresholds + human review queue,
+A005,I005,Missing contraindications in summaries,Structured checklist + secondary clinician review,

@@ -59,15 +59,15 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ## 2. DOING
 
-- [ ] T020 Harvest MIDL metadata
+- [ ] T140 Full-text benchmark extraction for Swin UNETR (W4312428231) from CVF / IEEE page
   - Status: DOING
-  - Priority: P1
-  - Workstream: Domain Core
-  - Parent: ROOT
-  - Title: Harvest MIDL metadata
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 MIDL metadata 入库
-  - Why It Matters: 医疗 ML 方法主线入口
+  - Priority: P2
+  - Workstream: Benchmark Forensics
+  - Parent: T054
+  - Title: Replace abstract placeholder BT006 with numeric Dice rows
+  - Deliverable: 更新 `benchmark_tables.csv`
+  - Done When: Decathlon + BTCV tasks have per-task metrics
+  - Why It Matters: Repair — abstract only cites leaderboards
 
 ## 3. READY / TODO
 
@@ -77,839 +77,489 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ### P1 Agentic / Frontier follow-ups
 
-- [ ] T111 Link `agent_systems.csv` rows to future `papers_master.csv` entries with shared `paper_id`
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Agentic Systems
-  - Parent: T016
-  - Title: Unify IDs between registries
-  - Deliverable: 更新两表或链接表
-  - Done When: 每个 agent_system 能解析到 bibliographic 主键
-  - Why It Matters: Link — 避免孤立的 OpenAlex 引用
-
-- [ ] T112 Normalize `frontier_papers.csv` venue and type fields via OpenAlex API enrichment pass
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Frontier Radar
-  - Parent: T014
-  - Title: Enrich frontier paper metadata
-  - Deliverable: 更新 CSV
-  - Done When: venue 列非空或显式 `preprint`
-  - Why It Matters: Validate — 支持按 venue 过滤噪声
-
-- [ ] T117 Document `paper_trial_links` relation_type vocabulary
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T037
-  - Title: Add controlled vocabulary to `DECISIONS.md`
-  - Deliverable: `DECISIONS.md` subsection
-  - Done When: 至少 5 个 relation_type 值有定义与示例
-  - Why It Matters: Deepen — 避免链接语义漂移
-
-- [ ] T118 Create `guideline_registry.csv` stub for guideline IDs
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T038
-  - Title: Normalize guideline references
-  - Deliverable: `research_ops/19_linking/guideline_registry.csv` (headers only)
-  - Done When: guideline_id 可映射到组织、版本、URL
-  - Why It Matters: Link — paper–guideline 可维护
-
-- [ ] T119 Seed `paper_trial_links` from OpenAlex → ClinicalTrials.gov abstract mentions (pilot 50 rows)
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T037
-  - Title: Pilot automated trial linking
-  - Deliverable: 更新 `paper_trial_links.csv`
-  - Done When: 50 条可人工 spot-check 的链接
-  - Why It Matters: Exploit — 验证链接管线
-
-### P1 Domain-Core Harvest
-
-- [ ] T120 Filter `papers_master` seed rows to MICCAI-proceedings only (venue / conference series match)
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Domain Core
-  - Parent: T019
-  - Title: Remove OpenAlex search noise from MICCAI harvest
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 非 MICCAI 论文已移除或标记 `notes=noise`
-  - Why It Matters: Validate — 搜索词会混入非会议论文
-
-- [ ] T121 Deduplicate `papers_master` against `frontier_papers` by `openalex_id`
+- [ ] T123 Add `venue_type` column to `papers_master.csv` (conference_proceedings | journal | preprint | repository)
   - Status: TODO
   - Priority: P1
   - Workstream: Paper Master
   - Parent: T019
-  - Title: Single paper spine across tables
-  - Deliverable: 去重后的 papers_master 或链接说明
-  - Done When: 同一 OpenAlex ID 只保留一行主记录
-  - Why It Matters: Link — 防止多表分裂
+  - Title: Disambiguate LNCS volumes vs journal articles
+  - Deliverable: schema + backfill for existing rows
+  - Done When: MICCAI/MIDL 行可程序过滤
+  - Why It Matters: Deepen — 支撑 T046 合并与 venue 分析
 
-- [ ] T122 Ingest official MICCAI open bibliography (if available) into `source_batches/`
+- [ ] T124 Backfill `authors` field via OpenAlex for all `papers_master` rows
   - Status: TODO
   - Priority: P1
   - Workstream: Domain Core
   - Parent: T019
-  - Title: Replace search-based seed with curator-grade list
-  - Deliverable: manifest + batch note
-  - Done When: provenance 指向官方来源而非仅 OpenAlex search
-  - Why It Matters: Deepen — 会议论文应用官方元数据
+  - Title: Author strings from API `authorships`
+  - Deliverable: 更新 `papers_master.csv`
+  - Done When: 非空 authors 或显式 `unknown`
+  - Why It Matters: Exploit — 检索与去重更稳
 
-- [ ] T021 Harvest IPMI / ISBI metadata
+- [ ] T125 Harvest remaining MIDL works (OpenAlex ~96 for source S4306519517)
   - Status: TODO
   - Priority: P1
   - Workstream: Domain Core
-  - Parent: ROOT
-  - Title: Harvest IPMI and ISBI metadata
+  - Parent: T020
+  - Title: Paginate OpenAlex `cursor=*` for full MIDL coverage
   - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批历史和方法脉络论文入库
-  - Why It Matters: 补足领域时间轴
+  - Done When: 全部 MIDL 论文入库或记录 API 缺口
+  - Why It Matters: Exploit — 单源完整覆盖
 
-- [ ] T022 Harvest MedIA metadata
+- [ ] T126 Paginate full IPMI + ISBI corpora from OpenAlex (sources S4306418889, S4306420100)
   - Status: TODO
   - Priority: P1
   - Workstream: Domain Core
-  - Parent: ROOT
-  - Title: Harvest MedIA metadata
+  - Parent: T021
+  - Title: Complete IPMI/ISBI harvest beyond first-page seeds
   - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 MedIA 元数据入库
-  - Why It Matters: 核心期刊高信号来源
+  - Done When: counts match OpenAlex `meta.count` or gap documented
+  - Why It Matters: Exploit — 与 T125 同类完整覆盖
 
-- [ ] T023 Harvest TMI metadata
+- [ ] T127 Paginate MedIA + TMI full corpora (sources S116571295, S58069681; thousands of works)
   - Status: TODO
   - Priority: P1
   - Workstream: Domain Core
-  - Parent: ROOT
-  - Title: Harvest TMI metadata
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 TMI 元数据入库
-  - Why It Matters: 核心期刊高信号来源
+  - Parent: T022
+  - Title: Beyond 25-paper seeds for core journals
+  - Deliverable: 更新 `papers_master.csv` + RUN_LOG note on API cost
+  - Done When: documented sampling strategy or full ingest complete
+  - Why It Matters: Exploit — 期刊主线需要可扩展抓取策略
 
-- [ ] T024 Harvest Radiology / Radiology: AI metadata
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Domain Core
-  - Parent: ROOT
-  - Title: Harvest Radiology and Radiology: AI metadata
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批临床影像 AI 元数据入库
-  - Why It Matters: 连接方法与临床转化
-
-### P1 General Method Frontier Harvest
-
-- [ ] T025 Harvest NeurIPS candidates
+- [ ] T128 Expand NeurIPS harvest beyond title-keyword gate (use OpenAlex abstract_inverted_index or concepts)
   - Status: TODO
   - Priority: P1
   - Workstream: Method Frontier
-  - Parent: ROOT
-  - Title: Harvest NeurIPS candidate papers relevant to vision, multimodal, representation, agent, robustness
-  - Deliverable: `papers_master.csv` + `transfer_candidates.csv`
-  - Done When: 一批可迁移 NeurIPS 候选入库
-  - Why It Matters: 方法迁移主来源
-
-- [ ] T026 Harvest ICML candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Method Frontier
-  - Parent: ROOT
-  - Title: Harvest ICML candidate papers relevant to transferable methods
+  - Parent: T025
+  - Title: Recover NeurIPS papers where imaging terms only appear in abstract
   - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 ICML 候选入库
-  - Why It Matters: 泛化方法线索
+  - Done When: 抽样 20 篇人工核对召回改进
+  - Why It Matters: Repair — 当前 T025 偏保守
 
-- [ ] T027 Harvest ICLR candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Method Frontier
-  - Parent: ROOT
-  - Title: Harvest ICLR candidate papers relevant to pretraining, foundation, representation, agents
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 ICLR 候选入库
-  - Why It Matters: foundation / representation / agent 关键来源
-
-- [ ] T028 Harvest CVPR candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Method Frontier
-  - Parent: ROOT
-  - Title: Harvest CVPR candidate papers relevant to medical imaging transfer
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 CVPR 候选入库
-  - Why It Matters: 视觉方法迁移入口
-
-- [ ] T029 Harvest ICCV / ECCV candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Method Frontier
-  - Parent: ROOT
-  - Title: Harvest ICCV and ECCV candidate papers for 3D/video/segmentation/VLM transfer
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批 ICCV/ECCV 候选入库
-  - Why It Matters: 3D / 视频 / VLM 迁移价值高
-
-- [ ] T030 Build first `transfer_candidates.csv`
+- [ ] T129 Spot-check `transfer_candidates.csv` rows TC0001–TC0030 against paper titles
   - Status: TODO
   - Priority: P1
   - Workstream: Transfer
-  - Parent: T025
-  - Title: Build transfer candidate table
-  - Deliverable: `research_ops/10_transfer/transfer_candidates.csv`
-  - Done When: 至少列出 30 个迁移机会
-  - Why It Matters: 把方法前沿压缩成可执行清单
+  - Parent: T030
+  - Title: Validate auto-generated transfer hypotheses
+  - Deliverable: `RUN_LOG.md` 核对笔记
+  - Done When: 每条标记 valid / weak / drop
+  - Why It Matters: Validate — 防止伪迁移条目
+
+- [ ] T130 Add optional `openalex_source_id` column to `papers_master.csv` for harvest reproducibility
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Paper Master
+  - Parent: T019
+  - Title: Record OpenAlex `primary_location.source.id` used for venue-scoped harvests
+  - Deliverable: schema + backfill for venue-sourced rows
+  - Done When: MIDL/MICCAI/MedIA 等批次可重放
+  - Why It Matters: Deepen — provenance beyond free-text notes
+
+- [ ] T131 Expand ICLR recall using OpenAlex `concepts` or abstract fields (parallel to T128)
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Method Frontier
+  - Parent: T027
+  - Title: Reduce title-gate false negatives for ICLR biomedical transfer
+  - Deliverable: 更新 `papers_master.csv` + RUN_LOG 抽样
+  - Done When: 10 篇新增经人工或启发式验证
+  - Why It Matters: Repair — T027 与 T026/T025 同型局限
+
+- [ ] T132 Improve ECCV medical harvest (venue metadata sparse in OpenAlex)
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Method Frontier
+  - Parent: T029
+  - Title: Use proceedings DOI lists or OpenAlex `host_organization` filters to recover ECCV medical papers
+  - Deliverable: 更新 `papers_master.csv` + DECISIONS note on method
+  - Done When: ≥10 ECCV rows with verified venue string
+  - Why It Matters: Repair — T029 ECCV 仅 1 条来自通用 source
+
+### P1 Domain-Core Harvest
+
+### P1 General Method Frontier Harvest
 
 ### P1 Clinical / High-Impact Signal Harvest
 
-- [ ] T031 Harvest Nature / Science / Cell candidates
+- [ ] T133 Replace T034 title heuristics with abstract-based extraction for T033-linked papers
   - Status: TODO
   - Priority: P1
   - Workstream: Clinical Signal
-  - Parent: ROOT
-  - Title: Harvest high-impact science candidates relevant to biomedical AI and computational medicine
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 高影响科学层候选入库
-  - Why It Matters: 获取真正重要的问题定义
-
-- [ ] T032 Harvest Nature Medicine / NBE / npj / Communications Medicine candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Clinical Signal
-  - Parent: ROOT
-  - Title: Harvest translational and digital medicine candidates
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批临床转化候选入库
-  - Why It Matters: 获取 workflow 和证据模式
-
-- [ ] T033 Harvest JAMA / JAMA Network Open / NEJM / Lancet Digital Health candidates
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Clinical Signal
-  - Parent: ROOT
-  - Title: Harvest clinical high-impact candidates
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 一批高影响临床候选入库
-  - Why It Matters: 提炼 endpoint 和真实临床需求
-
-- [ ] T034 Extract endpoints and evidence patterns
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Clinical Signal
-  - Parent: T031
-  - Title: Extract endpoints, validation patterns, workflow constraints, reader studies, multicenter signals
-  - Deliverable: `clinical_signal.csv`, `endpoint_registry.csv`, `evidence_patterns.csv`
-  - Done When: 形成一版临床证据模式库
-  - Why It Matters: 避免做 benchmark 漂亮但临床价值弱的题
+  - Parent: T034
+  - Title: Pull OpenAlex inverted abstracts to refine endpoint_hint and evidence_pattern
+  - Deliverable: 更新 `clinical_signal.csv`
+  - Done When: 至少 10 行从 title 推断升级为 abstract 支撑
+  - Why It Matters: Repair — 当前 T034 为快速占位
 
 ### P1 Biomedical Literature Lake
 
 ### P1 Data / Challenge / Trial Map
 
-- [ ] T039 Harvest Grand Challenge metadata
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Data Ecosystem
-  - Parent: ROOT
-  - Title: Harvest Grand Challenge metadata
-  - Deliverable: `challenges_master.csv`
-  - Done When: 一批 challenge 元数据入库
-  - Why It Matters: active / ended / stale 任务地图
-
-- [ ] T040 Split challenges into active / ended / stale
+- [ ] T134 Paginate full Grand Challenge catalog (242+ challenges) into `challenges_master.csv`
   - Status: TODO
   - Priority: P1
   - Workstream: Data Ecosystem
   - Parent: T039
-  - Title: Separate challenge states
+  - Title: Complete GC API crawl with `next` cursor
+  - Deliverable: 更新 CSV + manifest row optional
+  - Done When: `count` matches API `count` field
+  - Why It Matters: Exploit — T039 仅首批 50 条
+
+- [ ] T135 Add `stale` lifecycle_bucket using `modified` vs `end_date` heuristics
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Data Ecosystem
+  - Parent: T040
+  - Title: Distinguish ended vs stale challenges
   - Deliverable: 更新 `challenges_master.csv`
-  - Done When: 所有 challenge 状态分类明确
-  - Why It Matters: 支持墓地与复活分析
+  - Done When: 规则写入 `DECISIONS.md`
+  - Why It Matters: Deepen — 支撑墓地分析
 
-- [ ] T041 Harvest TCIA collections
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Data Ecosystem
-  - Parent: ROOT
-  - Title: Harvest TCIA collections relevant to medical imaging AI
-  - Deliverable: `datasets_master.csv`
-  - Done When: 一批 TCIA metadata 入库
-  - Why It Matters: 医学影像公开数据关键入口
-
-- [ ] T042 Harvest PhysioNet datasets
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Data Ecosystem
-  - Parent: ROOT
-  - Title: Harvest PhysioNet datasets relevant to imaging, multimodal medicine, and clinical AI
-  - Deliverable: 更新 `datasets_master.csv`
-  - Done When: 一批 PhysioNet dataset metadata 入库
-  - Why It Matters: 多模态和临床数据入口
-
-- [ ] T043 Harvest ClinicalTrials.gov entries
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Data Ecosystem
-  - Parent: ROOT
-  - Title: Harvest ClinicalTrials.gov entries relevant to AI, imaging, diagnostics, workflow, decision support
-  - Deliverable: trial metadata / linking tables
-  - Done When: 一批 trial metadata 可检索
-  - Why It Matters: 从真实临床研究需求反推机会
-
-- [ ] T044 Build first `datasets_master.csv`
+- [ ] T136 Append remaining TCIA collections (153 total) with modality from per-collection metadata API
   - Status: TODO
   - Priority: P1
   - Workstream: Data Ecosystem
   - Parent: T041
-  - Title: Build datasets master table
-  - Deliverable: `research_ops/03_datasets/datasets_master.csv`
-  - Done When: 包含 modality、task、label granularity、license、access friction 等字段
-  - Why It Matters: 数据地图比泛读 paper 更值钱
+  - Title: Full TCIA coverage beyond 40-name seed
+  - Deliverable: 更新 `datasets_master.csv`
+  - Done When: 每集合一行或记录 API 限制
+  - Why It Matters: Exploit — 数据湖底盘
 
-- [ ] T045 Build first `challenges_master.csv`
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Data Ecosystem
-  - Parent: T039
-  - Title: Build challenges master table
-  - Deliverable: `research_ops/04_challenges/challenges_master.csv`
-  - Done When: 可按 task/status/metric/dataset 检索
-  - Why It Matters: 支持 benchmark 与墓地分析
-
-### P1 Paper Master Assembly
-
-- [ ] T046 Merge all harvested papers into first `papers_master.csv`
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Paper Master
-  - Parent: ROOT
-  - Title: Build unified paper master
-  - Deliverable: `research_ops/02_papers/papers_master.csv`
-  - Done When: 形成统一 paper 主表
-  - Why It Matters: 所有 linking 与分析依赖它
-
-- [ ] T047 Normalize task / modality / anatomy / disease tags
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Paper Master
-  - Parent: T046
-  - Title: Normalize domain tags
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: 同义标签初步统一
-  - Why It Matters: 支持横向分析
-
-- [ ] T048 Normalize method tags
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Paper Master
-  - Parent: T046
-  - Title: Normalize method tags
-  - Deliverable: 更新 `papers_master.csv`
-  - Done When: foundation / multimodal / agent / SSL / uncertainty 标签统一
-  - Why It Matters: 支持趋势统计与迁移搜索
-
-- [ ] T049 Link papers to datasets and challenges
+- [ ] T138 Merge `paper_challenge_links` OpenAlex IDs into `papers_master.csv` (dedupe spine)
   - Status: TODO
   - Priority: P1
   - Workstream: Linking
-  - Parent: T046
-  - Title: Link papers to datasets / challenges where possible
-  - Deliverable: 更新 paper 表和 linking 表
-  - Done When: 至少一批论文已连接数据和 challenge
-  - Why It Matters: 防止论文脱离可执行资源
+  - Parent: T049
+  - Title: Ingest challenge publication works into master table
+  - Deliverable: 更新 `papers_master.csv`
+  - Done When: 每个 `paper_challenge_links.paper_id` 在 master 中存在
+  - Why It Matters: Link — 单一论文主键
 
-### P2 Benchmark / Repro / Failure
-
-- [ ] T050 Select top 50 high-value papers for audit
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Repro Audit
-  - Parent: T046
-  - Title: Select 50 papers for deeper audit
-  - Deliverable: 审计对象清单
-  - Done When: 高价值审计列表完成
-  - Why It Matters: 节约精读成本
-
-- [ ] T051 Build `repo_registry.csv`
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Repro Audit
-  - Parent: T050
-  - Title: Register high-value repos
-  - Deliverable: `research_ops/06_repro/repo_registry.csv`
-  - Done When: 高价值论文相关 repo 已登记
-  - Why It Matters: 复现入口
-
-- [ ] T052 Mine GitHub issues for reproducibility blockers
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Repro Audit
-  - Parent: T051
-  - Title: Mine issue-level blockers
-  - Deliverable: `research_ops/06_repro/issue_mining.csv`
-  - Done When: 一批复现阻塞点已提取
-  - Why It Matters: 失败点常藏在 issue 里
-
-- [ ] T053 Build first `repro_audit.csv`
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Repro Audit
-  - Parent: T052
-  - Title: Build repro audit table
-  - Deliverable: `research_ops/06_repro/repro_audit.csv`
-  - Done When: 高价值论文具有 green/yellow/red 标签
-  - Why It Matters: 确定值得投入的工作
-
-- [ ] T054 Extract benchmark tables for one major subfield
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Benchmark Forensics
-  - Parent: T050
-  - Title: Extract benchmark tables
-  - Deliverable: `research_ops/05_benchmarks/benchmark_tables.csv`
-  - Done When: 至少一条主线 benchmark 可横向对比
-  - Why It Matters: 找出真正可比与不可比结果
-
-- [ ] T055 Build first `split_audit.csv`
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Benchmark Forensics
-  - Parent: T054
-  - Title: Audit split / metric drift
-  - Deliverable: `research_ops/05_benchmarks/split_audit.csv`
-  - Done When: 一批 benchmark drift 已记录
-  - Why It Matters: 防止被虚假 SOTA 误导
-
-- [ ] T056 Extract limitations and build failure database
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Failure Mining
-  - Parent: T050
-  - Title: Extract limitations from papers, supplements, and issues
-  - Deliverable: `research_ops/07_failures/failure_modes.csv`
-  - Done When: 至少一版 failure 数据库形成
-  - Why It Matters: 好 idea 更多来自失败而非成功摘要
-
-### P2 Task Graveyard / Resurrection
-
-- [ ] T057 Identify ended challenges and stale tasks
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Task Graveyard
-  - Parent: T040
-  - Title: Identify dead/stale tasks
-  - Deliverable: `research_ops/08_tasks/task_graveyard.csv`
-  - Done When: 一批死掉或冷却任务已分类
-  - Why It Matters: 从旧任务中挖复活机会
-
-- [ ] T058 Score resurrection potential
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Task Graveyard
-  - Parent: T057
-  - Title: Build resurrection candidates table
-  - Deliverable: `research_ops/08_tasks/resurrection_candidates.csv`
-  - Done When: 一批任务具有复活评分
-  - Why It Matters: foundation models / agents 可能重启旧方向
-
-### P1/P2 Case Report Lake + Phenopacket Factory
-
-- [ ] T114 Add `case_report_cache_lifecycle.md` cross-link to `cache_cleanup_workflow.md`
+- [ ] T139 Build `paper_dataset_links.csv` stub (paper ↔ TCIA/PhysioNet IDs)
   - Status: TODO
   - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T059
-  - Title: Align case pipeline wording with global cache policy
-  - Deliverable: memo + one-line cross-ref in `cache_cleanup_workflow.md`
-  - Done When: T065 执行时不会与全局 manifest 规则冲突
-  - Why It Matters: Repair — 单一生命周期故事
+  - Workstream: Linking
+  - Parent: T049
+  - Title: Start dataset linkage beyond challenges
+  - Deliverable: `research_ops/19_linking/paper_dataset_links.csv`
+  - Done When: 至少 10 条来自论文全文或标题显式数据集名
+  - Why It Matters: Exploit — T049 目前仅 challenge 侧
 
-- [ ] T115 Validate case report CSV headers against Phenopacket minimal fields checklist
+- [ ] T141 Mine OpenAlex `concepts` for frontier paper clustering
   - Status: TODO
   - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T060
-  - Title: Map columns to Phenopacket core concepts
-  - Deliverable: 表格或 `schema_notes.md` 增补
-  - Done When: 每个 phenopacket 列有定义来源
-  - Why It Matters: Validate — 避免后期返工
-
-- [ ] T116 Draft Europe PMC case-report query templates for T062 harvest
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T062
-  - Title: OA case report search templates (PMC OA / Europe PMC)
-  - Deliverable: `query_registry.csv` 新增行或 sidecar memo
-  - Done When: 至少 5 条可执行查询模板
-  - Why It Matters: Exploit — 降低首次抓取试错成本
-
-- [ ] T062 Harvest first batch of open-access case reports
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T059
-  - Title: Download first batch of OA case reports into cache
-  - Deliverable: cache + manifest + updated `case_reports_master.csv`
-  - Done When: 首批可合法下载 case reports 已抓取并登记
-  - Why It Matters: 启动病例湖
-
-- [ ] T063 Extract first 200 structured case records
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T062
-  - Title: Extract 200 structured case records
-  - Deliverable: 更新 `case_reports_master.csv`
-  - Done When: 至少 200 条病例结构化完成
-  - Why It Matters: 建立初始病例湖
-
-- [ ] T064 Extract first 200 phenopacket-like records
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T063
-  - Title: Convert 200 cases into phenopacket-like records
-  - Deliverable: 更新 `phenopackets.csv`
-  - Done When: 至少 200 条记录可检索
-  - Why It Matters: rare disease retrieval 和 clustering 基础
-
-- [ ] T065 Define case report download-parse-delete pipeline
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Case Lake
-  - Parent: T062
-  - Title: Specify how to download, parse, extract, manifest, and optionally delete raw case report files
-  - Deliverable: `case_report_cache_lifecycle.md`
-  - Done When: 流水线规则明确
-  - Why It Matters: 大规模病例抓取必须可控
-
-- [ ] T066 Build first `case_report_figures.csv`
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Case Lake
-  - Parent: T061
-  - Title: Build case report figure table
-  - Deliverable: `research_ops/16_case_reports/case_report_figures.csv`
-  - Done When: 一批图像/图注记录完成
-  - Why It Matters: 支持 text+figure clue mining
-
-### P2 Rare Disease / Case Intelligence
-
-- [ ] T067 Build rare disease retrieval mini-benchmark
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Rare Disease
-  - Parent: T064
-  - Title: Build rare disease retrieval mini-benchmark from case reports
-  - Deliverable: benchmark seed + memo
-  - Done When: 一个可执行 retrieval benchmark 形成
-  - Why It Matters: scaling 对长尾病例帮助最大
-
-- [ ] T068 Build atypical presentation clustering memo
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Rare Disease
-  - Parent: T063
-  - Title: Analyze atypical presentation clustering opportunities
-  - Deliverable: memo
-  - Done When: 总结一批 atypical presentation 模式
-  - Why It Matters: 长尾病例依赖大规模病例语料
-
-- [ ] T069 Build differential diagnosis seed benchmark
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Rare Disease
-  - Parent: T064
-  - Title: Build differential diagnosis seed benchmark
-  - Deliverable: benchmark seed file
-  - Done When: 一个差异诊断种子基准形成
-  - Why It Matters: 连接病例湖与可评测任务
-
-- [ ] T070 Build negative-finding extraction checklist
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Rare Disease
-  - Parent: T064
-  - Title: Build checklist for extracting diagnostically important negative findings
-  - Deliverable: checklist
-  - Done When: 形成标准化抽取规范
-  - Why It Matters: rare disease 和鉴别诊断中阴性特征很关键
-
-### P1/P2 Clinical Pull / Scaling Fit
-
-### P2 Trend Linking / Anti-Hype / Opportunities
-
-- [ ] T076 Link frontier trends to historical bottlenecks
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Trend Linking
+  - Workstream: Frontier Radar
   - Parent: T014
-  - Title: Connect frontier trends to old failures, stale tasks, and old literature bottlenecks
-  - Deliverable: `research_ops/19_linking/trend_to_problem_links.csv`
-  - Done When: 一批 trend -> old bottleneck 链接完成
-  - Why It Matters: 真机会来自新能力 + 老痛点的交叉
+  - Title: Add concept vectors to frontier_papers rows
+  - Deliverable: 更新 CSV 或 sidecar JSONL
+  - Done When: 每篇 frontier 论文至少有 top-3 concept labels
+  - Why It Matters: Exploit — T102 frontier follow-up
 
-- [ ] T077 Build `anti_hype_checks.csv`
+- [ ] T142 Build frontier ↔ pain_point auto-linker using title token overlap
   - Status: TODO
-  - Priority: P2
+  - Priority: P1
   - Workstream: Trend Linking
   - Parent: T076
-  - Title: Build anti-hype checks for hot trends
-  - Deliverable: `research_ops/20_hypotheses/anti_hype_checks.csv`
-  - Done When: 对高热 trend 形成“解决了什么 / 没解决什么”检查表
-  - Why It Matters: 防止被 buzzword 误导
+  - Title: Expand trend_to_problem_links beyond manual 8 rows
+  - Deliverable: 更新 `trend_to_problem_links.csv`
+  - Done When: ≥30 links with confidence field
+  - Why It Matters: Link — T102
 
-- [ ] T078 Build `scaling_opportunities.csv`
+- [ ] T143 Harvest OpenReview forum metadata for frontier_papers subset
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Frontier Radar
+  - Parent: T014
+  - Title: Attach review scores where venue is OpenReview
+  - Deliverable: 更新 `frontier_papers.csv` 或链接表
+  - Done When: ≥10 rows enriched
+  - Why It Matters: Validate — T102
+
+- [ ] T144 Add `trend_signals.csv` rows from monthly OpenAlex alert query
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Frontier Radar
+  - Parent: T014
+  - Title: Operationalize trend_signals registry
+  - Deliverable: 更新 `trend_signals.csv`
+  - Done When: ≥10 signals with strength score
+  - Why It Matters: Exploit — T102
+
+- [ ] T145 Cross-map frontier_papers to transfer_candidates with embedding similarity
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Transfer
+  - Parent: T030
+  - Title: Auto-suggest medical_imaging transfer targets
+  - Deliverable: 更新 `transfer_candidates.csv`
+  - Done When: ≥20 new rows with similarity score column
+  - Why It Matters: Exploit — T102
+
+- [ ] T146 Build frontier agent safety eval checklist (tool abuse / PHI)
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Agentic Systems
+  - Parent: T016
+  - Title: Document red-team scenarios for clinical agents
+  - Deliverable: `15_agentic/skill_cards/SK011_safety_redteam.md`
+  - Done When: ≥8 scenarios
+  - Why It Matters: Deepen — T102
+
+- [ ] T147 Link MedAgentSim-class papers to repro_audit yellow bucket
   - Status: TODO
   - Priority: P2
-  - Workstream: Trend Linking
-  - Parent: T074
-  - Title: Build scaling opportunities table
-  - Deliverable: `research_ops/17_scaling/scaling_opportunities.csv`
-  - Done When: 形成一批高价值 research opportunities
-  - Why It Matters: 将趋势、临床痛点、数据基础变成行动项
+  - Workstream: Repro Audit
+  - Parent: T053
+  - Title: Track simulation papers separately from clinical deployment claims
+  - Deliverable: 更新 `repro_audit.csv`
+  - Done When: ≥5 rows tagged `simulation_only`
+  - Why It Matters: Repair — T102
 
-### P2 Agent Self-Improvement Harness
-
-- [ ] T079 Define stable skill card format
+- [ ] T148 Expand anti_hype_checks for “self-evolving” claims using promotion_tests
   - Status: TODO
   - Priority: P2
-  - Workstream: Agent Self-Improvement
-  - Parent: T018
-  - Title: Define reusable skill template
-  - Deliverable: skill template memo
-  - Done When: skill card 含 name、io、scope、failure modes、validation
-  - Why It Matters: Agent 增长的是技能资产，不是上下文长度
+  - Workstream: Hypothesis
+  - Parent: T077
+  - Title: Tie AH002 to concrete PT-* tests
+  - Deliverable: 更新 `anti_hype_checks.csv`
+  - Done When: 每条 check 关联 test_id
+  - Why It Matters: Link — T102
 
-- [ ] T080 Create first 10 skill cards
+- [ ] T149 Add arXiv version graph for frontier preprints
   - Status: TODO
   - Priority: P2
-  - Workstream: Agent Self-Improvement
-  - Parent: T079
-  - Title: Create first 10 `skill_cards`
-  - Deliverable: `research_ops/15_agentic/skill_cards/*.md`
-  - Done When: 至少 10 个技能卡片完成
-  - Why It Matters: 自进化需要显式资产
+  - Workstream: Frontier Radar
+  - Parent: T014
+  - Title: Track v1→v2 diffs for hot preprints
+  - Deliverable: sidecar CSV
+  - Done When: ≥5 chains recorded
+  - Why It Matters: Exploit — T102
 
-- [ ] T081 Create `promotion_tests.csv`
+- [ ] T150 Summarize frontier batch in `trend_memos/frontier_batch_001.md`
   - Status: TODO
   - Priority: P2
-  - Workstream: Agent Self-Improvement
-  - Parent: T079
-  - Title: Define validation tests for skills
-  - Deliverable: `research_ops/15_agentic/promotion_tests.csv`
-  - Done When: 关键技能均有测试
-  - Why It Matters: 没有验证就不是可审计升级
+  - Workstream: Frontier Radar
+  - Parent: T014
+  - Title: Human-readable snapshot of frontier radar
+  - Deliverable: memo under `14_frontier/trend_memos/`
+  - Done When: 覆盖 top 10 papers + 3 risks
+  - Why It Matters: Exploit — T102
 
-- [ ] T082 Build `benchmark_tasks.csv`
+- [ ] T151 Run ORDO/OMIM dictionary match on case titles
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Case Lake
+  - Parent: T063
+  - Title: Upgrade disease_primary field
+  - Deliverable: 更新 `case_reports_master.csv`
+  - Done When: ≥50 rows with ORDO id
+  - Why It Matters: Exploit — T103
+
+- [ ] T152 Extract negation cues from case abstracts into negative_findings column
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Case Lake
+  - Parent: T063
+  - Title: Apply checklist T070 automatically
+  - Deliverable: 更新 case_reports_master
+  - Done When: ≥100 rows with non-empty negations
+  - Why It Matters: Exploit — T103
+
+- [ ] T153 Build PMC OA full-text fetch pass for top 20 rare cases
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Case Lake
+  - Parent: T062
+  - Title: Move from metadata-only to structured narrative fields
+  - Deliverable: manifest + parsed fields
+  - Done When: 20 cases with outcomes section extracted
+  - Why It Matters: Deepen — T103
+
+- [ ] T154 Align case_reports_master.pmid with PubTator annotations pull
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Case Lake
+  - Parent: T063
+  - Title: Entity-normalized phenotypes
+  - Deliverable: 更新 phenopackets
+  - Done When: ≥50 rows with gene/disease entities
+  - Why It Matters: Exploit — T103
+
+- [ ] T155 Split case lake train/val by journal+year grouped split
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Case Lake
+  - Parent: T067
+  - Title: Leakage-safe evaluation for RDRET
+  - Deliverable: split manifest CSV
+  - Done When: documented split ids
+  - Why It Matters: Validate — T103
+
+- [ ] T156 Add language field and filter non-English for v1 benchmarks
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Case Lake
+  - Parent: T062
+  - Title: Reduce noise in retrieval eval
+  - Deliverable: 更新 case_reports_master
+  - Done When: language populated from Europe PMC
+  - Why It Matters: Repair — T103
+
+- [ ] T157 Link case reports to nearest ClinicalTrials.gov trials by condition tokens
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Linking
+  - Parent: T043
+  - Title: case→trial weak links
+  - Deliverable: `paper_trial_links` pattern reuse or new `case_trial_links.csv`
+  - Done When: ≥20 links
+  - Why It Matters: Link — T103
+
+- [ ] T158 Mine figure availability flag from Europe PMC `hasFigures` if exposed
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Case Lake
+  - Parent: T066
+  - Title: Improve case_report_figures coverage
+  - Deliverable: 更新 figures table
+  - Done When: ≥50 figure rows
+  - Why It Matters: Exploit — T103
+
+- [ ] T159 Build case-to-paper citation graph via Europe PMC references API
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Literature Lake
+  - Parent: T035
+  - Title: Connect cases to guidelines/lit reviews
+  - Deliverable: linking CSV
+  - Done When: ≥30 edges
+  - Why It Matters: Link — T103
+
+- [ ] T160 Publish case lake stats memo `case_lake_stats_001.md`
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Case Lake
+  - Parent: T062
+  - Title: Counts by journal/year/language
+  - Deliverable: memo in `16_case_reports/`
+  - Done When: histograms + top journals
+  - Why It Matters: Exploit — T103
+
+- [ ] T161 Automate PT-* tests in CI script (dry-run mode)
   - Status: TODO
   - Priority: P2
   - Workstream: Agent Self-Improvement
   - Parent: T081
-  - Title: Build benchmark task table
-  - Deliverable: `research_ops/15_agentic/benchmark_tasks.csv`
-  - Done When: 一批稳定 benchmark tasks 可用于验证技能
-  - Why It Matters: 让改进可比较
+  - Title: Wire promotion tests to benchmark_tasks
+  - Deliverable: `scripts/run_promotion_tests.sh` (or python)
+  - Done When: script exits 0 on sandbox
+  - Why It Matters: Exploit — T104
 
-- [ ] T083 Start `reflection_log.csv`
+- [ ] T162 Add skill versioning field to skill_cards frontmatter
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Agent Self-Improvement
+  - Parent: T080
+  - Title: Track semver per skill
+  - Deliverable: update 10 cards
+  - Done When: each card has version
+  - Why It Matters: Deepen — T104
+
+- [ ] T163 Map each RL00x reflection to a concrete repair task id
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Agent Self-Improvement
+  - Parent: T083
+  - Title: Close the loop reflection→TODO
+  - Deliverable: 更新 reflection_log notes
+  - Done When: 3/3 RL rows linked
+  - Why It Matters: Repair — T104
+
+- [ ] T164 Add `skill_graph.csv` edges for SK001–SK010 dependencies
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Agent Self-Improvement
+  - Parent: T080
+  - Title: DAG for skill composition
+  - Deliverable: 更新 skill_graph.csv
+  - Done When: ≥10 edges
+  - Why It Matters: Link — T104
+
+- [ ] T165 Define rollback procedure for promoted skills
   - Status: TODO
   - Priority: P2
   - Workstream: Agent Self-Improvement
   - Parent: T079
-  - Title: Start reflection log
-  - Deliverable: `research_ops/15_agentic/reflection_log.csv`
-  - Done When: 可记录失败、修正、升级原因
-  - Why It Matters: 支持错误回放和技能提炼
+  - Title: Document git revert + benchmark regression rule
+  - Deliverable: paragraph in `what_counts_as_real_agent_self_evolution.md`
+  - Done When: rollback steps explicit
+  - Why It Matters: Deepen — T104
 
-### P2 Hypothesis / Idea / Reviewer
-
-- [ ] T084 Build `hypothesis_market.csv`
+- [ ] T166 Add `promotion_tests` negative tests (must fail on bad outputs)
   - Status: TODO
   - Priority: P2
-  - Workstream: Hypothesis
-  - Parent: T078
-  - Title: Build hypothesis market
-  - Deliverable: `research_ops/20_hypotheses/hypothesis_market.csv`
-  - Done When: 一批 hypothesis 已结构化登记
-  - Why It Matters: 把发现机会变成候选市场
+  - Workstream: Agent Self-Improvement
+  - Parent: T081
+  - Title: Contrastive pass/fail pairs
+  - Deliverable: 更新 promotion_tests.csv
+  - Done When: ≥3 negative tests
+  - Why It Matters: Validate — T104
 
-- [ ] T085 Build `cheap_tests.csv`
+- [ ] T167 Benchmark runtime SLOs for SK002 and SK003
   - Status: TODO
   - Priority: P2
-  - Workstream: Hypothesis
-  - Parent: T084
-  - Title: Build cheap tests table
-  - Deliverable: `research_ops/20_hypotheses/cheap_tests.csv`
-  - Done When: 高优 hypothesis 具有低成本验证路径
-  - Why It Matters: 降低从想法到实验的距离
+  - Workstream: Agent Self-Improvement
+  - Parent: T082
+  - Title: Record p50/p95 latencies
+  - Deliverable: RUN_LOG table
+  - Done When: 20 samples each
+  - Why It Matters: Exploit — T104
 
-- [ ] T086 Build `evidence_gaps.csv`
+- [ ] T168 Add secret-handling section to skill_template
   - Status: TODO
   - Priority: P2
-  - Workstream: Hypothesis
-  - Parent: T084
-  - Title: Build evidence gap table
-  - Deliverable: `research_ops/20_hypotheses/evidence_gaps.csv`
-  - Done When: 每条 hypothesis 有证据不足说明
-  - Why It Matters: 防止自我说服
+  - Workstream: Agent Self-Improvement
+  - Parent: T079
+  - Title: Never embed tokens in skill cards
+  - Deliverable: update skill_template.md
+  - Done When: policy bullet list added
+  - Why It Matters: Repair — T104
 
-- [ ] T087 Build first `idea_queue.csv`
+- [ ] T169 Create `SK011` for PubMed E-utilities polite pooling
   - Status: TODO
   - Priority: P2
-  - Workstream: Hypothesis
-  - Parent: T084
-  - Title: Build idea queue
-  - Deliverable: `research_ops/11_ideas/idea_queue.csv`
-  - Done When: 一批 idea 已可排序
-  - Why It Matters: 形成行动队列
+  - Workstream: Agent Self-Improvement
+  - Parent: T080
+  - Title: Wrap NCBI rate-limit recipe
+  - Deliverable: new skill card
+  - Done When: card + PT test stub
+  - Why It Matters: Exploit — T104
 
-- [ ] T088 Build `reviewer_attacks.csv`
+- [ ] T170 Weekly skill health report markdown export
   - Status: TODO
   - Priority: P2
-  - Workstream: Hypothesis
-  - Parent: T087
-  - Title: Build reviewer attack list
-  - Deliverable: `research_ops/12_reviewer/reviewer_attacks.csv`
-  - Done When: top ideas 有 attack list 与 reviewer risk
-  - Why It Matters: 让想法更抗打
-
-### P3 Specialized Explorations
-
-- [ ] T089 Build off-label drug response mining mini-benchmark
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T062
-  - Title: Build off-label response benchmark seed
-  - Deliverable: benchmark seed
-  - Done When: 一个可执行小 benchmark 形成
-  - Why It Matters: case reports 与 repurposing 的直接连接点
-
-- [ ] T090 Build adverse event mining mini-benchmark
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T062
-  - Title: Build adverse event mining benchmark seed
-  - Deliverable: benchmark seed
-  - Done When: 一个 AE 小基准形成
-  - Why It Matters: 低频高价值临床信号
-
-- [ ] T091 Build oncology MDT support memo
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T075
-  - Title: Build oncology MDT support opportunity memo
-  - Deliverable: memo
-  - Done When: 描述问题、数据、scaling fit、cheap test
-  - Why It Matters: 文献和病例负担极高，适合 scaling
-
-- [ ] T092 Build evidence-synthesis opportunity memo
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T075
-  - Title: Build evidence synthesis opportunity memo
-  - Deliverable: memo
-  - Done When: 一条证据综合机会说明形成
-  - Why It Matters: AI 最适合信息压缩工作
-
-- [ ] T093 Build trial-matching opportunity memo
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T043
-  - Title: Build trial matching opportunity memo
-  - Deliverable: memo
-  - Done When: 形成 trial matching 的 problem/data/risk 分析
-  - Why It Matters: 典型 retrieval + linking + scaling 问题
-
-- [ ] T094 Build rare-disease support opportunity memo
-  - Status: TODO
-  - Priority: P3
-  - Workstream: Specialized Exploration
-  - Parent: T067
-  - Title: Build rare disease support opportunity memo
-  - Deliverable: memo
-  - Done When: rare disease scaling opportunity 分析形成
-  - Why It Matters: 长尾问题非常适合大语料与病例库方法
-
-### P1/P2 File Download / Cleanup Special Tasks
-
-- [ ] T098 Define curated keep-set policy
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Download Infrastructure
-  - Parent: T006C
-  - Title: Define a small canonical keep-set of high-value full-text/PDF files
-  - Deliverable: `research_ops/manifests/keep_set_manifest.csv`
-  - Done When: 少量高价值原文样本的保留标准明确
-  - Why It Matters: 并不是所有原始文件都该删
-
-- [ ] T099 Define parse-failure retry queue
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Download Infrastructure
-  - Parent: T006B
-  - Title: Define queue for failed downloads and failed parses
-  - Deliverable: `research_ops/manifests/retry_queue.csv`
-  - Done When: 所有失败项可重试、可追踪
-  - Why It Matters: 批处理不可能一次全成功
-
-- [ ] T100 Define storage budget and cleanup triggers
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Download Infrastructure
-  - Parent: T006D
-  - Title: Define storage budget thresholds and cleanup triggers for cache directories
-  - Deliverable: policy or memo
-  - Done When: 缓存超过阈值时有明确清理策略
-  - Why It Matters: 防止仓库失控膨胀
-
-### P2 Maintenance / Continuation
-
-- [ ] T101 Reprioritize backlog by information gain
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Maintenance
-  - Parent: ROOT
-  - Title: Reprioritize backlog based on information gain
-  - Deliverable: `STATUS.md` update
-  - Done When: backlog 排序与最新发现一致
-  - Why It Matters: 防止任务树僵化
-
-- [ ] T102 Add 10 follow-up tasks from frontier discoveries
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Maintenance
-  - Parent: T014
-  - Title: Add follow-up tasks from trend discoveries
-  - Deliverable: TODO expansion
-  - Done When: 新趋势进入执行层
-  - Why It Matters: 让趋势变成行动
-
-- [ ] T103 Add 10 follow-up tasks from case mining
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Maintenance
-  - Parent: T062
-  - Title: Add follow-up tasks from case report mining
-  - Deliverable: TODO expansion
-  - Done When: 病例新线索进入任务队列
-  - Why It Matters: 防止病例湖成为死仓库
-
-- [ ] T104 Add 10 follow-up tasks from skill failures
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Maintenance
+  - Workstream: Agent Self-Improvement
   - Parent: T083
-  - Title: Add follow-up tasks from skill failures and reflection log
-  - Deliverable: TODO expansion
-  - Done When: skill failure 变成改进任务
-  - Why It Matters: 支持可审计自进化
+  - Title: Aggregate reflection_log + failed PT tests
+  - Deliverable: `13_exports/run_summaries/skill_health_001.md`
+  - Done When: first report generated
+  - Why It Matters: Exploit — T104
+
+### P1 Paper Master Assembly
+
+### P2 Benchmark / Repro / Failure
+
+- [ ] T140 Full-text benchmark extraction for Swin UNETR (W4312428231) from CVF / IEEE page
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Benchmark Forensics
+  - Parent: T054
+  - Title: Replace abstract placeholder BT006 with numeric Dice rows
+  - Deliverable: 更新 `benchmark_tables.csv`
+  - Done When: Decathlon + BTCV tasks have per-task metrics
+  - Why It Matters: Repair — abstract only cites leaderboards
 
 ## 4. BLOCKED
 
@@ -971,6 +621,88 @@ Agent 运行在 GitHub repository 环境中，可以：
 - [x] T113 Frontier → transfer promotion heuristics — 2026-03-31 (`DECISIONS.md` D-004)
 - [x] T105 Write first run summary — 2026-03-31 (`summary_001.md`)
 - [x] T106 Update next best action in STATUS — 2026-03-31
+- [x] T020 Harvest MIDL metadata — 2026-03-31 (20 works, OpenAlex `primary_location.source.id:S4306519517`)
+- [x] T111 Link `agent_systems` → `papers_master` — 2026-03-31 (`papers_master_paper_id` column + T111 backfill rows)
+- [x] T112 Enrich `frontier_papers` venues — 2026-03-31 (OpenAlex per-row)
+- [x] T117 `paper_trial_links.relation_type` vocabulary — 2026-03-31 (`DECISIONS.md` D-005)
+- [x] T118 `guideline_registry.csv` stub — 2026-03-31
+- [x] T119 Pilot `paper_trial_links` — 2026-03-31 (50 rows: DOI in CT.gov JSON → OpenAlex)
+- [x] T120 Filter MICCAI seed to LNCS proceedings volumes — 2026-03-31 (dropped 1 non-LNCS journal row)
+- [x] T121 Dedup `papers_master` vs `frontier_papers` — 2026-03-31 (0 overlap; script verified)
+- [x] T122 MICCAI official bibliography note — 2026-03-31 (`source_batches/README_MICCAI_official_bibliography.md`)
+- [x] T021 Harvest IPMI / ISBI metadata — 2026-03-31 (15+15 works, OpenAlex sources S4306418889 + S4306420100)
+- [x] T022 Harvest MedIA metadata — 2026-03-31 (25 works, source S116571295)
+- [x] T023 Harvest TMI metadata — 2026-03-31 (25 works, source S58069681)
+- [x] T024 Harvest Radiology / Radiology: AI — 2026-03-31 (15+15, S50280174 + S4210219523)
+- [x] T025 Harvest NeurIPS candidates — 2026-03-31 (30 papers, source S4306420609, years 2019–2021 keyword gate)
+- [x] T030 Build `transfer_candidates.csv` — 2026-03-31 (30 rows aligned to T025)
+- [x] T026 Harvest ICML candidates — 2026-03-31 (30 papers, source S4306419644, years 2014–2022 keyword gate)
+- [x] T027 Harvest ICLR candidates — 2026-03-31 (30 papers, source S4306419637, years 2020–2024 keyword gate)
+- [x] T028 Harvest CVPR candidates — 2026-03-31 (30 papers from CVPR 2022 source S4363607701 + 2 legacy S4306417987)
+- [x] T029 Harvest ICCV / ECCV — 2026-03-31 (15 ICCV 2021 S4363607764; 1 ECCV via S4306418318 segmentation gate — see T132)
+- [x] T031 Harvest Nature / Science / Cell — 2026-03-31 (30 papers; sources S137773608, S3880285, S110447773)
+- [x] T032 Harvest translational journals — 2026-03-31 (32 papers; Nat Med, NBE, npj DM, Comm Med)
+- [x] T033 Harvest JAMA / JAMA Open / NEJM / Lancet DH — 2026-03-31 (32 papers)
+- [x] T034 Extract clinical_signal + registries — 2026-03-31 (32 signals + 12 endpoints + 11 patterns; title heuristics)
+- [x] T039 Harvest Grand Challenge metadata — 2026-03-31 (50 challenges via `grand-challenge.org/api/v1/challenges/`)
+- [x] T040 Split challenges lifecycle — 2026-03-31 (`lifecycle_bucket` column from OPEN/CLOSED)
+- [x] T041 Harvest TCIA collections — 2026-03-31 (40 collections into `datasets_master.csv` via NBIA `getCollectionValues`)
+- [x] T042 Harvest PhysioNet datasets — 2026-03-31 (30 DB projects appended via `physionet.org/api/v1/project/published/`)
+- [x] T043 Harvest ClinicalTrials.gov — 2026-03-31 (`19_linking/trials_master.csv`, 30 studies)
+- [x] T044 `datasets_master.csv` — 2026-03-31 (70 rows: TCIA + PhysioNet)
+- [x] T045 `challenges_master.csv` — 2026-03-31 (50 rows + `lifecycle_bucket`)
+- [x] T046 Unified `papers_master.csv` — 2026-03-31 (single spine; incremental merges during harvest)
+- [x] T047 Normalize `tags_modality` — 2026-03-31 (controlled facets in `schema_notes.md`)
+- [x] T048 Normalize `tags_method` — 2026-03-31 (title+batch heuristics)
+- [x] T049 Link papers to challenges — 2026-03-31 (`19_linking/paper_challenge_links.csv`, 19 rows via DOI→OpenAlex)
+- [x] T050 Audit priority list — 2026-03-31 (`06_repro/audit_priority_list.csv`, 50 papers)
+- [x] T051 Build `repo_registry.csv` — 2026-03-31 (19 repos from OpenAlex abstract GitHub URLs)
+- [x] T052 Mine GitHub issues — 2026-03-31 (`issue_mining.csv`, 20 issues from public API)
+- [x] T053 Build `repro_audit.csv` — 2026-03-31 (50 rows; red/yellow from repo presence heuristic)
+- [x] T054 Extract benchmark tables — 2026-03-31 (C-CAM WSSS medical subfield; `benchmark_tables.csv`)
+- [x] T055 Build `split_audit.csv` — 2026-03-31 (3 rows; WSSS + leaderboard comparability)
+- [x] T056 Extract failure modes — 2026-03-31 (`failure_modes.csv` seed from C-CAM + Swin UNETR abstract gaps)
+- [x] T057 Task graveyard — 2026-03-31 (31 CLOSED Grand Challenge rows in `task_graveyard.csv`)
+- [x] T058 Resurrection candidates — 2026-03-31 (15 imaging-related closed challenges)
+- [x] T114 Case pipeline cross-link — 2026-03-31 (`case_report_cache_lifecycle.md` + `cache_cleanup_workflow.md` § Case-report variant)
+- [x] T115 Phenopacket column mapping — 2026-03-31 (`schema_notes.md` Case lake section)
+- [x] T116 Europe PMC query templates — 2026-03-31 (`query_registry.csv` Q011–Q015)
+- [x] T062 OA case harvest — 2026-03-31 (200 records + `cache/metadata` JSON + `download_manifest.csv`)
+- [x] T063 Structured case records — 2026-03-31 (`case_reports_master.csv` 200 rows)
+- [x] T064 Phenopacket-like rows — 2026-03-31 (`phenopackets.csv` 200 minimal rows)
+- [x] T065 Case cache lifecycle memo — 2026-03-31 (`case_report_cache_lifecycle.md`)
+- [x] T066 Case report figures — 2026-03-31 (`case_report_figures.csv` 6 placeholder rows)
+- [x] T067 Rare disease retrieval seed — 2026-03-31 (`rare_disease_retrieval_seed.csv` + memo)
+- [x] T068 Atypical presentation memo — 2026-03-31 (`atypical_presentation_memo.md`)
+- [x] T069 Differential diagnosis seed — 2026-03-31 (`differential_diagnosis_seed.csv` 15 rows)
+- [x] T070 Negative finding checklist — 2026-03-31 (`negative_finding_checklist.md`)
+- [x] T076 Trend → bottleneck links — 2026-03-31 (`trend_to_problem_links.csv` 8 rows)
+- [x] T077 Anti-hype checks — 2026-03-31 (`anti_hype_checks.csv` 5 rows)
+- [x] T078 Scaling opportunities — 2026-03-31 (`scaling_opportunities.csv` 5 rows)
+- [x] T079 Skill template — 2026-03-31 (`15_agentic/skill_template.md`)
+- [x] T080 Skill cards — 2026-03-31 (`SK001`–`SK010` under `skill_cards/`)
+- [x] T081 `promotion_tests.csv` — 2026-03-31 (10 PT-* rows)
+- [x] T082 `benchmark_tasks.csv` — 2026-03-31 (5 tasks)
+- [x] T083 `reflection_log.csv` — 2026-03-31 (3 RL rows)
+- [x] T084 `hypothesis_market.csv` — 2026-03-31 (5 hypotheses)
+- [x] T085 `cheap_tests.csv` — 2026-03-31 (5 tests)
+- [x] T086 `evidence_gaps.csv` — 2026-03-31 (5 gaps)
+- [x] T087 `idea_queue.csv` — 2026-03-31 (5 ideas)
+- [x] T088 `reviewer_attacks.csv` — 2026-03-31 (5 attacks)
+- [x] T089 Off-label benchmark seed memo — 2026-03-31 (`synthesis_memos/off_label_response_benchmark_seed.md`)
+- [x] T090 AE mining benchmark seed memo — 2026-03-31 (`synthesis_memos/adverse_event_mining_benchmark_seed.md`)
+- [x] T091 Oncology MDT memo — 2026-03-31 (`synthesis_memos/oncology_mdt_opportunity.md`)
+- [x] T092 Evidence synthesis memo — 2026-03-31 (`synthesis_memos/evidence_synthesis_opportunity.md`)
+- [x] T093 Trial matching memo — 2026-03-31 (`synthesis_memos/trial_matching_opportunity.md`)
+- [x] T094 Rare disease support memo — 2026-03-31 (`synthesis_memos/rare_disease_support_opportunity.md`)
+- [x] T098 `keep_set_manifest.csv` — 2026-03-31 (policy rows + placeholders)
+- [x] T099 `retry_queue.csv` — 2026-03-31 (template rows for failed jobs)
+- [x] T100 Storage budget — 2026-03-31 (same thresholds as T110 in `LICENSE_POLICY.md`)
+- [x] T101 Reprioritize backlog — 2026-03-31 (P1 frontier/case/skill follow-ups T141–T170 added; DOING=T140)
+- [x] T102 Frontier follow-ups — 2026-03-31 (T141–T150)
+- [x] T103 Case mining follow-ups — 2026-03-31 (T151–T160)
+- [x] T104 Skill harness follow-ups — 2026-03-31 (T161–T170)
+- [x] T137 `trials_master` documentation — 2026-03-31 (`schema_notes.md`)
 
 ## 6. Drop Rules
 

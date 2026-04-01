@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-03-31 — Mega harvest: papers spine + data lake + case lake + repro + hypothesis stack
+
+- **Scope**
+  - Domain / frontier / clinical journals → `papers_master.csv` (396 data rows after dedupe passes).
+  - Data ecosystem: Grand Challenge (50), TCIA+PhysioNet `datasets_master` (70), CT.gov `trials_master` (30), `challenges_master` lifecycle column.
+  - Linking: `paper_trial_links` (50 DOI-in-protocol), `paper_challenge_links` (19), `trend_to_problem_links` (8).
+  - Repro: `audit_priority_list` (50), `repo_registry` (19 GitHub URLs from inverted abstracts), `issue_mining` (20), `repro_audit` (50).
+  - Benchmark forensics: `benchmark_tables` (C-CAM numeric rows + Swin UNETR placeholder BT006), `split_audit`, `failure_modes`.
+  - Task graveyard: `task_graveyard` (31), `resurrection_candidates` (15).
+  - Case lake: Europe PMC OA cursor harvest **200** cases → `cache/metadata/epmc_case_pmid*.json` + matching `download_manifest` rows; `phenopackets` (200 minimal); `case_report_figures` (6 placeholders); RDRET seed + memos.
+  - Agent harness: `skill_template.md`, SK001–SK010, `promotion_tests`, `benchmark_tasks`, `reflection_log`.
+  - Hypothesis stack: `hypothesis_market`, `cheap_tests`, `evidence_gaps`, `idea_queue`, `reviewer_attacks`; P3 exploration memos under `13_exports/synthesis_memos/`.
+  - Infra CSVs: `keep_set_manifest`, `retry_queue` templates; `query_registry` Q011–Q015; `case_report_cache_lifecycle.md` + cross-link in `cache_cleanup_workflow.md`.
+  - TODO maintenance: closed T079–T104; added T141–T170 follow-up blocks; **DOING=T140** (Swin UNETR full benchmark table).
+- **Verification commands**
+  - `wc -l research_ops/02_papers/papers_master.csv` → 397
+  - `wc -l research_ops/16_case_reports/case_reports_master.csv` → 201
+  - `wc -l research_ops/manifests/download_manifest.csv` → 201
+  - `wc -l research_ops/03_datasets/datasets_master.csv` → 71
+  - `wc -l research_ops/19_linking/paper_trial_links.csv` → 51
+- **Risks logged**
+  - Heuristic labels (clinical_signal, RDRET, DDX seeds) need human or NLP upgrade (see T133, T151–T156).
+
 ## 2026-03-31 — Extended bootstrap + atlas + clinical pull + MICCAI seed
 
 - **Scope**
