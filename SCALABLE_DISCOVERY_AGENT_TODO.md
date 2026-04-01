@@ -59,15 +59,15 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ## 2. DOING
 
-- [ ] T140 Full-text benchmark extraction for Swin UNETR (W4312428231) from CVF / IEEE page
+- [ ] T184 Rolling harvest: 2017 window (venues + arXiv)
   - Status: DOING
-  - Priority: P2
-  - Workstream: Benchmark Forensics
-  - Parent: T054
-  - Title: Replace abstract placeholder BT006 with numeric Dice rows
-  - Deliverable: 更新 `benchmark_tables.csv`
-  - Done When: Decathlon + BTCV tasks have per-task metrics
-  - Why It Matters: Repair — abstract only cites leaderboards
+  - Priority: P1
+  - Workstream: Paper Master
+  - Parent: T171
+  - Title: 10 journals ×35 + arXiv 2017 medimg cap ~70
+  - Deliverable: 更新 `papers_master.csv` + RUN_LOG
+  - Done When: 新增 ≥100 行
+  - Why It Matters: 继续向 2010s 中段回卷
 
 ## 3. READY / TODO
 
@@ -698,11 +698,24 @@ Agent 运行在 GitHub repository 环境中，可以：
 - [x] T098 `keep_set_manifest.csv` — 2026-03-31 (policy rows + placeholders)
 - [x] T099 `retry_queue.csv` — 2026-03-31 (template rows for failed jobs)
 - [x] T100 Storage budget — 2026-03-31 (same thresholds as T110 in `LICENSE_POLICY.md`)
-- [x] T101 Reprioritize backlog — 2026-03-31 (P1 frontier/case/skill follow-ups T141–T170 added; DOING=T140)
+- [x] T101 Reprioritize backlog — 2026-03-31 (P1 frontier/case/skill follow-ups T141–T170 added)
 - [x] T102 Frontier follow-ups — 2026-03-31 (T141–T150)
 - [x] T103 Case mining follow-ups — 2026-03-31 (T151–T160)
 - [x] T104 Skill harness follow-ups — 2026-03-31 (T161–T170)
 - [x] T137 `trials_master` documentation — 2026-03-31 (`schema_notes.md`)
+- [x] T171 Rolling wide recent harvest — 2026-03-31 (10 journals × 2024–2025 + 7 global searches; +1464 rows net of dedupe)
+- [x] T172 arXiv repository broad slices — 2026-03-31 (OpenAlex `S4306400194`; +382 rows; tag `preprint_broad`)
+- [x] T173 Rolling window 2023 — 2026-03-31 (10 journals ×70 + arXiv 2023 two queries; +916 rows; total papers_master 3158)
+- [x] T177 Rolling window 2022 — 2026-03-31 (10 journals ×65 + arXiv 2022 two queries; +814 rows; total 3972)
+- [x] T176 bioRxiv/medRxiv 2024–2025 — 2026-03-31 (S4306402567 + S4306400573; +126 rows; total 4098)
+- [x] T178 Rolling window 2021 — 2026-03-31 (10 journals ×55 + arXiv 2021 medimg; +660 rows; total 4758)
+- [x] T179 bioRxiv/medRxiv deepen — 2026-03-31 (2023 six-query sweep + 2024–25 spatial/scRNA; +264 rows; total 5022)
+- [x] T180 Rolling window 2020 — 2026-03-31 (10 journals ×50 + arXiv2020 medimg cap 100; +550 rows; total 5572)
+- [x] T181 Rolling window 2019 — 2026-03-31 (10 journals ×45 + arXiv2019 medimg cap 90; +492 rows; total 6064 before monthly smoke)
+- [x] T174 `harvest_window` column — 2026-03-31 (backfilled from `source_batch` + T182 rows use `YYYY-MM`)
+- [x] T182 Monthly harvest script — 2026-03-31 (`scripts/harvest_openalex_monthly.py`; smoke +5 rows for MedIA 2025-01)
+- [x] T175 `topic_subtag` for preprints — 2026-03-31 (1452 rows: preprint_broad/biorxiv/medrxiv title heuristics)
+- [x] T183 Rolling window 2018 — 2026-03-31 (10 journals ×40 + arXiv2018 cap 80; +332 rows; total 6401)
 
 ## 6. Drop Rules
 

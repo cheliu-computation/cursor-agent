@@ -4,6 +4,52 @@
 
 ---
 
+## 2026-03-31 — T183 2018 window
+
+- **T183**: 2018 — 10 journals ×40 + arXiv2018 `medical imaging deep learning` cap 80 → **+332** (total **6401**). New rows set `harvest_window=2018_*`; new arXiv rows get `topic_subtag` heuristics.
+- **Next DOING**: **T184** (2017).
+
+## 2026-03-31 — T181 / T174 / T182 / T175 + monthly smoke
+
+- **T181**: 2019 window — journals ×45 + arXiv2019 cap 90 → **+492** (total **6064** before script).
+- **T174**: Added **`harvest_window`** column; backfilled from `source_batch` patterns (`YYYY_venue_rolling`, `YYYY_preprint_rolling`, `YYYY_topic_search`, `YYYY_legacy_or_mixed`).
+- **T182**: Added `scripts/harvest_openalex_monthly.py`; smoke test MedIA `S116571295` **2025-01** limit 5 → **+5** merged (total **6069**).
+- **T175**: Added **`topic_subtag`** for `preprint_broad|preprint_biorxiv|preprint_medrxiv` rows via title regex buckets (**1452** rows tagged).
+- **Next DOING**: **T183** (2018).
+
+## 2026-03-31 — T179 / T180 preprint deepen + 2020 slice
+
+- **T179**: bioRxiv `S4306402567` + medRxiv `S4306400573` — **2023** full sweep (single cell, genomics+ML, DL, ML, prediction, AI) plus **2024–2025** spatial + scRNA atlas queries → **+264** (total **5022**).
+- **T180**: **2020** — 10 journals ×50 + arXiv 2020 `medical imaging deep learning` cap 100 → **+550** (total **5572**).
+- **Next DOING**: **T181** (2019 window).
+
+## 2026-03-31 — Rolling 2022 / 2021 + bioRxiv-medRxiv (T177 / T178 / T176)
+
+- **T177**: 2022 — 10 journals ×65 + arXiv 2022 (`medical imaging deep learning`, `transformer medical`) → **+814** (total **3972**).
+- **T176**: bioRxiv `S4306402567` + medRxiv `S4306400573`, 2024–2025, ML/DL/AI/prediction queries → **+126** (total **4098**).
+- **T178**: 2021 — 10 journals ×55 + arXiv 2021 `medical imaging deep learning` cap 110 → **+660** (total **4758**).
+- **Next DOING**: **T179** (deeper bioRxiv/medRxiv + 2023 + genomics/single-cell).
+
+## 2026-03-31 — Rolling window 2023 (T173)
+
+- **Scope**: Same 10 journals as T171, **70** works each for **publication_year:2023**; arXiv `S4306400194` for 2023 with searches `medical imaging deep learning` (130) and `large language model medicine` (100).
+- **Counts**: `papers_master` rows **2242 → 3158** (Δ **+916**). File lines **3159** with header.
+- **Next DOING**: **T177** (2022 window).
+
+## 2026-03-31 — Rolling wide + recent ingest (T171 / T172)
+
+- **Scope**
+  - **T171**: For each of 10 sources (MedIA, TMI, Radiology, Radiology AI, Nat Med, npj Digital Medicine, Lancet Digital Health, Nature Machine Intelligence, Nature Computational Science, Cell Systems), fetch up to **60** works per **2024** and **2025** (`sort=publication_date:desc`, OpenAlex cursor pagination). Then seven global `search` queries (years 2023–2025, `sort=cited_by_count:desc`, ~45 hits each): LLM+clinical, FM+medical imaging, AI+radiology, generative+pathology, federated+healthcare, multimodal+biomedical, scientific discovery agent.
+  - **T172**: arXiv repository source `S4306400194` with four search slices (limits 80–120) for 2024–2025; tag `preprint_broad`.
+  - New rows include **authors** from `authorships` (up to 12 + “et al.”).
+- **Counts**
+  - Before → after `papers_master` data rows: **396 → 2242** (delta **+1846**; file lines **2243** incl. header).
+  - Year histogram (data rows): 2026→80, 2025→715, 2024→805, 2023→52, 2022→31, 2021→87, older tail.
+- **New follow-ups**: T174 `harvest_window` column, T175 subtag arXiv noise, T176 bioRxiv/medRxiv slices.
+- **Verification**
+  - `wc -l research_ops/02_papers/papers_master.csv` → 2243
+  - `python -c` year Counter on `year` column (see above)
+
 ## 2026-03-31 — Mega harvest: papers spine + data lake + case lake + repro + hypothesis stack
 
 - **Scope**

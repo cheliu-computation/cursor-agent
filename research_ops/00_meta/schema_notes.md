@@ -2,10 +2,19 @@
 
 Short column semantics for high-churn registries. See header row as source of truth.
 
+## `harvest_window` (T174)
+Rolling-ingest provenance bucket, **not** necessarily calendar month:
+- `YYYY-MM` — from `T182_month_*` script batches
+- `YYYY_venue_rolling` / `YYYY_preprint_rolling` / `YYYY_topic_search` — inferred from `source_batch` pattern
+- `YYYY_legacy_or_mixed` — early seeds where only `year` is reliable
+- `unknown` — missing signals
+
 ## `papers_master.csv`
 - **paper_id**: Stable internal ID (e.g. `openalex:W123`, `doi:10.x/...`, or generated UUID).
+- **harvest_window**: Rolling slice label for audits (see § `harvest_window` above).
 - **source_batch**: Provenance batch label (which harvest run or query).
 - **tags_***: Pipe- or comma-separated controlled vocabulary (normalize in T047–T048).
+- **topic_subtag**: For `preprint_*` rows (T175), pipe-separated coarse buckets from title keywords: `imaging` | `clinical` | `genomics` | `other_preprint`.
 
 ## `source_registry.csv`
 - **layer**: A–H per `SOURCE_POLICY.md` (domain, method, clinical, data, repro, frontier, infra, case).
@@ -40,6 +49,9 @@ Pipe-separated facets, primary bucket first:
 - `clinical_high_impact` — JAMA, NEJM, Lancet Digital Health family
 - `clinical_ai` — agent/clinical simulator papers (T111 backfill heuristic)
 - `unspecified` — legacy or unknown provenance
+- `preprint_broad` — arXiv / repository slice via OpenAlex `primary_location.source.id:S4306400194` (T172; title-keyword recall)
+- `preprint_biorxiv` — bioRxiv via `S4306402567` (T176)
+- `preprint_medrxiv` — medRxiv via `S4306400573` (T176)
 
 Optional secondary facets: `radiology`, `pathology` (inferred from venue string).
 
