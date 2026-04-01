@@ -1,1 +1,6 @@
 task_id,name,description,metric,notes
+BTASK-REPRO-01,Repo smoke test,Clone repo from registry and run README install command,install_exit_code,Use sandbox with network
+BTASK-EPMC-02,Case metadata recall,Retrieve known PMID core JSON via Europe PMC,json_field_presence,Pick gold PMIDs
+BTASK-OA-03,OpenAlex DOI resolve,Resolve 10 DOIs from papers_master,doi_hit_rate,
+BTASK-GC-04,Challenge pagination,Walk GC API until next=null,pages_completed,
+BTASK-CLIN-05,Clinical signal precision,Manual review sample of 10 heuristic signals,precision@10,

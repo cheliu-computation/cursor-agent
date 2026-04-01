@@ -1,1 +1,4 @@
 log_id,timestamp,failure_summary,fix_summary,skill_or_task_id,notes
+RL001,2026-03-31T00:00:00Z,TCIA v4 endpoint returned empty; v4 path wrong,Switched to NBIA v1 getCollectionValues,SK005,Documented in RUN_LOG during session
+RL002,2026-03-31T00:00:00Z,OpenAlex abstract scan missed GitHub URLs,Used inverted index decode for SK007 seed,SK007,
+RL003,2026-03-31T00:00:00Z,ECCV medical harvest sparse on generic source,Added T132 follow-up for proceedings DOI lists,T029,

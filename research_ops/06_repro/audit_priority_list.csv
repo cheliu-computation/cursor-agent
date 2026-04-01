@@ -1,0 +1,51 @@
+rank,paper_id,title,year,venue,source_batch,priority_score,rationale
+1,openalex:W4391160310,Factors influencing clinician and patient interaction with machine learning-based risk prediction models: a systematic review,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+2,openalex:W4395067202,Randomised controlled trials evaluating artificial intelligence in clinical practice: a scoping review,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+3,openalex:W4395067252,"Machine learning to understand risks for severe COVID-19 outcomes: a retrospective cohort study of immune-mediated inflammatory diseases, immunomodulatory medications, and comorbidities in a large US ",2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+4,openalex:W4398195161,Predicting type 1 diabetes in children using electronic health records in primary care in the UK: development and validation of a machine-learning algorithm,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+5,openalex:W4398195179,Machine learning to predict type 1 diabetes in children,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+6,openalex:W4399832694,Proteomic prediction of diverse incident diseases: a machine learning-guided biomarker discovery study using data from a prospective cohort study,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+7,openalex:W4399834249,External validation of the myocardial-ischaemic-injury-index machine learning algorithm for the early diagnosis of myocardial infarction: a multicentre cohort study,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+8,openalex:W4405534231,Tackling algorithmic bias and promoting transparency in health datasets: the STANDING Together consensus recommendations,2024,The Lancet Digital Health,T033_lancet_dh_2024,11,clinical_trial_journal_ai
+9,openalex:W4390975901,Modeling real-world data to repurpose drugs for Alzheimer’s disease,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+10,openalex:W4391528827,Deep learning-aided decision support for diagnosis of skin disease across skin tones,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+11,openalex:W4392193048,Adapted large language models can outperform medical experts in clinical text summarization,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+12,openalex:W4392947532,A visual-language foundation model for computational pathology,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+13,openalex:W4394683903,Generative models improve fairness of medical classifiers under distribution shifts,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+14,openalex:W4394964969,Causal machine learning for predicting treatment outcomes,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+15,openalex:W4400324908,Evaluation and mitigation of the limitations of large language models in clinical decision-making,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+16,openalex:W4400889241,A foundation model for clinical-grade computational pathology and rare cancers detection,2024,Nature Medicine,T032_nature_medicine_2024,10,composite_score
+17,openalex:W4414457879,HOI-brain: A novel multi-channel transformers framework for brain disorder diagnosis by accurately extracting signed higher-order interactions from fMRI data,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+18,openalex:W4414756182,SparseXMIL: Leveraging sparse convolutions for context-aware and memory-efficient classification of whole slide images in digital pathology,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+19,openalex:W7133306872,FADFNet: A fine-tunable and adaptive decomposition-fusion network for cross-dataset low-dose CT and low-dose PET image reconstruction,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+20,openalex:W7133307234,AMA-SAM: Adversarial multi-Domain alignment of segment anything model for high-Fidelity histology nuclei segmentation,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+21,openalex:W7133309137,PHIVE: A physics-informed variational encoder enables rapid spectral fitting of brain metabolite mapping at 7T,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+22,openalex:W7134107268,Artificial intelligence in microscopic hair imaging for scalp disorders: From image acquisition to clinical decisions,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+23,openalex:W7134108826,FreqConvMamba: Frequency-guided hierarchical hybrid SSM-CNN for medical image segmentation,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+24,openalex:W7134127382,A content-aware variable-rate framework for pathology learned image compression (PathoLIC),2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+25,openalex:W7134201244,MedSapiens: Taking a pose to rethink medical imaging landmark detection,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+26,openalex:W7134887469,Memory like the human brain: A framework for decoding multimodal learning of brain-visual-linguistic features,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+27,openalex:W7134918073,Explicable intensity-aware 3D cerebrovascular segmentation with planar representation,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+28,openalex:W7134925414,HOI-brain: A novel multi-channel transformers framework for brain disorder diagnosis by accurately extracting signed higher-order interactions from fMRI data,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+29,openalex:W7134935494,PTCMIL: multiple instance learning via prompt token clustering for whole slide image analysis,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+30,openalex:W7134944726,MG-3D: Multi-grained knowledge-enhanced vision-language pre-training for 3D medical image analysis,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+31,openalex:W7134965559,Eliminating domain-related confounding factors in cross-domain one-shot medical image segmentation via causal inference,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+32,openalex:W7134965712,Establishing a relationship between iron-based blood measures and structural brain changes using neural networks in UK Biobank,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+33,openalex:W7135061954,ACE-ProtoNet: Adaptive covariance eigen-gate and uncertainty-aware prototype learning for coronary artery segmentation,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+34,openalex:W7135070057,PCa-Mamba: Spatiotemporal state space models for prostate cancer detection in multi-parametric MRI,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+35,openalex:W7135230477,Editorial Board,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+36,openalex:W7135416061,Beyond benchmarks of IUGC: Rethinking requirements of deep learning method for intrapartum ultrasound biometry from fetal ultrasound videos,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+37,openalex:W7138001366,PASS-Tr: PAtch-wise swin slice attention to leverage generalization of 2D large vision model to universal lesion detection,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+38,openalex:W7138528703,Translating MRI to PET through conditional diffusion models with enhanced pathology awareness,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+39,openalex:W7139037145,SEQUAL: Self-refining and effective querying active learning with pseudo label divergence score for carotid intima-media segmentation in ultrasound,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+40,openalex:W7139981065,ViFIT-assisted histopathology: From H&amp;E style standardization to virtual fiber image transformation,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+41,openalex:W7140114233,Clinical priors-inspired privileged knowledge distillation for reliable pancreatic lesion classification,2026,Medical Image Analysis,T022_media_openalex_source,8,core_imaging_journal
+42,openalex:W4361298490,"Artificial Intelligence and Machine Learning in Clinical Medicine, 2023",2023,New England Journal of Medicine,T033_nejm_2023,6,clinical_trial_journal_ai
+43,openalex:W4367041201,Advances in Artificial Intelligence for Infectious-Disease Surveillance,2023,New England Journal of Medicine,T033_nejm_2023,6,clinical_trial_journal_ai
+44,openalex:W4381480589,Artificial Intelligence and Machine Learning in Clinical Medicine,2023,New England Journal of Medicine,T033_nejm_2023,6,clinical_trial_journal_ai
+45,openalex:W4390919221,Three Epochs of Artificial Intelligence in Health Care,2024,JAMA,T033_jama_2024,6,clinical_trial_journal_ai
+46,openalex:W4390937667,Understanding Liability Risk from Using Health Care Artificial Intelligence Tools,2024,New England Journal of Medicine,T033_nejm_2024,6,clinical_trial_journal_ai
+47,openalex:W4391050822,"Mind the Gap — Machine Learning, Dataset Shift, and History in the Age of Clinical Algorithms",2024,New England Journal of Medicine,T033_nejm_2024,6,clinical_trial_journal_ai
+48,openalex:W4391100658,Outcomes in Mental Health Counseling From Conversational Content With Transformer-Based Machine Learning,2024,JAMA Network Open,T033_jama_network_open_2024,6,clinical_trial_journal_ai
+49,openalex:W4391324500,Regulate Artificial Intelligence in Health Care by Prioritizing Patient Outcomes,2024,JAMA,T033_jama_2024,6,clinical_trial_journal_ai
+50,openalex:W4391616800,Machine Learning Models for Predicting Disability and Pain Following Lumbar Disc Herniation Surgery,2024,JAMA Network Open,T033_jama_network_open_2024,6,clinical_trial_journal_ai

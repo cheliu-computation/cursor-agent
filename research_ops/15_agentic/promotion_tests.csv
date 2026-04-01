@@ -1,1 +1,11 @@
 test_id,skill_id,description,pass_criteria,notes
+PT-OPENALEX-001,SK001,Harvest 5 works from a known source without duplicate openalex_id,5 rows appended; 0 dupes vs existing spine,
+PT-EPMC-001,SK002,Fetch one OA case page; write manifest + JSON,manifest row has sha256; JSON parses,
+PT-CTGOV-001,SK003,Pull 3 studies for fixed query.term,3 rows with nct_id,
+PT-GC-001,SK004,Read first GC API page,count>0 and CSV append works,
+PT-TCIA-001,SK005,NBIA getCollectionValues returns >100 collections,len>=100,
+PT-PHYSIO-001,SK006,Parse PhysioNet published list,len>=600 projects,
+PT-GH-001,SK007,Mine one public repo issues,>=1 row when keywords match,
+PT-LINK-001,SK008,Resolve one DOI via OpenAlex,HTTP 200 + wid,
+PT-MANIFEST-001,SK009,Dry-run delete gate checklist,all LICENSE_POLICY gates documented True/False table,
+PT-CLIN-001,SK010,Produce clinical_signal row,row references valid paper_id,

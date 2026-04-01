@@ -1,1 +1,21 @@
 issue_id,repo_url,issue_number,title,category,repro_blocker,notes
+IM0001,https://github.com/Scalsol/RepPointsV2,20,Code compilation error,repro_or_env,maybe,T052 paper=openalex:W3101246443
+IM0002,https://github.com/Scalsol/RepPointsV2,18,IndexError: The shape of the mask [2101120] at index 0 does not match the shape of the indexed tensor [656600] at index 0,repro_or_env,maybe,T052 paper=openalex:W3101246443
+IM0003,https://github.com/Scalsol/RepPointsV2,17,loss nan,repro_or_env,maybe,T052 paper=openalex:W3101246443
+IM0004,https://github.com/snudatalab/KegNet,5,until now some bug appear,repro_or_env,maybe,T052 paper=openalex:W2970657225
+IM0005,https://github.com/snudatalab/KegNet,3,Small error in the code (tensorly.decomposition.parital_tucker),repro_or_env,maybe,T052 paper=openalex:W2970657225
+IM0006,https://github.com/snudatalab/KegNet,2,About the accuracy on SVHN dataset,repro_or_env,maybe,T052 paper=openalex:W2970657225
+IM0007,https://github.com/FBLADL/ACPL,7,Regarding accuracy mentioned in the paper on Chest X-ray14 dataset for different label percentage,repro_or_env,maybe,T052 paper=openalex:W4312436424
+IM0008,https://github.com/FBLADL/ACPL,6,ERROR: Could not find a version that satisfies the requirement faiss,repro_or_env,maybe,T052 paper=openalex:W4312436424
+IM0009,https://github.com/FBLADL/ACPL,4,Confusion in Datasets Preparation,repro_or_env,maybe,T052 paper=openalex:W4312436424
+IM0010,https://github.com/cwmok/C2FViT,22,Debug code?,repro_or_env,maybe,T052 paper=openalex:W4312694282
+IM0011,https://github.com/BWGZK/CycleMix,12,About the MSCMRSeg dataset itself,repro_or_env,maybe,T052 paper=openalex:W4214961286
+IM0012,https://github.com/BWGZK/CycleMix,11,Smoothness weight was larger than GCO_MAX_ENERGYTERM; danger of integer overflow.,repro_or_env,maybe,T052 paper=openalex:W4214961286
+IM0013,https://github.com/BWGZK/CycleMix,7,When run “run.sh”，Type error：can't convert np.ndarray of type numpy unit16 #4,repro_or_env,maybe,T052 paper=openalex:W4214961286
+IM0014,https://github.com/JLiangLab/DiRA,4,pre-trained weights,repro_or_env,maybe,T052 paper=openalex:W4307972630
+IM0015,https://github.com/zzzqzhou/Dual-Normalization,14,How to preprocess datasets.,repro_or_env,maybe,T052 paper=openalex:W4312465577
+IM0016,https://github.com/choubo/DRA,8,Questions about AITEX dataset conversion,repro_or_env,maybe,T052 paper=openalex:W4312289809
+IM0017,https://github.com/choubo/DRA,1,Inference codes and trained weights ? ,repro_or_env,maybe,T052 paper=openalex:W4312289809
+IM0018,https://github.com/Kangningthu/ADELE,18,NaN loss for PASCAL VOC dataset,repro_or_env,maybe,T052 paper=openalex:W4286908677
+IM0019,https://github.com/Kangningthu/ADELE,15,preprocessing on SegTHOR dataset,repro_or_env,maybe,T052 paper=openalex:W4286908677
+IM0020,https://github.com/Kangningthu/ADELE,14,Weights for multiscale consistency,repro_or_env,maybe,T052 paper=openalex:W4286908677
