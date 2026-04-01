@@ -8,3 +8,5 @@ research_ops/parsed/**/*.pdf
 
 # Bulk abstract JSONL (regenerate via scripts; keep paper_reading_status.csv in git)
 research_ops/parsed/abstracts/openalex_abstracts_*.jsonl
+research_ops/parsed/abstracts/abstract_index.sqlite
+research_ops/parsed/section_extractions_pilot.jsonl
