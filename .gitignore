@@ -5,3 +5,6 @@ research_ops/cache/**/*
 # Parsed temp blobs (if any large binaries land here)
 research_ops/parsed/**/*.bin
 research_ops/parsed/**/*.pdf
+
+# Bulk abstract JSONL (regenerate via scripts; keep paper_reading_status.csv in git)
+research_ops/parsed/abstracts/openalex_abstracts_*.jsonl

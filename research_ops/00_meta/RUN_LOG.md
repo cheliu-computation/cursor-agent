@@ -4,6 +4,12 @@
 
 ---
 
+## 2026-04-01 — Full-text read stack: abstracts + T202 OA pilot
+
+- **T200–T201**: Added `paper_reading_status.csv`, `fulltext_read_pipeline.md`, `scripts/ingest_openalex_abstracts.py`, `.gitignore` for `openalex_abstracts_*.jsonl`. Ingested OpenAlex `abstract_inverted_index` for **all 6401** `papers_master` rows (years 2026→1988 + backfill 80 late-added papers). JSONL files under `parsed/abstracts/` (not committed).
+- **T202**: `scripts/pilot_fetch_oa_html.py` — prioritized HTML over PDF for 2025–2026 with `abstract_status=ingested` and `oa_url_cached`; **50** successful downloads; **68** new `download_manifest` rows total across two invocations; **73** rows marked `fulltext_html_status=error` (403/timeouts).
+- **TODO**: New tasks **T200–T213** (HTML scale, PDF pilot, PMC, Unpaywall, FTS sqlite, monthly sync, audit link, GROBID, case fulltext, policy gate); **DOING=T203**.
+
 ## 2026-03-31 — T183 2018 window
 
 - **T183**: 2018 — 10 journals ×40 + arXiv2018 `medical imaging deep learning` cap 80 → **+332** (total **6401**). New rows set `harvest_window=2018_*`; new arXiv rows get `topic_subtag` heuristics.

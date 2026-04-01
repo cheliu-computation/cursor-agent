@@ -59,21 +59,123 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ## 2. DOING
 
-- [ ] T184 Rolling harvest: 2017 window (venues + arXiv)
+- [ ] T203 Expand OA HTML fetch to all `abstract_status=ingested` with non-empty `oa_url` (batched by year 2026→2015)
   - Status: DOING
   - Priority: P1
-  - Workstream: Paper Master
-  - Parent: T171
-  - Title: 10 journals ×35 + arXiv 2017 medimg cap ~70
-  - Deliverable: 更新 `papers_master.csv` + RUN_LOG
-  - Done When: 新增 ≥100 行
-  - Why It Matters: 继续向 2010s 中段回卷
+  - Workstream: Literature Lake
+  - Parent: T202
+  - Title: Scale HTML layer with rate limit + retry_queue
+  - Deliverable: 更新 manifest + status
+  - Done When: ≥500 行 `fulltext_html_status=ingested` 或显式 `blocked`
+  - Why It Matters: Exploit — 结构化正文抽取前置
 
 ## 3. READY / TODO
 
 ### P0 Setup / Governance (follow-ups)
 
 ### P0 Download / Cache (follow-up)
+
+### P1 Full-text read stack (摘要 → OA HTML → PDF)
+
+- [ ] T204 Pilot OA PDF download (cap 20) with hash + manifest (non-paywalled only)
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Literature Lake
+  - Parent: T203
+  - Title: True PDF layer for reproducibility spot-checks
+  - Deliverable: `cache/pdfs/` + manifest + `pdf_status`
+  - Done When: 20 PDF 可校验 SHA256
+  - Why It Matters: Deepen — 与 repro 审计衔接
+
+- [ ] T205 Europe PMC full-text XML for rows with PMID (when present)
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Literature Lake
+  - Parent: T200
+  - Title: OA PMC XML path where DOI/PMID maps
+  - Deliverable: cache + parsed excerpts + status
+  - Done When: ≥30 条 PMC 全文试跑
+  - Why It Matters: 高质医学全文入口
+
+- [ ] T206 Unpaywall / Crossref polite link enrichment for missing `oa_url`
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Literature Lake
+  - Parent: T200
+  - Title: Backfill OA URLs before HTML/PDF passes
+  - Deliverable: 更新 `paper_reading_status` + optional sidecar CSV
+  - Done When: ≥200 行新增可抓取 OA 线索
+  - Why It Matters: Repair — OpenAlex 缺摘要/缺 OA 时的补洞
+
+- [ ] T207 Build `parsed/abstracts/abstract_index.sqlite` (FTS5 on title+abstract) for local grep
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Literature Lake
+  - Parent: T200
+  - Title: Queryable abstract corpus
+  - Deliverable: sqlite under `parsed/` (gitignored if large)
+  - Done When: 可 SQL 检索 keywords
+  - Why It Matters: Exploit — agent 批量「读」摘要
+
+- [ ] T208 Monthly job: run `ingest_openalex_abstracts.py` for current `YYYY-MM` new `papers_master` rows
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Maintenance
+  - Parent: T182
+  - Title: Keep abstract layer synced with harvest
+  - Deliverable: RUNBOOK 段落 in `fulltext_read_pipeline.md`
+  - Done When: 文档化 cron/agent 步骤
+  - Why It Matters: 持续迭代读取
+
+- [ ] T209 Link `paper_reading_status` to `audit_priority_list` / `repro_audit` (join on openalex_id)
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Repro Audit
+  - Parent: T050
+  - Title: Prioritize fulltext fetch for audit queue
+  - Deliverable: 更新 CSV 或视图 memo
+  - Done When: 前 50 审计论文标记 `read_priority=high`
+  - Why It Matters: Link — 精读与审计对齐
+
+- [ ] T210 GROBID / science-parse optional pass on OA HTML/PDF (if license allows)
+  - Status: TODO
+  - Priority: P3
+  - Workstream: Literature Lake
+  - Parent: T203
+  - Title: Structured sections (methods/results) extraction
+  - Deliverable: `parsed/` JSON per paper
+  - Done When: 10 篇端到端试点
+  - Why It Matters: Deepen — 真结构化「读完」
+
+- [ ] T211 Case report fulltext: PMC OA XML for `case_reports_master` PMIDs
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Case Lake
+  - Parent: T062
+  - Title: Parallel fulltext track for case lake
+  - Deliverable: manifest + `case_reading_status.csv` (new)
+  - Done When: 20 篇病例全文缓存+解析状态
+  - Why It Matters: 病例湖与文献湖同构
+
+- [ ] T212 Policy gate: auto-set `skipped_policy` when `is_oa=false` and no PMC route
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Literature Lake
+  - Parent: T200
+  - Title: Avoid silent paywall fetches
+  - Deliverable: 更新 `paper_reading_status.notes`
+  - Done When: 规则写入 `fulltext_read_pipeline.md`
+  - Why It Matters: Repair — 合规
+
+- [ ] T213 Resume rolling harvest 2017→ (venues + arXiv) — optional depth past current 6401 rows
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Paper Master
+  - Parent: T171
+  - Title: Continue year-backfill when ingest bandwidth allows
+  - Deliverable: `papers_master.csv` + RUN_LOG
+  - Done When: 每窗口 ≥100 新行或停止条件记录
+  - Why It Matters: Exploit — 与全文读取并行扩表
 
 ### P1 Agentic / Frontier follow-ups
 
@@ -716,6 +818,10 @@ Agent 运行在 GitHub repository 环境中，可以：
 - [x] T182 Monthly harvest script — 2026-03-31 (`scripts/harvest_openalex_monthly.py`; smoke +5 rows for MedIA 2025-01)
 - [x] T175 `topic_subtag` for preprints — 2026-03-31 (1452 rows: preprint_broad/biorxiv/medrxiv title heuristics)
 - [x] T183 Rolling window 2018 — 2026-03-31 (10 journals ×40 + arXiv2018 cap 80; +332 rows; total 6401)
+- [x] T200 Full-text read stack scaffold — 2026-04-01 (`paper_reading_status.csv`, `fulltext_read_pipeline.md`, `scripts/ingest_openalex_abstracts.py`, `parsed/abstracts/.gitkeep`, `.gitignore` for JSONL)
+- [x] T201 OpenAlex abstract ingest all `papers_master` years — 2026-04-01 (2026→1988; **6401** status rows = **6401** papers; JSONL gitignored)
+- [x] T201b Backfill 80 status rows added after first 2026 pass — 2026-04-01 (sync `paper_reading_status` ↔ `papers_master`)
+- [x] T202 Pilot OA HTML fetch — 2026-04-01 (`scripts/pilot_fetch_oa_html.py`; **50** successful caches + **68** `download_manifest` rows incl. prior partial; **73** fetch errors logged in status)
 
 ## 6. Drop Rules
 

@@ -16,6 +16,9 @@ Rolling-ingest provenance bucket, **not** necessarily calendar month:
 - **tags_***: Pipe- or comma-separated controlled vocabulary (normalize in T047–T048).
 - **topic_subtag**: For `preprint_*` rows (T175), pipe-separated coarse buckets from title keywords: `imaging` | `clinical` | `genomics` | `other_preprint`.
 
+## `paper_reading_status.csv` (T200+)
+Tracks **abstract / OA HTML / PDF** pipeline per `openalex_id`. Status values: `pending` | `ingested` | `missing` | `error` | `skipped_policy`. Artifacts are repo-relative paths; bulk JSONL under `parsed/abstracts/` is gitignored (regenerate via `scripts/ingest_openalex_abstracts.py`).
+
 ## `source_registry.csv`
 - **layer**: A–H per `SOURCE_POLICY.md` (domain, method, clinical, data, repro, frontier, infra, case).
 - **bulkability** / **parseability**: Qualitative (`high|medium|low` or `json_high` style) for agent planning.
