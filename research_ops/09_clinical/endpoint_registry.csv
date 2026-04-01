@@ -1,1 +1,13 @@
 endpoint_id,name,definition,clinical_domain,notes
+EP001,all_cause_mortality,Death from any cause within follow-up,general,
+EP002,disease_specific_mortality,Death attributed to index condition,oncology_cardiology,
+EP003,hospitalization,Unplanned inpatient admission,acute_care,
+EP004,readmission,30/90-day readmission,health_systems,
+EP005,los,Length of stay,hospital,
+EP006,diagnostic_accuracy,Sensitivity/specificity/AUC for diagnosis,diagnostics,
+EP007,time_to_diagnosis,Time from presentation to definitive diagnosis,workflow,
+EP008,treatment_response,Change in disease activity score / tumor metrics,therapeutics,
+EP009,adverse_events,Grade 3+ toxicity or safety endpoint,trials,
+EP010,patient_reported_outcome,PRO / symptom score / QoL,patient_centered,
+EP011,biomarker_change,Lab or imaging biomarker delta,precision_medicine,
+EP012,clinical_deterioration,Early warning / ICU transfer composite,acute_care,

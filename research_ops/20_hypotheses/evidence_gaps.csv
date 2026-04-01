@@ -1,1 +1,6 @@
 gap_id,hypothesis_id,gap_description,blocking_questions,notes
+EG001,H001,No production EHR shadow logs yet,What is acceptable latency and override rate?,
+EG002,H002,Weak positive labels (title keyword rare),Need ORDO/ICD confirmation for positives,
+EG003,H003,Metric definition drift across challenge years,Is leaderboard metric still comparable?,
+EG004,H004,Structured eligibility criteria parsing quality,How often are criteria missing in CT.gov JSON?,
+EG005,H005,Figure/table extraction fidelity,Do path slides add signal beyond text?,

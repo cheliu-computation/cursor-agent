@@ -1,1 +1,12 @@
 pattern_id,name,description,example_refs,notes
+EV001,rct,Randomized allocation with control arm,T033-linked papers,
+EV002,prospective_cohort,Forward-in-time enrollment with defined protocol,,
+EV003,retrospective_cohort,EHR or registry look-back,,
+EV004,case_control,Cases vs matched controls,,
+EV005,cross_sectional,Single timepoint association study,,
+EV006,reader_study,Clinician readers with ground truth or consensus,,
+EV007,external_validation,Held-out site or temporal split,,
+EV008,multicenter,Multiple independent sites,,
+EV009,preregistration,Trial or analysis preregistered,,
+EV010,real_world_evidence,Claims or EHR without experimental arm,,
+EV011,simulation,In-silico or user study only,,

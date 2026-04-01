@@ -1,1 +1,4 @@
 audit_id,benchmark_or_paper,split_description,drift_risk,notes
+SA001,openalex:W4313181443,Weakly supervised CAM pseudo-labels on ProMRI/ACDC/CHAOS,high,WSSS pseudo-masks can leak val distribution if not isolated; T055 needs dataset-specific protocol read
+SA002,openalex:W4312428231,Self-supervised pretrain on unlabeled 3D volumes then finetune on Decathlon/BTCV,medium,Pretrain corpus vs finetune task boundary affects comparability across papers citing same leaderboard
+SA003,Grand Challenge harvest (T039),Challenge-defined hidden test sets,varies,GC rows often lack metric/split detail in list API; use per-challenge pages for forensic compare

@@ -1,1 +1,6 @@
 test_id,hypothesis_id,description,cost_estimate,success_criteria,notes
+CT001,H001,Shadow-mode summarization on 50 synthetic inbox threads,low,<10% critical omission rate vs gold outline,
+CT002,H002,BM25 vs embedding retrieval on RDRET seed,low,Recall@5 improves over keyword baseline on 5 queries,
+CT003,H003,Re-run one resurrection challenge with public baseline code,medium,Dice delta recorded with same metric definition,
+CT004,H004,Rule-based trial eligibility matcher on 30 synthetic patients,low,Precision@10 >=0.7 on labeled set,
+CT005,H005,Blinded factuality checklist on 10 synthetic cases,medium,>=80% checklist pass rate,

@@ -1,1 +1,6 @@
 check_id,trend_or_claim,solved,not_solved,verification_path,notes
+AH001,Clinical multi-agent LLM assistants,Prototype triage and drafting in sandbox settings,Autonomous diagnosis; liability; longitudinal safety under distribution shift,Reader studies + incident monitoring + red-team on tool misuse,T077 seed
+AH002,Self-evolving clinical simulation agents,Iterative scenario generation for training,Proof that evolution improves real patient outcomes vs scripted sims,A/B curriculum studies with human performance endpoints,
+AH003,AI scientist / closed-loop lab automation,Accelerates literature-grounded experiment planning,Robotic lab variance; reproducibility across sites; cost,Preregistered replication on benchmark tasks,
+AH004,Rare disease conversational agents,Improved patient education retrieval,Definitive diagnosis without clinician oversight,Prospective clinician-in-loop trials,
+AH005,Biomedical hypothesis LLMs,Generate diverse candidate hypotheses,Replace empirical validation or causal inference,Track precision@k on curated gold hypothesis sets,
