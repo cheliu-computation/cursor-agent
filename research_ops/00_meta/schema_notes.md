@@ -27,3 +27,48 @@ Short column semantics for high-churn registries. See header row as source of tr
 ## `paper_guideline_links.csv`
 - **guideline_id**: Internal stable ID; pair with **organization** + **version_year** for human disambiguation.
 - **relation_type**: `cites` | `implements` | `compares_to` | `derived_from` | `unknown`.
+
+## `tags_modality` controlled values (T047)
+Pipe-separated facets, primary bucket first:
+
+- `medical_imaging` — MICCAI/MIDL/IPMI/ISBI/MedIA/TMI style imaging ML
+- `clinical_imaging` — Radiology / Radiology AI harvests
+- `machine_learning` — NeurIPS/ICML/ICLR venue-scoped harvests
+- `computer_vision` — CVPR/ICCV/ECCV medical-oriented rows
+- `biomedical_science` — Nature/Science/Cell AI×bio crossovers
+- `clinical_translational` — Nat Med, NBE, npj DM, Comm Med
+- `clinical_high_impact` — JAMA, NEJM, Lancet Digital Health family
+- `clinical_ai` — agent/clinical simulator papers (T111 backfill heuristic)
+- `unspecified` — legacy or unknown provenance
+
+Optional secondary facets: `radiology`, `pathology` (inferred from venue string).
+
+## `tags_method` buckets (T048)
+Pipe-separated, alphabetically sorted:
+
+`agents`, `computer_vision`, `computational_biomedicine`, `deep_learning`, `foundation_models`, `federated_privacy`, `generative`, `representation_learning`, `segmentation`, `self_supervised`, `transformers`, `unspecified`
+
+Heuristic: title keywords + venue batch (ML conferences vs vision vs clinical journals).
+
+## `19_linking/trials_master.csv` (T043)
+Trial snapshot rows from ClinicalTrials.gov API v2: `trial_id` / `nct_id`, `brief_title`, `overall_status`, pipe-friendly `conditions`, `study_type`, canonical `url`.
+
+## `19_linking/paper_challenge_links.csv` (T049)
+Links Grand Challenge `challenge_id` (e.g. `gc:VESSEL12`) to `paper_id` (OpenAlex spine) via DOI resolution; **merge into `papers_master`** when missing (see T138).
+
+## `06_repro/audit_priority_list.csv` (T050)
+Ranked queue for deeper repro audit; scores are heuristic (venue + source_batch + recency), not citation counts.
+
+## `06_repro/repo_registry.csv` (T051)
+`paper_id` → GitHub repo URL; URLs parsed from OpenAlex `abstract_inverted_index` when present (validate against official project pages).
+
+## `06_repro/issue_mining.csv` (T052)
+Public GitHub Issues API results (title keyword gate); unauthenticated rate limits apply.
+
+## `06_repro/repro_audit.csv` (T053)
+Heuristic triage for audit queue; **not** a reproduction result until `repro_status` is updated after a run.
+
+## Case lake CSVs (T115 mapping)
+- `case_reports_master.presentation_summary`: Europe PMC `abstractText` snippet (not full case narrative until full-text).
+- `phenopackets.*`: Minimal regex-derived demographics only; HPO/phenotypes require NLP or manual curation.
+- `case_report_figures`: Placeholder rows until figure captions are parsed from XML/HTML full text.

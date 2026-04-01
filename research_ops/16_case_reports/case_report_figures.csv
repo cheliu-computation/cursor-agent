@@ -1,1 +1,7 @@
 figure_id,case_id,figure_index,caption,image_modality,diagnostic_value,weak_supervision_value,license_note,source_url,notes
+CF0001,pmid:41479782,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by,https://europepmc.org/article/MED/41479782,T066 placeholder from Europe PMC core flags/title heuristics
+CF0002,pmid:41502903,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by-nc-nd,https://europepmc.org/article/MED/41502903,T066 placeholder from Europe PMC core flags/title heuristics
+CF0003,pmid:41560863,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by,https://europepmc.org/article/MED/41560863,T066 placeholder from Europe PMC core flags/title heuristics
+CF0004,pmid:41561956,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by,https://europepmc.org/article/MED/41561956,T066 placeholder from Europe PMC core flags/title heuristics
+CF0005,pmid:41647751,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by-nc-nd,https://europepmc.org/article/MED/41647751,T066 placeholder from Europe PMC core flags/title heuristics
+CF0006,pmid:41660169,1,unknown; requires full-text parse,unknown,unknown,maybe,cc by,https://europepmc.org/article/MED/41660169,T066 placeholder from Europe PMC core flags/title heuristics

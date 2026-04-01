@@ -9,3 +9,8 @@ Q007,frontier_family,self_improve,(self-improving OR self-evolving OR skill acqu
 Q008,case_family,rare_disease,(case report) AND (rare disease OR orphan disease) AND (LLM OR retrieval OR diagnosis),case lake seed,
 Q009,safety_family,AE_mining,(adverse event OR side effect) AND (case report OR pharmacovigilance) AND (NLP OR LLM),specialized mining,
 Q010,data_family,datasets,(benchmark OR dataset) AND (medical imaging) AND (public OR open),dataset discovery,
+Q011,case_family,epmc_oa_case_title,OPEN_ACCESS:Y AND TITLE:"case report" AND (HAS_PMC:Y OR IN_EPMC:Y),Europe PMC REST; T116,
+Q012,case_family,epmc_oa_case_abstract,OPEN_ACCESS:Y AND ABSTRACT:"case report" AND (HAS_PMC:Y OR IN_EPMC:Y),Europe PMC REST; T116,
+Q013,case_family,epmc_oa_combined,OPEN_ACCESS:Y AND (TITLE:"case report" OR ABSTRACT:"case report") AND (HAS_PMC:Y OR IN_EPMC:Y),Europe PMC cursor harvest; T062,
+Q014,case_family,epmc_rare,OPEN_ACCESS:Y AND (TITLE:"case report" OR ABSTRACT:"case report") AND (rare OR orphan) AND (HAS_PMC:Y OR IN_EPMC:Y),rare disease case mining,
+Q015,case_family,epmc_oncology,OPEN_ACCESS:Y AND (TITLE:"case report" OR ABSTRACT:"case report") AND (cancer OR carcinoma OR tumor) AND (HAS_PMC:Y OR IN_EPMC:Y),oncology case reports,

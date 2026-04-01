@@ -15,3 +15,6 @@
 ## Failure paths
 - Download failure → `retry_queue.csv` with failure type `download`.
 - Parse failure → `retry_queue.csv` with failure type `parse`; raw may remain until resolved or policy timeout.
+
+## Case-report variant
+For Europe PMC / PMC OA case metadata JSON under `cache/metadata/`, follow `research_ops/16_case_reports/case_report_cache_lifecycle.md` (same manifest gates; default `parse_status=metadata_only` until full-text parse).
