@@ -1,0 +1,20 @@
+link_id,paper_id,challenge_id,relation,confidence,notes
+PCH0001,openalex:W2009911194,gc:VESSEL12,challenge_publication,medium,Resolved DOI 10.1016/j.media.2014.07.003 via OpenAlex; add to papers_master in follow-up
+PCH0002,openalex:W2164160732,gc:ANODE09,challenge_publication,medium,Resolved DOI 10.1016/j.media.2010.05.005 via OpenAlex; add to papers_master in follow-up
+PCH0003,openalex:W2135011268,gc:CADDementia,challenge_publication,medium,Resolved DOI 10.1016/j.neuroimage.2015.01.048 via OpenAlex; add to papers_master in follow-up
+PCH0004,openalex:W2106033751,gc:PROMISE12,challenge_publication,medium,Resolved DOI 10.1016/j.media.2013.12.002 via OpenAlex; add to papers_master in follow-up
+PCH0005,openalex:W2772723798,gc:CAMELYON16,challenge_publication,medium,Resolved DOI 10.1001/jama.2017.14585 via OpenAlex; add to papers_master in follow-up
+PCH0006,openalex:W2584017349,gc:LUNA16,challenge_publication,medium,Resolved DOI 10.1016/j.media.2017.06.015 via OpenAlex; add to papers_master in follow-up
+PCH0007,openalex:W2889232360,gc:CAMELYON17,challenge_publication,medium,Resolved DOI 10.1109/tmi.2018.2867350 via OpenAlex; add to papers_master in follow-up
+PCH0008,openalex:W2919070891,gc:RETOUCH,challenge_publication,medium,Resolved DOI 10.1109/tmi.2019.2901398 via OpenAlex; add to papers_master in follow-up
+PCH0009,openalex:W2901235535,gc:CATARACTS,challenge_publication,medium,Resolved DOI 10.1016/j.media.2018.11.008 via OpenAlex; add to papers_master in follow-up
+PCH0010,openalex:W2885824038,gc:ICIAR2018-Challenge,challenge_publication,medium,Resolved DOI 10.1016/j.media.2019.05.010 via OpenAlex; add to papers_master in follow-up
+PCH0011,openalex:W2153431772,gc:SLIVER07,challenge_publication,medium,Resolved DOI 10.1109/tmi.2009.2013851 via OpenAlex; add to papers_master in follow-up
+PCH0012,openalex:W2977650145,gc:IDRiD,challenge_publication,medium,Resolved DOI 10.1016/j.media.2019.101561 via OpenAlex; add to papers_master in follow-up
+PCH0013,openalex:W2126393454,gc:EMPIRE10,challenge_publication,medium,Resolved DOI 10.1109/tmi.2011.2158349 via OpenAlex; add to papers_master in follow-up
+PCH0014,openalex:W2940648811,gc:curious2018,challenge_publication,medium,Resolved DOI 10.1109/tmi.2019.2935060 via OpenAlex; add to papers_master in follow-up
+PCH0015,openalex:W3015450039,gc:ANHIR,challenge_publication,medium,Resolved DOI 10.1109/tmi.2020.2986331 via OpenAlex; add to papers_master in follow-up
+PCH0016,openalex:W3160122800,gc:BreastPathQ,challenge_publication,medium,Resolved DOI 10.1117/1.jmi.8.3.034501 via OpenAlex; add to papers_master in follow-up
+PCH0017,openalex:W3002569343,gc:CHAOS,challenge_publication,medium,Resolved DOI 10.1016/j.media.2020.101950 via OpenAlex; add to papers_master in follow-up
+PCH0018,openalex:W3172681723,gc:Decathlon-10,challenge_publication,medium,Resolved DOI 10.1038/s41467-022-30695-9 via OpenAlex; add to papers_master in follow-up
+PCH0019,openalex:W2340907062,gc:orCaScore,challenge_publication,medium,Resolved DOI 10.1118/1.4945696 via OpenAlex; add to papers_master in follow-up

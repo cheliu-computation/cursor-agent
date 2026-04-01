@@ -20,3 +20,18 @@
 - **Rule 2**: If title contains **multi-agent** + **(clinical OR biomedical OR EHR)**, link to `pain_points` PP-family (workflow / inbox) in `trend_to_problem_links` when a matching pain_id exists.
 - **Rule 3**: If **self_evolve=yes** but no **promotion_tests** or public code, mark as **hype-risk** in `anti_hype_checks` before any transfer promotion.
 - **Date**: 2026-03-31
+
+## D-005 — `paper_trial_links.relation_type` vocabulary
+Use one primary label per row (add detail in `relation_subtype` / `notes`).
+
+| Value | Meaning | Example |
+|-------|---------|---------|
+| `registers` | Paper is a trial **registration** or protocol-only publication for the trial | Protocol paper with NCT in structured field |
+| `reports_results` | Paper **reports outcomes** of the registered trial (primary or secondary results) | NEJM results article ↔ NCT |
+| `cited_in_protocol_text` | Trial record **embeds the DOI/PMID** in text (background, rationale, references) | T119 pilot links from CT.gov JSON |
+| `mentions` | Free-text mention without clear bibliographic ID | Legacy / low confidence |
+| `protocol_only` | Link is to trial **documentation** on CT.gov only (no paper ID yet) | Placeholder rows |
+| `unknown` | Insufficient evidence to classify | Default when ambiguous |
+
+**Confidence**: pair `cited_in_protocol_text` with `confidence=low|medium` unless independently verified in PubMed/ publisher site.
+- **Date**: 2026-03-31

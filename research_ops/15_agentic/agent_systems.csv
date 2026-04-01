@@ -1,16 +1,16 @@
-system_id,name,paper_or_url,components,tool_use,memory,self_evolve_claim,notes
-AS001,AI Hospital: Benchmarking Large Language Models in a Multi-agent Medical Interac,https://openalex.org/W4391899415,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS002,Enhancing diagnostic capability with multi-agents conversational large language ,https://openalex.org/W4408411093,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS003,CARE-AD: a multi-agent large language model framework for Alzheimer’s disease pr,https://openalex.org/W4413472898,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS004,HEAL-KGGen: A Hierarchical Multi-Agent LLM Framework with Knowledge Graph Enhanc,https://openalex.org/W4411122443,see paper,yes,yes,maybe,seed from frontier_papers harvest
-AS005,Enhancing Diagnostic Accuracy through Multi-Agent Conversations: Using Large Lan,https://openalex.org/W4391335084,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS006,MedAgentSim: Self-evolving Multi-agent Simulations for Realistic Clinical Intera,https://openalex.org/W4414379468,see paper,yes,maybe,yes,seed from frontier_papers harvest
-AS007,CellAgent: LLM-Driven Multi-Agent Framework for Natural Language-Based Single-Ce,https://openalex.org/W4396974446,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS008,Toward the Autonomous AI Doctor: Quantitative Benchmarking of an Autonomous Agen,https://openalex.org/W4413065709,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS009,The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies,https://openalex.org/W4412709685,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS010,The Virtual Lab: AI Agents Design New SARS-CoV-2 Nanobodies with Experimental Va,https://openalex.org/W4404283941,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS011,Agent Laboratory: Using LLM Agents as Research Assistants,https://openalex.org/W4406231153,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS012,ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven,https://openalex.org/W4403324055,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS013,Patients as Agents in Behavioral Health Research and Service Provision: Recommen,https://openalex.org/W2988403549,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS014,Digital Cardiovascular Twins; AI Agents; and Sensor Data: A Narrative Review fro,https://openalex.org/W4413480510,see paper,yes,maybe,maybe,seed from frontier_papers harvest
-AS015,BioDiscoveryAgent: An AI Agent for Designing Genetic Perturbation Experiments,https://openalex.org/W4399151368,see paper,yes,maybe,maybe,seed from frontier_papers harvest
+system_id,name,paper_or_url,components,tool_use,memory,self_evolve_claim,notes,papers_master_paper_id
+AS001,AI Hospital: Benchmarking Large Language Models in a Multi-agent Medical Interac,https://openalex.org/W4391899415,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4391899415
+AS002,Enhancing diagnostic capability with multi-agents conversational large language ,https://openalex.org/W4408411093,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4408411093
+AS003,CARE-AD: a multi-agent large language model framework for Alzheimer’s disease pr,https://openalex.org/W4413472898,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4413472898
+AS004,HEAL-KGGen: A Hierarchical Multi-Agent LLM Framework with Knowledge Graph Enhanc,https://openalex.org/W4411122443,see paper,yes,yes,maybe,seed from frontier_papers harvest,openalex:W4411122443
+AS005,Enhancing Diagnostic Accuracy through Multi-Agent Conversations: Using Large Lan,https://openalex.org/W4391335084,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4391335084
+AS006,MedAgentSim: Self-evolving Multi-agent Simulations for Realistic Clinical Intera,https://openalex.org/W4414379468,see paper,yes,maybe,yes,seed from frontier_papers harvest,openalex:W4414379468
+AS007,CellAgent: LLM-Driven Multi-Agent Framework for Natural Language-Based Single-Ce,https://openalex.org/W4396974446,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4396974446
+AS008,Toward the Autonomous AI Doctor: Quantitative Benchmarking of an Autonomous Agen,https://openalex.org/W4413065709,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4413065709
+AS009,The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies,https://openalex.org/W4412709685,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4412709685
+AS010,The Virtual Lab: AI Agents Design New SARS-CoV-2 Nanobodies with Experimental Va,https://openalex.org/W4404283941,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4404283941
+AS011,Agent Laboratory: Using LLM Agents as Research Assistants,https://openalex.org/W4406231153,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4406231153
+AS012,ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven,https://openalex.org/W4403324055,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4403324055
+AS013,Patients as Agents in Behavioral Health Research and Service Provision: Recommen,https://openalex.org/W2988403549,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W2988403549
+AS014,Digital Cardiovascular Twins; AI Agents; and Sensor Data: A Narrative Review fro,https://openalex.org/W4413480510,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4413480510
+AS015,BioDiscoveryAgent: An AI Agent for Designing Genetic Perturbation Experiments,https://openalex.org/W4399151368,see paper,yes,maybe,maybe,seed from frontier_papers harvest,openalex:W4399151368
