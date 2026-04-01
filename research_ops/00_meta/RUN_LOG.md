@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-04-01 — Batch close-out: T204–T211, T209, T213 + corpus 6583
+
+- **T204**–**T212**, **T208**, **T214**–**T216**: prior entries below; this run added scripts + CSV updates end-to-end.
+- **T209**: `read_priority=high` on **50** rows in `audit_priority_list.csv` and `repro_audit.csv`; join doc in `schema_notes.md`.
+- **T210**: `pilot_section_extract_html.py` — **10** HTML → `section_extractions_pilot.jsonl` (gitignored).
+- **T211**: `fetch_case_pmc_fulltext_pilot.py` — **20** case `fullTextXML` + `case_reading_status.csv` + manifest rows.
+- **T213**: `harvest_openalex_year_slice.py --year 2017` — **+182** papers (**6583** total); abstract ingest **2017** batch **92** ingested; FTS rebuild **6671** lines; Crossref second pass **+139** `oa_url_cached`; T212 second pass **+80** `skipped_policy` (now **1523** total).
+- **Manifest**: **~2364** data rows after case + paper EPMC + Layer B retries.
+- **DOING handoff**: **T127** (MedIA/TMI full pagination).
+
+## 2026-04-01 — T214 retry batch + T215 retry_queue + T216 cache baseline
+
+- **T214**: `batch_fetch_oa_html.py --retry-errors --limit 300` — **+300** manifest rows; `ingested+abstract+oa_url` **pending** **854 → 535** (**−37%** vs pre-batch `paper_reading_status` on branch tip before this run).
+- **T215**: `scripts/append_layerb_errors_to_retry_queue.py` — **+120** `RQ-T215-*` rows in `retry_queue.csv` (distinct `oa_url_cached` from `fulltext_html_status=error`).
+- **T216**: Post-run footprint — `cache/fulltext` ~**294MB** (incl. **40** `T205_PMC*.xml`); `cache/pdfs` ~**5.5GB**; `download_manifest` data rows **2344**.
+
+## 2026-04-01 — T204–T207 + T205 EPMC + T206 Crossref/EPMC + T212 policy gate
+
+- **T204**: `scripts/t204_verify_pdf_cache.py` — **20** rows `pdf_status=ingested`; SHA256(on disk) == `download_manifest.file_hash` for existing `T203_*.pdf` paths.
+- **T207**: `scripts/build_abstract_fts.py` — SQLite FTS5 **6481** rows from `openalex_abstracts_*.jsonl` → `parsed/abstracts/abstract_index.sqlite` (gitignored); sample query `MATCH 'segmentation'` → **645** hits.
+- **T205**: `scripts/fetch_epmc_fulltext_pilot.py` — **40** `fullTextXML` files `cache/fulltext/T205_PMC*.xml`; manifest **DL2005–DL2044**; new registry `paper_epmc_fulltext_pilot.csv`.
+- **T206**: `enrich_oa_url_crossref.py` — **500** API calls, **+450** `oa_url_cached` (polite UA with mailto); `enrich_oa_url_epmc.py` (relaxed `inEPMC=Y`) **+9**; `enrich_oa_url_openalex.py` **+0** on missing-URL sample. **http `oa_url` count → 4956/6401**.
+- **T212**: `scripts/t212_openalex_policy_gate.py` — **1445** lookups, **1443** rows `fulltext_html_status=skipped_policy` where OpenAlex `open_access.is_oa=false` and still no URL.
+- **TODO**: T204,T205,T206,T207,T212 → DONE; **DOING=T214**; added **T217** (Unpaywall optional).
+
 ## 2026-04-01 — Cache audit + T203 Layer B batch fetch (phase summary)
 
 - **Cleanup**: Scanned `research_ops/cache/{fulltext,pdfs,tmp}` against `download_manifest.local_path` — **no orphan files** (tmp only `.gitkeep`). No bulk delete of manifest-linked bytes (policy: manifest retained).

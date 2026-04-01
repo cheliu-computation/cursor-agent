@@ -59,15 +59,15 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ## 2. DOING
 
-- [ ] T204 Pilot OA PDF download (cap 20) with hash + manifest (non-paywalled only)
+- [ ] T127 Paginate MedIA + TMI full corpora (sources S116571295, S58069681; thousands of works)
   - Status: DOING
   - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T203
-  - Title: True PDF layer for reproducibility spot-checks
-  - Deliverable: `cache/pdfs/` + manifest + `pdf_status`
-  - Done When: 20 PDF 可校验 SHA256
-  - Why It Matters: Deepen — 与 repro 审计衔接
+  - Workstream: Domain Core
+  - Parent: T022
+  - Title: Beyond 25-paper seeds for core journals
+  - Deliverable: 更新 `papers_master.csv` + RUN_LOG note on API cost
+  - Done When: documented sampling strategy or full ingest complete
+  - Why It Matters: Exploit — 期刊主线需要可扩展抓取策略
 
 ## 3. READY / TODO
 
@@ -77,125 +77,15 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ### P1 Full-text read stack (摘要 → OA HTML → PDF)
 
-- [ ] T205 Europe PMC full-text XML for rows with PMID (when present)
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Literature Lake
-  - Parent: T200
-  - Title: OA PMC XML path where DOI/PMID maps
-  - Deliverable: cache + parsed excerpts + status
-  - Done When: ≥30 条 PMC 全文试跑
-  - Why It Matters: 高质医学全文入口
-
-- [ ] T206 Unpaywall / Crossref polite link enrichment for missing `oa_url`
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Literature Lake
-  - Parent: T200
-  - Title: Backfill OA URLs before HTML/PDF passes
-  - Deliverable: 更新 `paper_reading_status` + optional sidecar CSV
-  - Done When: ≥200 行新增可抓取 OA 线索
-  - Why It Matters: Repair — OpenAlex 缺摘要/缺 OA 时的补洞
-
-- [ ] T207 Build `parsed/abstracts/abstract_index.sqlite` (FTS5 on title+abstract) for local grep
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Literature Lake
-  - Parent: T200
-  - Title: Queryable abstract corpus
-  - Deliverable: sqlite under `parsed/` (gitignored if large)
-  - Done When: 可 SQL 检索 keywords
-  - Why It Matters: Exploit — agent 批量「读」摘要
-
-- [ ] T208 Monthly job: run `ingest_openalex_abstracts.py` for current `YYYY-MM` new `papers_master` rows
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Maintenance
-  - Parent: T182
-  - Title: Keep abstract layer synced with harvest
-  - Deliverable: RUNBOOK 段落 in `fulltext_read_pipeline.md`
-  - Done When: 文档化 cron/agent 步骤
-  - Why It Matters: 持续迭代读取
-
-- [ ] T209 Link `paper_reading_status` to `audit_priority_list` / `repro_audit` (join on openalex_id)
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Repro Audit
-  - Parent: T050
-  - Title: Prioritize fulltext fetch for audit queue
-  - Deliverable: 更新 CSV 或视图 memo
-  - Done When: 前 50 审计论文标记 `read_priority=high`
-  - Why It Matters: Link — 精读与审计对齐
-
-- [ ] T210 GROBID / science-parse optional pass on OA HTML/PDF (if license allows)
+- [ ] T217 Unpaywall API pass (email key) for `fulltext_html_status=pending` + DOI — optional `oa_url` / license fields beyond Crossref
   - Status: TODO
   - Priority: P3
   - Workstream: Literature Lake
-  - Parent: T214
-  - Title: Structured sections (methods/results) extraction
-  - Deliverable: `parsed/` JSON per paper
-  - Done When: 10 篇端到端试点
-  - Why It Matters: Deepen — 真结构化「读完」
-
-- [ ] T211 Case report fulltext: PMC OA XML for `case_reports_master` PMIDs
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Case Lake
-  - Parent: T062
-  - Title: Parallel fulltext track for case lake
-  - Deliverable: manifest + `case_reading_status.csv` (new)
-  - Done When: 20 篇病例全文缓存+解析状态
-  - Why It Matters: 病例湖与文献湖同构
-
-- [ ] T212 Policy gate: auto-set `skipped_policy` when `is_oa=false` and no PMC route
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T200
-  - Title: Avoid silent paywall fetches
-  - Deliverable: 更新 `paper_reading_status.notes`
-  - Done When: 规则写入 `fulltext_read_pipeline.md`
-  - Why It Matters: Repair — 合规
-
-- [ ] T213 Resume rolling harvest 2017→ (venues + arXiv) — optional depth past current 6401 rows
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Paper Master
-  - Parent: T171
-  - Title: Continue year-backfill when ingest bandwidth allows
-  - Deliverable: `papers_master.csv` + RUN_LOG
-  - Done When: 每窗口 ≥100 新行或停止条件记录
-  - Why It Matters: Exploit — 与全文读取并行扩表
-
-- [ ] T214 Layer B continuation: drain remaining `pending` / `error` OA rows (timeouts, headers, per-domain notes) toward ≥500 additional `ingested|pdf_cached`
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T203
-  - Title: Close the long tail after first-pass batch fetch
-  - Deliverable: manifest + `paper_reading_status` + RUN_LOG counts
-  - Done When: `pending` Layer-B queue for ingested-abstract + OA URL drops by ≥30% or blocked reasons documented
-  - Why It Matters: Exploit — more raw fulltext for parsers
-
-- [ ] T215 Append Layer-B download failures to `retry_queue.csv` (link `openalex_id`, URL, manifest note) with backoff policy in RUNBOOK
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Literature Lake
-  - Parent: T203
-  - Title: Auditable retries instead of only inline `notes`
-  - Deliverable: populated `retry_queue.csv` rows + `fulltext_read_pipeline.md` paragraph
-  - Done When: ≥50 rows enqueued from latest batch error set
-  - Why It Matters: Repair — operational hygiene
-
-- [ ] T216 Cache/disk hygiene: document measured `cache/pdfs` + `cache/fulltext` footprint after Layer B; optional eligible deletes per `LICENSE_POLICY.md` gates
-  - Status: TODO
-  - Priority: P2
-  - Workstream: Download / Cache
-  - Parent: T203
-  - Title: Keep agent environments within storage expectations
-  - Deliverable: paragraph in `RUN_LOG.md` + optional `delete_eligibility` review
-  - Done When: baseline GB + file counts recorded post-T203
-  - Why It Matters: Validate — reproducible without hoarding bytes
+  - Parent: T206
+  - Title: Enrich OA metadata when Crossref links are ambiguous
+  - Deliverable: sidecar or notes + rate-limited script
+  - Done When: ≥100 rows with `is_oa` / `best_oa_url` captured or doc why skipped
+  - Why It Matters: Repair — publisher-specific OA detection
 
 ### P1 Agentic / Frontier follow-ups
 
@@ -238,16 +128,6 @@ Agent 运行在 GitHub repository 环境中，可以：
   - Deliverable: 更新 `papers_master.csv`
   - Done When: counts match OpenAlex `meta.count` or gap documented
   - Why It Matters: Exploit — 与 T125 同类完整覆盖
-
-- [ ] T127 Paginate MedIA + TMI full corpora (sources S116571295, S58069681; thousands of works)
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Domain Core
-  - Parent: T022
-  - Title: Beyond 25-paper seeds for core journals
-  - Deliverable: 更新 `papers_master.csv` + RUN_LOG note on API cost
-  - Done When: documented sampling strategy or full ingest complete
-  - Why It Matters: Exploit — 期刊主线需要可扩展抓取策略
 
 - [ ] T128 Expand NeurIPS harvest beyond title-keyword gate (use OpenAlex abstract_inverted_index or concepts)
   - Status: TODO
@@ -843,6 +723,19 @@ Agent 运行在 GitHub repository 环境中，可以：
 - [x] T201b Backfill 80 status rows added after first 2026 pass — 2026-04-01 (sync `paper_reading_status` ↔ `papers_master`)
 - [x] T202 Pilot OA HTML fetch — 2026-04-01 (`scripts/pilot_fetch_oa_html.py`; **50** successful caches + **68** `download_manifest` rows incl. prior partial; **73** fetch errors logged in status)
 - [x] T203 Batch OA HTML/PDF fetch (Layer B scale-out) — 2026-04-01 (`scripts/batch_fetch_oa_html.py`; **1736** new `download_manifest` rows DL09201–DL2004; `fulltext_html_status`: **ingested 482**, **pdf_cached 1322**, **error 892**, **pending 3705**; arXiv PDF→abs fallback + `Accept: text/html`; cache audited — no manifest orphans; **D-006** documents `pdf_cached`)
+- [x] T204 PDF layer pilot — 2026-04-01 (`scripts/t204_verify_pdf_cache.py`; **20** rows `pdf_status=ingested` with on-disk SHA256 = `download_manifest` for `T203_*.pdf`)
+- [x] T205 Europe PMC fullTextXML pilot — 2026-04-01 (`scripts/fetch_epmc_fulltext_pilot.py`; **40** XML + manifest DL2005–DL2044; `paper_epmc_fulltext_pilot.csv`)
+- [x] T206 OA URL enrichment — 2026-04-01 (**Crossref** `enrich_oa_url_crossref.py` **+450** rows; **EPMC** `enrich_oa_url_epmc.py` **+9**; OpenAlex path **+0**); `oa_url_cached` **http** count **4956**/6401
+- [x] T207 Abstract FTS5 — 2026-04-01 (`scripts/build_abstract_fts.py`; **6481** rows in `abstract_index.sqlite`, gitignored)
+- [x] T212 OpenAlex policy gate — 2026-04-01 (`scripts/t212_openalex_policy_gate.py`; **1443** rows `fulltext_html_status=skipped_policy` where `is_oa=false` and no URL)
+- [x] T208 Monthly abstract sync RUNBOOK — 2026-04-01 (`fulltext_read_pipeline.md` § Monthly maintenance)
+- [x] T214 Layer B retry batch — 2026-04-01 (`batch_fetch_oa_html.py --retry-errors --limit 300`; **+300** manifest; ingested+OA **pending 854→535**, **−37%**)
+- [x] T215 retry_queue from Layer B errors — 2026-04-01 (`append_layerb_errors_to_retry_queue.py`; **+120** rows `RQ-T215-*`)
+- [x] T216 Cache footprint baseline — 2026-04-01 (RUN_LOG: fulltext ~294MB, pdfs ~5.5GB, 40 EPMC XML)
+- [x] T209 Audit read_priority — 2026-04-01 (`read_priority=high` on **50** rows in `audit_priority_list.csv` + `repro_audit.csv`; join doc in `schema_notes.md`)
+- [x] T211 Case PMC fullTextXML pilot — 2026-04-01 (`scripts/fetch_case_pmc_fulltext_pilot.py`; **20** XML + manifest; `case_reading_status.csv`)
+- [x] T210 Section extraction pilot — 2026-04-01 (`scripts/pilot_section_extract_html.py`; **10** rows → `section_extractions_pilot.jsonl`; naive HTML strip + heading regex)
+- [x] T213 Rolling 2017 journal slice — 2026-04-01 (`scripts/harvest_openalex_year_slice.py` 7 sources ×35; **+182** → `papers_master` **6583**; `ingest_openalex_abstracts` 2017 **92** ingested; `build_abstract_fts` **6671** rows; Crossref **+139** new `oa_url`; T212 **+80** `skipped_policy`)
 
 ## 6. Drop Rules
 

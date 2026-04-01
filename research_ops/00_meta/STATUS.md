@@ -3,54 +3,48 @@
 副标题：Scalable Discovery Agent 运行状态
 
 ## Current Focus
-- 当前阶段：**三层阅读栈** — 摘要（全库）→ Layer B 批量 OA 缓存（T203 首遍完成）→ **T204** PDF 试点 + 解析
-- 当前目标：完成 **T204**（显式 `pdf_status` + 小批量校验），并行准备 T205/T207
-- 当前任务 ID：**T204**
-- 当前工作流：Literature Lake / full-text cache
-- 当前运行模式：`download_manifest` 门禁 + `cache/{fulltext,pdfs}`（gitignore）
+- 当前阶段：文献脊 **6583** 篇（+**2017** 期刊切片）+ 阅读栈（摘要 FTS、Layer B、PMC 病例/论文 XML、审计 `read_priority`）
+- 当前目标：**T127** — 扩大 MedIA/TMI 等核心刊 OpenAlex 分页覆盖（与 T213 脚本同族）
+- 当前任务 ID：**T127**
+- 当前工作流：Literature Lake + Case Lake + Repro link
+- 当前运行模式：`download_manifest` + `cache/**`（gitignore）
 
 ## Current Task
-- Title：**T204** — 试点 **20** 条 OA PDF：`pdf_status` + manifest + SHA256 可复验（非 paywall）
-- Deliverable：更新 `download_manifest.csv`、`paper_reading_status.csv` 的 `pdf_status` / `pdf_artifact`
-- Done When：**20** 行 `pdf_status=ingested`（或等价策略）且 hash 记录在 manifest
-- Blocking Dependencies：与 T203 已缓存的 `pdf_cached` 行对齐时需避免重复下载
+- Title：**T127** — 对 OpenAlex `S116571295`（MedIA）、`S58069681`（TMI）等做 cursor 分页直至 `meta.count` 或记录采样策略
+- Deliverable：`papers_master.csv` + RUN_LOG
+- Done When：文档化完整抓取或明确 cap 理由
+- Blocking Dependencies：API 成本与速率
 
 ## Completed In This Run（摘要）
-- **T200**：`paper_reading_status.csv`、`fulltext_read_pipeline.md`、`parsed/abstracts/.gitkeep`
-- **T201**：OpenAlex **摘要** 全量 — **6401** 篇与 `papers_master` 一一对应；按年 JSONL（**gitignored**）
-- **T201b**：补登记后新增的 **80** 篇
-- **T202**：试点 **50** 次成功下载；manifest **+68**（两趟脚本：18+50）；`fulltext_html_status`：**ingested 68**、**error 73**（其余仍 `pending`）
-- **T203**：`scripts/batch_fetch_oa_html.py` — manifest **+1736**（DL09201–DL2004）；Layer B 状态 **ingested 482**、**pdf_cached 1322**、**error 892**、**pending 3705**（见 **D-006**）
-- **TODO**：**DOING=T204**；新增 **T214–T216**（Layer B 长尾、retry_queue、缓存体量记录）
+- **T204–T212、T208、T214–T216**：见 `RUN_LOG.md` 顶部条目（PDF 校验、EPMC、Crossref、FTS、policy gate、retry、footprint）
+- **T209**：`audit_priority_list` / `repro_audit` 增加 **`read_priority=high`**（50 行）
+- **T210**：`pilot_section_extract_html.py` → **10** 条 naive 分段 JSONL（gitignored）
+- **T211**：**20** 病例 `fullTextXML` + `case_reading_status.csv` + manifest
+- **T213**：`harvest_openalex_year_slice.py` — **2017** ×7 刊 ×35 → **+182** `papers_master`；`ingest_openalex_abstracts` **2017** 摘要 **92** ingested；**FTS 6671** 行；Crossref 再 **+139** `oa_url`；T212 二遍 **+80** `skipped_policy`
 
 ## Key Findings So Far
-- OpenAlex 对旧文献 **abstract 常缺失**（`abstract_status=missing` 正常）
-- 约 **4497** 行带 `oa_url_cached`；大量 OA 着陆页在 **Content-Type 上仍是 PDF** — 用 **`pdf_cached`** 记录（D-006），不等价于 HTML `ingested`
-- 对 arXiv：`oa_url` 常为 `/pdf/…` — **`/abs/` 回退** + 请求头 **`Accept: text/html`** 可提高 HTML 命中
-- 非 PDF 的待抓取 URL 耗尽后，仅靠重试 **error** 行难以再推高 `ingested` — **T214** 需新策略（PMC、Unpaywall、更长超时/合规 backoff）
+- **Crossref** 仍是缺 OpenAlex `oa_url` 时的主力补链；**T212** 对「无 URL」行用 OpenAlex `is_oa=false` 打 **`skipped_policy`**，避免误抓付费墙
+- **6583** 行 `paper_reading_status` 与主表对齐；**~2364** manifest 数据行（含论文 Layer B、EPMC、病例 XML）
 
 ## Current Assets
-- `papers_master.csv`：**6401** 行
-- `paper_reading_status.csv`：**6401** 行（与主表对齐）
-- `scripts/ingest_openalex_abstracts.py`：按年/全量摘要
-- `scripts/pilot_fetch_oa_html.py`：**T202** 试点
-- `scripts/batch_fetch_oa_html.py`：**T203** 批量 Layer B（可选 `--skip-pdf-primary`、`--retry-errors`）
+- `scripts/harvest_openalex_year_slice.py` — 按 **年 × source_id** 拉取并 merge
+- `scripts/fetch_case_pmc_fulltext_pilot.py`、`scripts/pilot_section_extract_html.py`
+- `paper_epmc_fulltext_pilot.csv`、`case_reading_status.csv`
 
 ## Risks / Blockers
-- 大规模 HTML 抓取：**ToS + 速率**；默认只处理 OpenAlex 给出的 `oa_url`
-- `cache/**` 不入库；依赖 manifest 做审计
+- Publisher ToS / 429；`cache/pdfs` 体量大（见 RUN_LOG T216）
 
 ## Next Best Task
-- **T204**（20 PDF + `pdf_status`）→ **T207**（摘要 FTS）→ **T214**（Layer B 长尾）
+- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ **T214** 续跑（可选）
 
 ## Immediate Follow-ups
-- **T212**：对明确非 OA 的行写 `skipped_policy`，减少无效请求
-- **T206**：Unpaywall 礼貌补 `oa_url`
+- 新入库 **2017** 行：可再跑 `batch_fetch_oa_html.py` 消化带 URL 的 `pending`
+- 重建本地摘要索引：`build_abstract_fts.py`（已在 T213 后执行）
 
 ## Working Rules For This Run
-- 每层：**manifest 先行**；删缓存前核对 `LICENSE_POLICY.md`
+- manifest 先行；删缓存前核对 `LICENSE_POLICY.md`
 
 ## Resume Instructions
-1. `TODO.md` → **DOING T203**
-2. 扩展 `pilot_fetch_oa_html.py` 或新脚本：按年循环 + `retry_queue`
+1. `TODO.md` → **DOING T127**
+2. OpenAlex `cursor` 分页脚本或手工分批 `harvest_openalex_year_slice.py` 提高 `limit-per-source`
 3. `cp research_ops/00_meta/TODO.md SCALABLE_DISCOVERY_AGENT_TODO.md` → commit
