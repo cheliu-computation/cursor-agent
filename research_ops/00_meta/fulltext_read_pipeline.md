@@ -9,10 +9,11 @@ Three layers; each layer has its own TODO id and **must** respect `LICENSE_POLIC
 
 ## Layer B — OA full text (HTML/XML landing page)
 - **When**: `open_access.is_oa` and `primary_location.landing_page_url` (or Europe PMC / Unpaywall later)
-- **Cache**: `research_ops/cache/fulltext/` (gitignored)
+- **Cache**: `research_ops/cache/fulltext/` (gitignored); PDF-shaped responses → `research_ops/cache/pdfs/T203_*.pdf` (see **D-006**)
 - **Manifest**: `download_manifest.csv` before any delete
-- **Registry**: `fulltext_html_status`
+- **Registry**: `fulltext_html_status` (`ingested` | `pdf_cached` | `error` | …)
 - **Pilot script**: `scripts/pilot_fetch_oa_html.py` (T202; uses `oa_url_cached` from `paper_reading_status.csv`)
+- **Batch script**: `scripts/batch_fetch_oa_html.py` (T203; arXiv `/abs/` fallback, `Accept: text/html`, `--skip-pdf-primary` / `--retry-errors`)
 
 ## Layer C — PDF
 - **When**: explicit OA + policy allow; **manifest + hash** mandatory

@@ -35,3 +35,8 @@ Use one primary label per row (add detail in `relation_subtype` / `notes`).
 
 **Confidence**: pair `cited_in_protocol_text` with `confidence=low|medium` unless independently verified in PubMed/ publisher site.
 - **Date**: 2026-03-31
+
+## D-006 — `fulltext_html_status=pdf_cached` for Layer B
+- **Decision**: When the OA URL is nominally an HTML landing page but the HTTP response is **PDF** (`Content-Type` or `.pdf` URL), set `fulltext_html_status=pdf_cached`, store bytes under `cache/pdfs/` with prefix **`T203_`**, and record the row in `download_manifest.csv` with accurate `mime_type`.
+- **Rationale**: Avoid mislabeling binary PDF as HTML; keeps Layer B “fetched fulltext bytes” auditable while **T204** can later normalize `pdf_status` for explicit PDF-layer tracking.
+- **Date**: 2026-04-01

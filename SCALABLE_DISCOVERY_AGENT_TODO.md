@@ -59,15 +59,15 @@ Agent 运行在 GitHub repository 环境中，可以：
 
 ## 2. DOING
 
-- [ ] T203 Expand OA HTML fetch to all `abstract_status=ingested` with non-empty `oa_url` (batched by year 2026→2015)
+- [ ] T204 Pilot OA PDF download (cap 20) with hash + manifest (non-paywalled only)
   - Status: DOING
   - Priority: P1
   - Workstream: Literature Lake
-  - Parent: T202
-  - Title: Scale HTML layer with rate limit + retry_queue
-  - Deliverable: 更新 manifest + status
-  - Done When: ≥500 行 `fulltext_html_status=ingested` 或显式 `blocked`
-  - Why It Matters: Exploit — 结构化正文抽取前置
+  - Parent: T203
+  - Title: True PDF layer for reproducibility spot-checks
+  - Deliverable: `cache/pdfs/` + manifest + `pdf_status`
+  - Done When: 20 PDF 可校验 SHA256
+  - Why It Matters: Deepen — 与 repro 审计衔接
 
 ## 3. READY / TODO
 
@@ -76,16 +76,6 @@ Agent 运行在 GitHub repository 环境中，可以：
 ### P0 Download / Cache (follow-up)
 
 ### P1 Full-text read stack (摘要 → OA HTML → PDF)
-
-- [ ] T204 Pilot OA PDF download (cap 20) with hash + manifest (non-paywalled only)
-  - Status: TODO
-  - Priority: P1
-  - Workstream: Literature Lake
-  - Parent: T203
-  - Title: True PDF layer for reproducibility spot-checks
-  - Deliverable: `cache/pdfs/` + manifest + `pdf_status`
-  - Done When: 20 PDF 可校验 SHA256
-  - Why It Matters: Deepen — 与 repro 审计衔接
 
 - [ ] T205 Europe PMC full-text XML for rows with PMID (when present)
   - Status: TODO
@@ -141,7 +131,7 @@ Agent 运行在 GitHub repository 环境中，可以：
   - Status: TODO
   - Priority: P3
   - Workstream: Literature Lake
-  - Parent: T203
+  - Parent: T214
   - Title: Structured sections (methods/results) extraction
   - Deliverable: `parsed/` JSON per paper
   - Done When: 10 篇端到端试点
@@ -176,6 +166,36 @@ Agent 运行在 GitHub repository 环境中，可以：
   - Deliverable: `papers_master.csv` + RUN_LOG
   - Done When: 每窗口 ≥100 新行或停止条件记录
   - Why It Matters: Exploit — 与全文读取并行扩表
+
+- [ ] T214 Layer B continuation: drain remaining `pending` / `error` OA rows (timeouts, headers, per-domain notes) toward ≥500 additional `ingested|pdf_cached`
+  - Status: TODO
+  - Priority: P1
+  - Workstream: Literature Lake
+  - Parent: T203
+  - Title: Close the long tail after first-pass batch fetch
+  - Deliverable: manifest + `paper_reading_status` + RUN_LOG counts
+  - Done When: `pending` Layer-B queue for ingested-abstract + OA URL drops by ≥30% or blocked reasons documented
+  - Why It Matters: Exploit — more raw fulltext for parsers
+
+- [ ] T215 Append Layer-B download failures to `retry_queue.csv` (link `openalex_id`, URL, manifest note) with backoff policy in RUNBOOK
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Literature Lake
+  - Parent: T203
+  - Title: Auditable retries instead of only inline `notes`
+  - Deliverable: populated `retry_queue.csv` rows + `fulltext_read_pipeline.md` paragraph
+  - Done When: ≥50 rows enqueued from latest batch error set
+  - Why It Matters: Repair — operational hygiene
+
+- [ ] T216 Cache/disk hygiene: document measured `cache/pdfs` + `cache/fulltext` footprint after Layer B; optional eligible deletes per `LICENSE_POLICY.md` gates
+  - Status: TODO
+  - Priority: P2
+  - Workstream: Download / Cache
+  - Parent: T203
+  - Title: Keep agent environments within storage expectations
+  - Deliverable: paragraph in `RUN_LOG.md` + optional `delete_eligibility` review
+  - Done When: baseline GB + file counts recorded post-T203
+  - Why It Matters: Validate — reproducible without hoarding bytes
 
 ### P1 Agentic / Frontier follow-ups
 
@@ -822,6 +842,7 @@ Agent 运行在 GitHub repository 环境中，可以：
 - [x] T201 OpenAlex abstract ingest all `papers_master` years — 2026-04-01 (2026→1988; **6401** status rows = **6401** papers; JSONL gitignored)
 - [x] T201b Backfill 80 status rows added after first 2026 pass — 2026-04-01 (sync `paper_reading_status` ↔ `papers_master`)
 - [x] T202 Pilot OA HTML fetch — 2026-04-01 (`scripts/pilot_fetch_oa_html.py`; **50** successful caches + **68** `download_manifest` rows incl. prior partial; **73** fetch errors logged in status)
+- [x] T203 Batch OA HTML/PDF fetch (Layer B scale-out) — 2026-04-01 (`scripts/batch_fetch_oa_html.py`; **1736** new `download_manifest` rows DL09201–DL2004; `fulltext_html_status`: **ingested 482**, **pdf_cached 1322**, **error 892**, **pending 3705**; arXiv PDF→abs fallback + `Accept: text/html`; cache audited — no manifest orphans; **D-006** documents `pdf_cached`)
 
 ## 6. Drop Rules
 

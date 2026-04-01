@@ -17,7 +17,7 @@ Rolling-ingest provenance bucket, **not** necessarily calendar month:
 - **topic_subtag**: For `preprint_*` rows (T175), pipe-separated coarse buckets from title keywords: `imaging` | `clinical` | `genomics` | `other_preprint`.
 
 ## `paper_reading_status.csv` (T200+)
-Tracks **abstract / OA HTML / PDF** pipeline per `openalex_id`. Status values: `pending` | `ingested` | `missing` | `error` | `skipped_policy`. Artifacts are repo-relative paths; bulk JSONL under `parsed/abstracts/` is gitignored (regenerate via `scripts/ingest_openalex_abstracts.py`).
+Tracks **abstract / OA HTML / PDF** pipeline per `openalex_id`. Status values: `pending` | `ingested` | `missing` | `error` | `skipped_policy`. **`pdf_cached`** (Layer B, T203): OA fetch succeeded but body is **PDF** — see `DECISIONS.md` **D-006**; artifact often `research_ops/cache/pdfs/T203_*.pdf`. Artifacts are repo-relative paths; bulk JSONL under `parsed/abstracts/` is gitignored (regenerate via `scripts/ingest_openalex_abstracts.py`).
 
 ## `source_registry.csv`
 - **layer**: A–H per `SOURCE_POLICY.md` (domain, method, clinical, data, repro, frontier, infra, case).

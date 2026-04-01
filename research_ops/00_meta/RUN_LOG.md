@@ -4,6 +4,16 @@
 
 ---
 
+## 2026-04-01 — Cache audit + T203 Layer B batch fetch (phase summary)
+
+- **Cleanup**: Scanned `research_ops/cache/{fulltext,pdfs,tmp}` against `download_manifest.local_path` — **no orphan files** (tmp only `.gitkeep`). No bulk delete of manifest-linked bytes (policy: manifest retained).
+- **Script**: Added `scripts/batch_fetch_oa_html.py` — year-priority queue, `--limit`, `--sleep`, `--retry-errors`, `--skip-pdf-primary`, arXiv `/pdf/` → `/abs/` attempts, `Accept: text/html` on requests.
+- **Manifest**: **1736** new rows (**DL09201–DL2004**, notes `T203 batch OA fetch`); total data rows **2004**.
+- **`paper_reading_status.csv`** (6401 papers): `fulltext_html_status` — **ingested 482**, **pdf_cached 1322**, **error 892**, **pending 3705** (after multi-pass batch + one error-retry sweep).
+- **Observation**: Original T203 gate “≥500 `ingested`” is **not met** because many non-PDF landing URLs still return `application/pdf`; corpus now has **1804** Layer-B bytes on disk (`ingested` + `pdf_cached`). **D-006** + **T214–T216** capture follow-up.
+- **Disk** (post-run, local): `cache/fulltext` ~**275MB**; `cache/pdfs` ~**4.8GB**, **1323** `.pdf` files.
+- **TODO**: **T203** → DONE; **DOING=T204**; added **T214–T216**.
+
 ## 2026-04-01 — Full-text read stack: abstracts + T202 OA pilot
 
 - **T200–T201**: Added `paper_reading_status.csv`, `fulltext_read_pipeline.md`, `scripts/ingest_openalex_abstracts.py`, `.gitignore` for `openalex_abstracts_*.jsonl`. Ingested OpenAlex `abstract_inverted_index` for **all 6401** `papers_master` rows (years 2026→1988 + backfill 80 late-added papers). JSONL files under `parsed/abstracts/` (not committed).
