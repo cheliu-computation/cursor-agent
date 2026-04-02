@@ -34,6 +34,8 @@ All paths are relative to the repository root. Heavy outputs go to `research_ops
 | `t204_verify_pdf_cache.py` | SHA256 verify cached PDF vs manifest → `pdf_status`. |
 | `extract_pdf_text.py` | PyMuPDF → `.txt` under `parsed/pdfs/` (`--self-test`, `--from-status`). |
 | `batch_extract_all_pdfs.py` | All `cache/pdfs/*.pdf` → `.txt` + `pdf_extract_index.csv` + `00_meta/PDF_CORPUS_REPORT.md`. |
+| `corpus_cleanup_readable_fulltext.py` | Delete PDFs/HTML not readable; keep PMC XML; prune manifest; `html_readable_index.csv`. |
+| `build_year_source_journal_table.py` | `YEAR_SOURCE_JOURNAL_TABLE.md` — year × source × journal-type. |
 | `fetch_epmc_fulltext_pilot.py` | Europe PMC `fullTextXML` for papers (T205). |
 | `fetch_case_pmc_fulltext_pilot.py` | Europe PMC `fullTextXML` for case reports (T211). |
 
