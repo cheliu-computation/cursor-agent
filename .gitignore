@@ -1,3 +1,7 @@
+# Python
+__pycache__/
+*.pyc
+
 # Raw download cache — do not commit bulk artifacts
 research_ops/cache/**/*
 !research_ops/cache/**/.gitkeep
