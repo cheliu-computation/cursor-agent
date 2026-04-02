@@ -10,3 +10,4 @@ research_ops/parsed/**/*.pdf
 research_ops/parsed/abstracts/openalex_abstracts_*.jsonl
 research_ops/parsed/abstracts/abstract_index.sqlite
 research_ops/parsed/section_extractions_pilot.jsonl
+research_ops/parsed/pdfs/*.txt

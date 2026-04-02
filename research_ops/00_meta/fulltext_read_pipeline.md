@@ -33,6 +33,7 @@ Three layers; each layer has its own TODO id and **must** respect `LICENSE_POLIC
 - **When**: explicit OA + policy allow; **manifest + hash** mandatory
 - **Cache**: `research_ops/cache/pdfs/` (gitignored)
 - **Registry**: `pdf_status`
+- **Text extraction**: `scripts/extract_pdf_text.py` — **PyMuPDF** `page.get_text("text")` → `research_ops/parsed/pdfs/<stem>.txt` (gitignored). Run `pip install -r requirements.txt` first. Flags: `--self-test` (sanity on cached PDFs), `--from-status --limit N` (rows with `fulltext_html_status=pdf_cached`). Optional `--parse-manifest` appends `parse_manifest.csv`. **Scanned PDFs** need a separate OCR path (not in this script).
 
 ## Section extraction pilot (T210)
 - **Naive path** (no GROBID): `scripts/pilot_section_extract_html.py` — strips tags, regex-splits on common headings → `parsed/section_extractions_pilot.jsonl` (gitignored).

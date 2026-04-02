@@ -1,1 +1,4 @@
 parse_id,manifest_id,parser_version,parse_status,structured_output_path,error_summary,raw_retained,notes
+P5b4269ef559d455c,DL10901,pymupdf_text_v1,text_extracted,research_ops/parsed/pdfs/T203_W2787835810.txt,,yes,extract_pdf_text.py openalex_id=W2787835810
+Pf0c7fbeb3efb4344,DL10903,pymupdf_text_v1,text_extracted,research_ops/parsed/pdfs/T203_W2884547966.txt,,yes,extract_pdf_text.py openalex_id=W2884547966
+P91a45443f9ca4df6,DL10904,pymupdf_text_v1,text_extracted,research_ops/parsed/pdfs/T203_W2886584550.txt,,yes,extract_pdf_text.py openalex_id=W2886584550

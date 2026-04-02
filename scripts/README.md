@@ -32,6 +32,7 @@ All paths are relative to the repository root. Heavy outputs go to `research_ops
 | `pilot_fetch_oa_html.py` | Small OA HTML/PDF pilot (T202). |
 | `batch_fetch_oa_html.py` | Batched OA fetch + arXiv fallbacks (T203/T214). |
 | `t204_verify_pdf_cache.py` | SHA256 verify cached PDF vs manifest → `pdf_status`. |
+| `extract_pdf_text.py` | PyMuPDF → `.txt` under `parsed/pdfs/` (`--self-test`, `--from-status`). |
 | `fetch_epmc_fulltext_pilot.py` | Europe PMC `fullTextXML` for papers (T205). |
 | `fetch_case_pmc_fulltext_pilot.py` | Europe PMC `fullTextXML` for case reports (T211). |
 
