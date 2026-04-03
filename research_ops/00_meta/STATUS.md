@@ -23,7 +23,8 @@
 - **T222**：缩小 preprint/arXiv 全文范围：默认过滤纯 preprint 全文抓取，只保留“近年 + 非 preprint 主来源 + DOI 匹配”的 arXiv 兜底路径
 - **T223**：开始搭建 trend/gap 分析层：生成 `trend_signals.csv`（**6** rows）与 `trend_gap_summary_001.md`
 - **T224**：新增 `publisher_arxiv_fallback_links.csv`，基于标准化标题找到 **12** 组正式来源 -> preprint/arXiv 兜底映射，其中 **1** 组在当前规则下可立即作为 fallback 候选
-- **当前 Layer-B 状态**：`error` **1119 → 68**；`skipped_policy` **1523 → 3721**
+- **T225**：剩余 Layer-B 终态长尾（403 / 404 / connection-reset / cleaned-artifact mismatch）已全部归类，`error` 清零
+- **当前 Layer-B 状态**：`error` **1119 → 0**；`skipped_policy` **1523 → 3789**
 
 ## Key Findings So Far
 - **Crossref** 仍是缺 OpenAlex `oa_url` 时的主力补链；**T212** 对「无 URL」行用 OpenAlex `is_oa=false` 打 **`skipped_policy`**，避免误抓付费墙
@@ -33,6 +34,7 @@
 - 当前仓库里的“正文”并不是存进数据库的全文库；raw 正文在 `cache/`（gitignored），提取后的文本/JSONL/索引在 `parsed/`，长期保留的是 CSV / manifest / extracted outputs
 - arXiv 相关 URL 历史上占比偏大；当前策略已将其缩到“metadata-first，full-text 仅作近年 publisher-backed 兜底”
 - trend/gap 分析层已不再是空壳：当前已有 **6** 条 trend signals，可直接作为第一版趋势/空白分析的骨架
+- 当前 Layer-B `error` 已清零；剩下的是 `pending` 候选和策略性跳过，不再混入“其实不会成功的网页重试项”
 
 ## Current Assets
 - `scripts/harvest_openalex_year_slice.py` — 按 **年 × source_id** 拉取并 merge
@@ -47,10 +49,11 @@
 - `cache/pdfs` 体量大（见 RUN_LOG T216）
 
 ## Next Best Task
-- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ 对剩余 **68** 条 `error` 做来源专项分流（尤其 `doi.org` / `academic.oup.com` / repository mirrors）
+- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ 扩展 `trend_signals` / `trend_gap_summary` 到第二版，并利用 `publisher_arxiv_fallback_links.csv` 精化兜底全文策略
 
 ## Immediate Follow-ups
-- 对剩余 `doi.org` / `academic.oup.com` / repository mirror` 错误行，优先走更稳的 OA 路由补链，而不是继续撞 publisher 直链
+- 基于 `trend_signals.csv` 与 `clinical_signal.csv` 生成第二版 trend-to-problem / gap ranking
+- 利用 `publisher_arxiv_fallback_links.csv` 只对高价值、近年的正式来源做少量 arXiv 兜底验证
 - 保持 case reports 为 metadata-only 默认策略，除非有明确需求再显式 opt-in 全文抓取
 
 ## Working Rules For This Run

@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-04-03 — Final Layer-B error tail cleanup
+
+- Inspected the final **68** residual `error` rows by host and failure note pattern.
+- Residual tail was overwhelmingly terminal rather than retry-worthy:
+  - **62** rows were repeated **403 / Forbidden**
+  - small remainder were stable **404**, repository reset, or handle-system failures
+- Expanded terminal policy handling and applied final cleanup scripts:
+  - updated `scripts/fetch_policy.py` terminal host lists
+  - re-ran `scripts/reclassify_layerb_policy_skips.py` (**+44** rows)
+  - added and ran `scripts/reclassify_terminal_tail.py` (**+24** rows)
+- Sequential recount after final cleanup:
+  - `skipped_policy`: **3789**
+  - `pending`: **1838**
+  - `ingested`: **441**
+  - `pdf_cached`: **515**
+  - `error`: **0**
+- Operational interpretation:
+  - the repo no longer carries generic Layer-B `error` rows for obviously terminal blocked/missing routes
+  - remaining work should focus on improving OA routing / coverage (`pending`), not repeatedly retrying known blocked HTML/PDF endpoints
+
 ## 2026-04-03 — Trend/gap layer bootstrap + publisher→arXiv fallback links
 
 - Added `scripts/build_trend_gap_signals.py` to generate a first-pass trend/gap layer from existing tables:

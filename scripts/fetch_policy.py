@@ -40,6 +40,23 @@ HIGH_FRICTION_HOSTS = {
     "jamanetwork.com",
     "www.nejm.org",
     "www.mdpi.com",
+    "academic.oup.com",
+    "onlinelibrary.wiley.com",
+    "www.sciencedirect.com",
+    "www.science.org",
+    "www.bmj.com",
+    "dl.acm.org",
+    "syndication.highwire.org",
+    "diabetesjournals.org",
+    "pmc.ncbi.nlm.nih.gov",
+    "nottingham-repository.worktribe.com",
+    "ir.ymlib.yonsei.ac.kr",
+    "digitalcommons.library.tmc.edu",
+    "pubs.acs.org",
+    "www.tandfonline.com",
+    "www.dovepress.com",
+    "ieeexplore.ieee.org",
+    "linkinghub.elsevier.com",
 }
 
 PREPRINT_MODALITY_TAGS = {
@@ -118,14 +135,17 @@ def classify_terminal_error(url: str, err: str, doi: str = "") -> str | None:
     host = parsed.netloc.lower()
     doi = doi.strip().lower().removeprefix("https://doi.org/")
 
-    if "403" not in msg and "forbidden" not in msg:
-        return None
-    if host in HIGH_FRICTION_HOSTS:
-        return "blocked_by_publisher"
-    if host in {"doi.org", "dx.doi.org"} and doi.startswith(HIGH_FRICTION_DOI_PREFIXES):
-        return "doi_landing_high_friction_publisher"
-    if host in {"doi.org", "dx.doi.org"} and doi.startswith("10.1101/"):
-        return "preprint_doi_filtered"
+    if "403" in msg or "forbidden" in msg:
+        if host in HIGH_FRICTION_HOSTS:
+            return "blocked_by_publisher"
+        if host in {"doi.org", "dx.doi.org"} and doi.startswith(HIGH_FRICTION_DOI_PREFIXES):
+            return "doi_landing_high_friction_publisher"
+        if host in {"doi.org", "dx.doi.org"} and doi.startswith("10.1101/"):
+            return "preprint_doi_filtered"
+    if host == "hdl.handle.net" and (
+        "connection reset" in msg or "500" in msg or "404" in msg
+    ):
+        return "repository_handle_unstable"
     return None
 
 
