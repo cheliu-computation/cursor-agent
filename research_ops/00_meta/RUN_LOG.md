@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-04-03 — Source triage round 2 (JAMA/NEJM keep, MDPI de-prioritize)
+
+- Inspected remaining Layer-B `error` tail by host and sampled URLs/notes for:
+  - `jamanetwork.com`
+  - `www.nejm.org`
+  - `academic.oup.com`
+  - `doi.org`
+  - `www.mdpi.com`
+- Live probe from current environment:
+  - JAMA landing/article path returns **403**
+  - NEJM full/landing path returns **403**
+- Updated source policy in code:
+  - keep **JAMA / NEJM** as high-value clinical sources, but do **not** keep retrying direct page/PDF fetches from this environment
+  - explicitly **de-prioritize MDPI** for gap/trend discovery; do not spend Layer-B repair budget there
+- Re-ran `reclassify_layerb_policy_skips.py` after source-policy expansion:
+  - **+59** additional rows moved from `error` to `skipped_policy`
+  - current Layer-B status distribution:
+    - `skipped_policy`: **2531**
+    - `pending`: **1916**
+    - `error`: **111**
+    - `pdf_cached`: **1545**
+    - `ingested`: **480**
+- Remaining `error` rows now form a smaller residual tail, led by:
+  - `doi.org` (**48**)
+  - `escholarship.org` (**10**)
+  - `academic.oup.com` (**8**)
+  - repository mirrors / publisher long tail
+- Operational conclusion:
+  - for **JAMA / NEJM** class sources, prefer metadata / DOI routing / OA resolution (Crossref, OpenAlex, Unpaywall later), not direct HTML/PDF page fetches from this environment
+  - for **MDPI**, stop treating Layer-B repair as worthwhile given lower value density for current objectives
+
 ## 2026-04-03 — Layer B policy repair + fetch strategy tightening
 
 - Added shared fetch policy helper `scripts/fetch_policy.py`:

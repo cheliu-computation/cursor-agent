@@ -19,12 +19,14 @@
 - **T218**：统一抓取策略模块 `scripts/fetch_policy.py`，修复无效 `User-Agent`/请求头，给 OA HTML / OpenAlex / Europe PMC 相关脚本复用
 - **T219**：默认禁用 `fetch_case_pmc_fulltext_pilot.py`；只有显式 `--allow-case-report-fetch` 才允许抓 case-report 全文
 - **T220**：`reclassify_layerb_policy_skips.py` 将 **949** 条明显高阻拦 / 持续 403 的 Layer-B 旧错误改标为 `skipped_policy`
-- **当前 Layer-B 状态**：`error` **1119 → 170**；`skipped_policy` **1523 → 2472**
+- **T221**：第二轮来源策略收敛：JAMA / NEJM 保留为高价值临床来源，但当前环境下页面直抓默认视为高阻拦；MDPI 明确降权，不再作为修复重点
+- **当前 Layer-B 状态**：`error` **1119 → 111**；`skipped_policy` **1523 → 2531**
 
 ## Key Findings So Far
 - **Crossref** 仍是缺 OpenAlex `oa_url` 时的主力补链；**T212** 对「无 URL」行用 OpenAlex `is_oa=false` 打 **`skipped_policy`**，避免误抓付费墙
 - Layer-B 里大量旧 `error` 实际属于 **publisher 403 / 高阻拦来源 / 不应直抓的 PDF 直链**，应归类为策略跳过而不是无限重试
 - 对当前目标而言，**研究文献（medical + AI）** 优先级明显高于 case-report 全文；case report 默认只保留 metadata / 弱信号定位
+- JAMA / NEJM 值得保留在来源层，但在当前执行环境里更适合依赖 Crossref / OpenAlex / Unpaywall / Europe PMC 这类 OA 路由，而不是直接抓 publisher 页面
 
 ## Current Assets
 - `scripts/harvest_openalex_year_slice.py` — 按 **年 × source_id** 拉取并 merge
@@ -36,7 +38,7 @@
 - `cache/pdfs` 体量大（见 RUN_LOG T216）
 
 ## Next Best Task
-- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ 对剩余 **170** 条 `error` 做来源专项分流（尤其 `doi.org` / `mdpi` / `jamanetwork`）
+- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ 对剩余 **111** 条 `error` 做来源专项分流（尤其 `doi.org` / `academic.oup.com` / repository mirrors）
 
 ## Immediate Follow-ups
 - 对剩余 `doi.org` / `mdpi` / `jamanetwork` 错误行，优先走更稳的 OA 路由补链，而不是继续撞 publisher 直链

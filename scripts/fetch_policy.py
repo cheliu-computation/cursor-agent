@@ -37,6 +37,9 @@ HIGH_FRICTION_HOSTS = {
     "pubs.rsna.org",
     "www.biorxiv.org",
     "www.medrxiv.org",
+    "jamanetwork.com",
+    "www.nejm.org",
+    "www.mdpi.com",
 }
 
 
@@ -86,6 +89,15 @@ def classify_policy_skip(url: str, doi: str = "") -> str | None:
 
     if host in {"www.biorxiv.org", "www.medrxiv.org"} and path.endswith(".full.pdf"):
         return "preprint_pdf_blocked"
+
+    if host == "jamanetwork.com" and "/articlepdf/" in path:
+        return "publisher_pdf_blocked"
+
+    if host == "www.nejm.org" and "/doi/pdf/" in path:
+        return "publisher_pdf_blocked"
+
+    if host == "www.mdpi.com" and "/pdf" in path:
+        return "low_priority_publisher_pdf_blocked"
 
     return None
 
