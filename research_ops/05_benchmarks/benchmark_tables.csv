@@ -1,0 +1,7 @@
+table_id,paper_id,benchmark_name,metric,split_notes,values_citation,notes
+BT001,openalex:W4313181443,ProMRI pseudo-mask (CAM-like comparison),DSC,weak_supervision; train/val split per dataset paper,OpenAlex abstract W4313181443,DSC 77.26% reported vs other CAM-like methods
+BT002,openalex:W4313181443,ACDC pseudo-mask (CAM-like comparison),DSC,weak_supervision,OpenAlex abstract W4313181443,DSC 80.34%
+BT003,openalex:W4313181443,CHAOS pseudo-mask (CAM-like comparison),DSC,weak_supervision,OpenAlex abstract W4313181443,DSC 78.15%
+BT004,openalex:W4313181443,ProMRI organ segmentation (WSSS pipeline),DSC,full segmentation stage; split unclear from abstract alone,OpenAlex abstract W4313181443,DSC 83.83%
+BT005,openalex:W4313181443,ACDC organ segmentation (WSSS pipeline),DSC,full segmentation stage,OpenAlex abstract W4313181443,DSC 87.54%
+BT006,openalex:W4312428231,Medical Decathlon + BTCV (referenced),Dice / task-specific,leaderboard + external synapse wiki cited in abstract,OpenAlex abstract W4312428231 + Decathlon leaderboard URL in abstract,Numeric table not in abstract; T054 marks need for full-text extraction

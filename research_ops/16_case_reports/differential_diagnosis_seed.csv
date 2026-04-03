@@ -1,0 +1,16 @@
+ddx_id,query_case_id,candidate_diagnoses,notes
+DDX001,pmid:41782281,infection;autoimmune,T069 keyword buckets from title+abstract snippet
+DDX002,pmid:41884188,malignancy;stroke;seizure_disorder,T069 keyword buckets from title+abstract snippet
+DDX003,pmid:41822661,stroke;hematologic_bleeding,T069 keyword buckets from title+abstract snippet
+DDX004,pmid:41694930,infection;hepatic,T069 keyword buckets from title+abstract snippet
+DDX005,pmid:41728388,infection;autoimmune,T069 keyword buckets from title+abstract snippet
+DDX006,pmid:41561956,infection;malignancy,T069 keyword buckets from title+abstract snippet
+DDX007,pmid:41618242,stroke;hematologic_bleeding,T069 keyword buckets from title+abstract snippet
+DDX008,pmid:41756699,malignancy;metabolic_endocrine,T069 keyword buckets from title+abstract snippet
+DDX009,pmid:41908786,infection;metabolic_endocrine,T069 keyword buckets from title+abstract snippet
+DDX010,pmid:41768241,malignancy;hepatic,T069 keyword buckets from title+abstract snippet
+DDX011,pmid:41822473,infection;autoimmune,T069 keyword buckets from title+abstract snippet
+DDX012,pmid:41669104,infection;autoimmune;malignancy,T069 keyword buckets from title+abstract snippet
+DDX013,pmid:41783865,stroke;hematologic_bleeding,T069 keyword buckets from title+abstract snippet
+DDX014,pmid:41647751,metabolic_endocrine;thromboembolic,T069 keyword buckets from title+abstract snippet
+DDX015,pmid:41869204,renal;thromboembolic,T069 keyword buckets from title+abstract snippet

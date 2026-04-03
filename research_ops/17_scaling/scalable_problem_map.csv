@@ -1,0 +1,21 @@
+problem_id,description,pain_point_ref,scaling_fit_score,data_source_clarity,risk,notes
+SP001,Inbox overload of imaging and lab results,PP001,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP002,Prior imaging unavailable at point of care,PP002,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP003,Handoff gaps between specialties,PP003,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP004,Duplicate testing across sites,PP004,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP005,Guideline updates not operationalized in EHR,PP005,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP006,Medication reconciliation errors at discharge,PP006,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP007,Pathology backlog delays oncology decisions,PP007,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP008,Radiology report turnaround on nights/weekends,PP008,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP009,Clinical trial eligibility screening manual burden,PP009,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP010,Rare disease diagnosis delay,PP010,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP011,ICU note bloat obscures trajectory,PP011,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP012,Prior auth documentation burden,PP012,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP013,Patient education materials not personalized,PP013,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP014,Adverse event signal detection from narratives,PP014,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP015,Multimodal data not fused (notes + imaging + labs),PP015,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP016,Quality metric reporting steals clinic time,PP016,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP017,Language barriers in informed consent,PP017,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP018,Home monitoring data not integrated,PP018,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP019,Surgical complication documentation inconsistency,PP019,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps
+SP020,Population health panel management scale,PP020,4-5,EHR+imaging+pubmed+trials,governance+liability,high literature+workflow volume; retrieval/synthesis plausibly helps

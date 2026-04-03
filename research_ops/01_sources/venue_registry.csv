@@ -1,0 +1,30 @@
+venue_id,venue_name,venue_type,layer,tier,publisher,homepage,session_pattern,notes
+VEN001,MICCAI,conference,A,tier1,MICCAI Society,https://www.miccai.org/,YYYY-MICCAI,Medical imaging ML flagship
+VEN002,MIDL,conference,A,tier1,MIDL Foundation,https://midl.io/,YYYY-MIDL,OA-friendly imaging ML
+VEN003,IPMI,workshop_series,A,tier2,IPMI Society,https://ipmi-society.org/,YYYY-IPMI,Mathematical imaging foundations
+VEN004,ISBI,conference,A,tier1,IEEE,https://ieee-isbi.org/,YYYY-ISBI,Broad biomedical imaging
+VEN005,Medical Image Analysis,journal,A,tier1,Elsevier,https://www.journals.elsevier.com/medical-image-analysis,vol(issue),Methods journal
+VEN006,IEEE Transactions on Medical Imaging,journal,A,tier1,IEEE,https://ieee-tmi.org/,vol(issue),TMI
+VEN007,Radiology,journal,A,tier1,RSNA,https://pubs.rsna.org/journal/radiology,vol(issue),Clinical radiology
+VEN008,Radiology: Artificial Intelligence,journal,A,tier1,RSNA,https://pubs.rsna.org/journal/ai,vol(issue),Clinical imaging AI
+VEN009,NeurIPS,conference,B,tier1,NeurIPS Foundation,https://neurips.cc/,YYYY,Top ML
+VEN010,ICML,conference,B,tier1,PMLR,https://icml.cc/,YYYY,ML methods
+VEN011,ICLR,conference,B,tier1,OpenReview,https://iclr.cc/,YYYY,Representation & agents
+VEN012,CVPR,conference,B,tier1,CVF,https://cvpr.thecvf.com/,YYYY,Computer vision
+VEN013,ICCV,conference,B,tier1,CVF,https://iccv.thecvf.com/,YYYY,Computer vision
+VEN014,ECCV,conference,B,tier1,ECVA,https://eccv.ecva.net/,YYYY,Computer vision
+VEN015,Nature,journal,C,tier0,Springer Nature,https://www.nature.com/,vol(issue),High-impact science
+VEN016,Science,journal,C,tier0,AAAS,https://www.science.org/journal/science,vol(issue),High-impact science
+VEN017,Cell,journal,C,tier0,Cell Press,https://www.cell.com/cell/,vol(issue),Biomedical science
+VEN018,Nature Medicine,journal,C,tier1,Springer Nature,https://www.nature.com/nm/,vol(issue),Translational medicine
+VEN019,Nature Biomedical Engineering,journal,C,tier1,Springer Nature,https://www.nature.com/natbiomedeng/,vol(issue),Engineering medicine
+VEN020,npj Digital Medicine,journal,C,tier1,Springer Nature,https://www.nature.com/npjdigitalmed/,vol(issue),OA digital health
+VEN021,JAMA,journal,C,tier1,AMA,https://jamanetwork.com/journals/jama,vol(issue),Clinical evidence
+VEN022,NEJM,journal,C,tier1,NEJM Group,https://www.nejm.org/,vol(issue),Clinical trials and practice
+VEN023,The Lancet Digital Health,journal,C,tier1,Elsevier,https://www.thelancet.com/digital-health,vol(issue),Digital health
+VEN024,Nature Machine Intelligence,journal,F,tier1,Springer Nature,https://www.nature.com/natmachintell/,vol(issue),ML + science discourse
+VEN025,Nature Computational Science,journal,F,tier1,Springer Nature,https://www.nature.com/natcomputsci/,vol(issue),Computational methods
+VEN026,arXiv cs.LG / q-bio / eess.IV,preprint_server,F,tier2,Cornell,https://arxiv.org/,YYMM.NNNNN,Fast frontier; validate separately
+VEN027,OpenReview.net,platform,F,tier2,OpenReview,https://openreview.net/,venue/forum,Peer review artifacts
+VEN028,bioRxiv,preprint_server,F,tier2,CSHL,https://www.biorxiv.org/,DOI,Biology preprints
+VEN029,medRxiv,preprint_server,F,tier2,BMJ/Yale/CSHL,https://www.medrxiv.org/,DOI,Clinical preprints

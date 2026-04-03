@@ -1,0 +1,4 @@
+failure_id,paper_id,category,description,source_section,notes
+FM001,openalex:W4313181443,weak_supervision,Medical WSSS: unclear organ/background boundaries hurt CAM,abstract,T056 from C-CAM motivation
+FM002,openalex:W4313181443,co_occurrence_bias,Severe co-occurrence of organs/classes in training biases CAM activations,abstract,
+FM003,openalex:W4312428231,evaluation_depth,Abstract references external leaderboards but does not tabulate headline Dice in-text,abstract,Needs full paper / leaderboard scrape for T054 follow-up

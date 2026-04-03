@@ -1,0 +1,2 @@
+# PDF text extraction (scripts/extract_pdf_text.py)
+pymupdf>=1.24.0
