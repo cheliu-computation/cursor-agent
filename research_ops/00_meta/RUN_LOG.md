@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-04-03 — Trend/gap layer bootstrap + publisher→arXiv fallback links
+
+- Added `scripts/build_trend_gap_signals.py` to generate a first-pass trend/gap layer from existing tables:
+  - `papers_master.csv`
+  - `frontier_papers.csv`
+  - `clinical_signal.csv`
+  - `scaling_fit_scores.csv`
+  - `pain_points.csv`
+- Generated initial analysis outputs:
+  - `research_ops/14_frontier/trend_signals.csv` → **6** seeded trend signals
+  - `research_ops/13_exports/synthesis_memos/trend_gap_summary_001.md`
+- First-pass trend conclusions from existing corpus:
+  - main analysis window **2019-2025** already has **5928** papers
+  - recent papers (**2023+**) = **3345**
+  - high-value clinical venues are materially represented even when direct publisher full text is blocked
+  - preprints remain a strong recency signal but should not dominate evidence-weighted conclusions
+  - agentic / scientific-discovery medical signal is visible but still much smaller than the mainstream medical-AI spine
+- Added `scripts/link_publisher_to_arxiv_fallback.py` for the finer rule:
+  - match publisher-backed records to arXiv/preprint copies by **normalized exact title**
+  - output file: `research_ops/19_linking/publisher_arxiv_fallback_links.csv`
+  - current output: **12** publisher→preprint exact-title matches, **1** currently eligible fallback under the narrowed policy
+- Added `scripts/reclassify_cleaned_artifacts.py` and applied it:
+  - **13** rows moved from `error` to `skipped_policy` where artifacts had already been fetched then cleaned (`corpus_cleanup_missing_file`, `pdf_cache_missing_cleaned`)
+- Extended `reclassify_layerb_policy_skips.py` pass for `doi.org` preprint DOI tail (`10.1101/...`):
+  - **+30** rows moved from `error` to `skipped_policy`
+- Layer-B status after this round:
+  - `skipped_policy`: **3721**
+  - `pending`: **1838**
+  - `error`: **68**
+  - `pdf_cached`: **515**
+  - `ingested`: **441**
+- Remaining `error` tail is now relatively small and concentrated in:
+  - `doi.org` (**18**)
+  - `academic.oup.com` (**8**)
+  - `pmc.ncbi.nlm.nih.gov` (**6**)
+  - `onlinelibrary.wiley.com` (**5**)
+
 ## 2026-04-03 — Preprint scope cleanup + storage model clarification
 
 - Clarified current storage model across docs:

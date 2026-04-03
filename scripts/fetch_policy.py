@@ -84,6 +84,9 @@ def classify_policy_skip(url: str, doi: str = "") -> str | None:
     if host in {"doi.org", "dx.doi.org"} and doi.startswith(HIGH_FRICTION_DOI_PREFIXES):
         return "doi_landing_high_friction_publisher"
 
+    if host in {"doi.org", "dx.doi.org"} and doi.startswith("10.1101/"):
+        return "preprint_doi_filtered"
+
     if host in {"www.cell.com", "www.thelancet.com"} and path.endswith("/pdf"):
         return "publisher_pdf_blocked"
 
@@ -121,6 +124,8 @@ def classify_terminal_error(url: str, err: str, doi: str = "") -> str | None:
         return "blocked_by_publisher"
     if host in {"doi.org", "dx.doi.org"} and doi.startswith(HIGH_FRICTION_DOI_PREFIXES):
         return "doi_landing_high_friction_publisher"
+    if host in {"doi.org", "dx.doi.org"} and doi.startswith("10.1101/"):
+        return "preprint_doi_filtered"
     return None
 
 
