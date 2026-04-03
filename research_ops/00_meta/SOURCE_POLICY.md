@@ -47,6 +47,18 @@
   - when a reliable API / PMC route exists, use that instead of direct site fetches
 - When the goal is **trend / gap finding**, metadata + abstract coverage is often more valuable than forcing brittle PDF fetches.
 
+## Preprint / arXiv scope cleanup (current)
+- **Default: do not bulk-fetch full text from arXiv / preprint sources.**
+- Keep preprints primarily as:
+  - metadata signals
+  - recent-trend candidates
+  - title/abstract recall support
+- Allow arXiv full-text fallback only when **all** are true:
+  1. the item is **recent** (prefer 2024+ unless explicitly overridden)
+  2. the primary / publisher-side source is high-value but the正文 cannot be read directly in the current environment
+  3. the title (and ideally DOI or other metadata) clearly matches between the publisher record and the arXiv version
+- For pure preprint venues, prefer abstract-level analysis first; do not let preprint full text dominate the main reading stack.
+
 ## Signal vs noise (default)
 - Prefer **structured fields** (title, abstract, affiliations, references) over unstructured scrapes.
 - Treat **press releases and secondary blogs** as low priority unless they point to primary artifacts.

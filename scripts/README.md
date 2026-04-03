@@ -30,7 +30,7 @@ All paths are relative to the repository root. Heavy outputs go to `research_ops
 | Script | Role |
 |--------|------|
 | `pilot_fetch_oa_html.py` | Small OA HTML/PDF pilot (T202). |
-| `batch_fetch_oa_html.py` | Batched OA fetch + arXiv fallbacks (T203/T214). |
+| `batch_fetch_oa_html.py` | Batched OA fetch; default filters preprint/arXiv full-text fetches except narrow recent fallback cases (T203/T214). |
 | `t204_verify_pdf_cache.py` | SHA256 verify cached PDF vs manifest → `pdf_status`. |
 | `extract_pdf_text.py` | PyMuPDF → `.txt` under `parsed/pdfs/` (`--self-test`, `--from-status`). |
 | `batch_extract_all_pdfs.py` | All `cache/pdfs/*.pdf` → `.txt` + `pdf_extract_index.csv` + `00_meta/PDF_CORPUS_REPORT.md`. |

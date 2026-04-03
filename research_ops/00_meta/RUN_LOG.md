@@ -4,6 +4,36 @@
 
 ---
 
+## 2026-04-03 — Preprint scope cleanup + storage model clarification
+
+- Clarified current storage model across docs:
+  - raw HTML/XML/PDF bytes are cached under `research_ops/cache/` (gitignored)
+  - extracted / derived text lives under `research_ops/parsed/`
+  - registry / master state lives in CSVs and manifests
+  - this repo does **not** currently store a database of full paper bodies
+- Audited preprint / arXiv footprint:
+  - `papers_master.csv` contains **1142** `preprint_broad` rows + **390** `preprint_biorxiv`
+  - `paper_reading_status.csv` had **1166** rows with `oa_url_cached` on `arxiv.org`
+  - of those, only **136** looked publisher-backed; the majority were pure preprint routes
+- Added narrowed arXiv fallback policy in `scripts/fetch_policy.py`:
+  - default: do **not** use arXiv/preprint full text as the main read path
+  - allow only a small recent fallback set when the record is non-preprint, recent, and appears publisher-backed
+- Updated `batch_fetch_oa_html.py` to enforce the narrowed preprint scope before Layer-B fetch.
+- Added `scripts/reclassify_preprint_scope.py` and applied it:
+  - **1147** rows reclassified to `skipped_policy` with `scope_skip=preprint_fulltext_filtered`
+  - only a very small residual set of recent arXiv fallback candidates remains
+- Sequential recount after scope cleanup:
+  - `skipped_policy`: **3678**
+  - `pending`: **1838**
+  - `error`: **111**
+  - `pdf_cached`: **515**
+  - `ingested`: **441**
+
+## Implication
+
+- For the current objective (medical + AI trend / gap finding), **preprint metadata may stay**, but **preprint full-text fetching is no longer the default path**.
+- arXiv is now treated as a **fallback-only** full-text source, not a bulk reading target.
+
 ## 2026-04-03 — Source triage round 2 (JAMA/NEJM keep, MDPI de-prioritize)
 
 - Inspected remaining Layer-B `error` tail by host and sampled URLs/notes for:

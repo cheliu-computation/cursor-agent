@@ -42,6 +42,12 @@ HIGH_FRICTION_HOSTS = {
     "www.mdpi.com",
 }
 
+PREPRINT_MODALITY_TAGS = {
+    "preprint_broad",
+    "preprint_biorxiv",
+    "preprint_medrxiv",
+}
+
 
 def browser_headers(accept: str | None = None) -> dict[str, str]:
     return {
@@ -116,6 +122,52 @@ def classify_terminal_error(url: str, err: str, doi: str = "") -> str | None:
     if host in {"doi.org", "dx.doi.org"} and doi.startswith(HIGH_FRICTION_DOI_PREFIXES):
         return "doi_landing_high_friction_publisher"
     return None
+
+
+def allow_arxiv_fallback(
+    url: str,
+    year: str,
+    venue: str,
+    doi: str,
+    tags_modality: str,
+) -> bool:
+    """Allow arXiv only as a recent fallback for non-preprint primary records.
+
+    Policy:
+    - default: filter arXiv/preprint full-text fetches out
+    - allow only if the record is recent and appears to have a non-preprint
+      primary venue / DOI, so arXiv acts as a fallback copy rather than the
+      main discovery source
+    """
+    host = urlparse(canonicalize_url(url)).netloc.lower()
+    if "arxiv.org" not in host:
+        return True
+
+    year = (year or "").strip()
+    venue_low = (venue or "").lower()
+    doi_low = (doi or "").lower()
+    modality_tags = {
+        t.strip()
+        for t in (tags_modality or "").split("|")
+        if t.strip()
+    }
+
+    if modality_tags & PREPRINT_MODALITY_TAGS:
+        return False
+    if "arxiv" in venue_low:
+        return False
+
+    try:
+        y = int(year)
+    except ValueError:
+        return False
+
+    # Only keep very recent fallback paths where a publisher-backed record exists.
+    if y < 2024:
+        return False
+    if not doi_low or doi_low.startswith("10.48550/arxiv."):
+        return False
+    return True
 
 
 def url_attempts(primary: str) -> list[str]:

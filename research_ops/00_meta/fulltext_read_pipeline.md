@@ -8,6 +8,12 @@ Three layers; each layer has its own TODO id and **must** respect `LICENSE_POLIC
 - **FTS index** (T207): `research_ops/parsed/abstracts/abstract_index.sqlite` — rebuild via `scripts/build_abstract_fts.py` (gitignored)
 - **Registry**: `paper_reading_status.csv` → `abstract_status=ingested|missing|error`
 
+## Storage model (important)
+- The repo does **not** store paper full text in a relational database.
+- Raw full-text bytes are cached under `research_ops/cache/` (gitignored).
+- Derived text / indexes live under `research_ops/parsed/` (also mostly gitignored).
+- Durable tracked assets are the CSV registries, manifests, and markdown memos, not bulk raw full text.
+
 ## Policy gate (T212)
 - Rows with **no** usable `oa_url_cached` after enrichment: call OpenAlex `open_access.is_oa`. If **`false`**, set `fulltext_html_status=skipped_policy` (avoid blind publisher fetches). Script: `scripts/t212_openalex_policy_gate.py`.
 
@@ -27,7 +33,11 @@ Three layers; each layer has its own TODO id and **must** respect `LICENSE_POLIC
 - **Manifest**: `download_manifest.csv` before any delete
 - **Registry**: `fulltext_html_status` (`ingested` | `pdf_cached` | `error` | …)
 - **Pilot script**: `scripts/pilot_fetch_oa_html.py` (T202; uses `oa_url_cached` from `paper_reading_status.csv`)
-- **Batch script**: `scripts/batch_fetch_oa_html.py` (T203; arXiv `/abs/` fallback, `Accept: text/html`, `--skip-pdf-primary` / `--retry-errors`)
+- **Batch script**: `scripts/batch_fetch_oa_html.py` (T203; `Accept: text/html`, `--skip-pdf-primary` / `--retry-errors`)
+- **Preprint scope rule**:
+  - default: do **not** bulk-fetch arXiv / preprint full text
+  - exception: allow arXiv fallback only for **recent** records when the paper also has a non-preprint venue / DOI and primary-source full text is unavailable
+  - use preprints as metadata-first signals; do not let them dominate the full-text queue
 
 ## Layer C — PDF
 - **When**: explicit OA + policy allow; **manifest + hash** mandatory

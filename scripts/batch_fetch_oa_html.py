@@ -12,7 +12,13 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fetch_policy import browser_headers, canonicalize_url, classify_policy_skip, url_attempts
+from fetch_policy import (
+    browser_headers,
+    canonicalize_url,
+    classify_policy_skip,
+    should_skip_arxiv_fulltext,
+    url_attempts,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
@@ -67,6 +73,24 @@ def load_pm_doi() -> dict[str, str]:
     return by_id
 
 
+def load_pm_meta() -> dict[str, dict[str, str]]:
+    by_id: dict[str, dict[str, str]] = {}
+    with PM.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            oid = (r.get("openalex_id") or "").strip()
+            if not oid:
+                continue
+            wid = oid if oid.startswith("W") else "W" + oid
+            by_id[wid] = {
+                "year": (r.get("year") or "").strip(),
+                "venue": (r.get("venue") or "").strip(),
+                "doi": (r.get("doi") or "").replace("https://doi.org/", "").strip(),
+                "title": (r.get("title") or "").strip(),
+                "tags_modality": (r.get("tags_modality") or "").strip(),
+            }
+    return by_id
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -107,6 +131,7 @@ def main() -> int:
 
     pm_year = load_pm_year()
     pm_doi = load_pm_doi()
+    pm_meta = load_pm_meta()
     by_oid: dict[str, dict] = {r["openalex_id"].strip(): r for r in status_rows}
 
     allowed_status = {"", "pending"}
@@ -141,6 +166,16 @@ def main() -> int:
         oid_key = rec["openalex_id"].strip()
         cur = by_oid.get(oid_key, rec)
         if (cur.get("fulltext_html_status") or "").strip() not in allowed_status:
+            continue
+
+        if should_skip_arxiv_fulltext(url, pm_meta.get(wid, {})):
+            cur["fulltext_html_status"] = "skipped_policy"
+            cur["fulltext_html_artifact"] = ""
+            cur["last_fetch_utc"] = now
+            cur["notes"] = (
+                (cur.get("notes", "") + "; T203_policy_skip=arxiv_filtered_default")
+            )[:240]
+            by_oid[oid_key] = cur
             continue
 
         policy_skip = classify_policy_skip(url, pm_doi.get(wid, ""))

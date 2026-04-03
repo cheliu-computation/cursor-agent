@@ -20,13 +20,16 @@
 - **T219**：默认禁用 `fetch_case_pmc_fulltext_pilot.py`；只有显式 `--allow-case-report-fetch` 才允许抓 case-report 全文
 - **T220**：`reclassify_layerb_policy_skips.py` 将 **949** 条明显高阻拦 / 持续 403 的 Layer-B 旧错误改标为 `skipped_policy`
 - **T221**：第二轮来源策略收敛：JAMA / NEJM 保留为高价值临床来源，但当前环境下页面直抓默认视为高阻拦；MDPI 明确降权，不再作为修复重点
-- **当前 Layer-B 状态**：`error` **1119 → 111**；`skipped_policy` **1523 → 2531**
+- **T222**：缩小 preprint/arXiv 全文范围：默认过滤纯 preprint 全文抓取，只保留“近年 + 非 preprint 主来源 + DOI 匹配”的 arXiv 兜底路径
+- **当前 Layer-B 状态**：`error` **1119 → 111**；`skipped_policy` **1523 → 3678**
 
 ## Key Findings So Far
 - **Crossref** 仍是缺 OpenAlex `oa_url` 时的主力补链；**T212** 对「无 URL」行用 OpenAlex `is_oa=false` 打 **`skipped_policy`**，避免误抓付费墙
 - Layer-B 里大量旧 `error` 实际属于 **publisher 403 / 高阻拦来源 / 不应直抓的 PDF 直链**，应归类为策略跳过而不是无限重试
 - 对当前目标而言，**研究文献（medical + AI）** 优先级明显高于 case-report 全文；case report 默认只保留 metadata / 弱信号定位
 - JAMA / NEJM 值得保留在来源层，但在当前执行环境里更适合依赖 Crossref / OpenAlex / Unpaywall / Europe PMC 这类 OA 路由，而不是直接抓 publisher 页面
+- 当前仓库里的“正文”并不是存进数据库的全文库；raw 正文在 `cache/`（gitignored），提取后的文本/JSONL/索引在 `parsed/`，长期保留的是 CSV / manifest / extracted outputs
+- arXiv 相关 URL 历史上占比偏大；当前策略已将其缩到“metadata-first，full-text 仅作近年 publisher-backed 兜底”
 
 ## Current Assets
 - `scripts/harvest_openalex_year_slice.py` — 按 **年 × source_id** 拉取并 merge

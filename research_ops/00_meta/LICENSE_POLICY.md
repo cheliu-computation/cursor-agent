@@ -7,6 +7,14 @@
 - **Default**: structured extractions and manifests are retained; **raw bulk files are not** committed to git.
 - Every downloaded artifact must have **source URL, retrieval time, license note, hash**, and **redownloadable** flag in `download_manifest.csv`.
 
+## What is stored today
+- Full text is **not** stored as a centralized database of article bodies.
+- Current storage model is:
+  - **raw bytes** under `research_ops/cache/` (gitignored, disposable after parse/policy checks)
+  - **parsed text / JSONL / indices** under `research_ops/parsed/` where applicable
+  - **structured registries / manifests / status tables** under git
+- In other words, the durable layer is mainly **manifests + parsed outputs + CSV state**, not a permanent full-body corpus in git.
+
 ## Content-type acquisition (summary)
 | Content type | Typical priority | Git default | After successful parse |
 |--------------|------------------|-------------|---------------------------|
