@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""T211: pilot Europe PMC fullTextXML for case_reports_master PMIDs."""
+"""T211: pilot Europe PMC fullTextXML for case_reports_master PMIDs.
+
+Disabled by default: case-report full-text crawling requires explicit opt-in.
+"""
 from __future__ import annotations
 
 import argparse
@@ -9,18 +12,17 @@ import json
 import re
 import time
 import urllib.parse
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+import urllib.request
+
+from fetch_policy import api_headers
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ROOT / "research_ops/16_case_reports/case_reports_master.csv"
 MNF = ROOT / "research_ops/manifests/download_manifest.csv"
 REG = ROOT / "research_ops/16_case_reports/case_reading_status.csv"
 CACHE = ROOT / "research_ops/cache/fulltext"
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
-
-
 def manifest_next_id(rows: list[dict]) -> int:
     last = 0
     for r in rows:
@@ -36,13 +38,13 @@ def extract_pmid(s: str) -> str:
 
 
 def fetch_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers=api_headers())
     with urllib.request.urlopen(req, timeout=60) as resp:
         return json.loads(resp.read().decode())
 
 
 def fetch_bytes(url: str) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers=api_headers())
     with urllib.request.urlopen(req, timeout=120) as resp:
         return resp.read()
 
@@ -51,7 +53,19 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=20)
     ap.add_argument("--sleep", type=float, default=0.2)
+    ap.add_argument(
+        "--allow-case-report-fetch",
+        action="store_true",
+        help="Explicitly allow case-report full-text fetches for this run.",
+    )
     args = ap.parse_args()
+
+    if not args.allow_case_report_fetch:
+        print(
+            "case-report full-text fetch disabled by default; "
+            "re-run with --allow-case-report-fetch to opt in"
+        )
+        return 2
 
     CACHE.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

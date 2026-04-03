@@ -7,9 +7,12 @@ import csv
 import hashlib
 import re
 import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+
+from fetch_policy import browser_headers, canonicalize_url, classify_policy_skip, url_attempts
 
 ROOT = Path(__file__).resolve().parents[1]
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
@@ -17,8 +20,6 @@ PM = ROOT / "research_ops/02_papers/papers_master.csv"
 MNF = ROOT / "research_ops/manifests/download_manifest.csv"
 CACHE_FT = ROOT / "research_ops/cache/fulltext"
 CACHE_PDF = ROOT / "research_ops/cache/pdfs"
-
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
 
 
 def manifest_next_id(rows: list[dict]) -> int:
@@ -31,50 +32,10 @@ def manifest_next_id(rows: list[dict]) -> int:
     return last
 
 
-def arxiv_id_from_url(url: str) -> str | None:
-    u = url.split("?", 1)[0].strip()
-    m = re.search(r"arxiv\.org/(?:pdf|abs)/([^/]+?)(?:\.pdf)?$", u, re.I)
-    if m:
-        return m.group(1).rstrip("/")
-    m = re.search(r"doi\.org/10\.48550/arxiv\.(.+)$", u, re.I)
-    if m:
-        return m.group(1).rstrip("/")
-    return None
-
-
-def url_attempts(primary: str) -> list[str]:
-    """Ordered list of URLs to try (primary first, then fallbacks)."""
-    primary = primary.strip()
-    seen: set[str] = set()
-    out: list[str] = []
-    for u in _expand_arxiv(primary):
-        if u and u not in seen:
-            seen.add(u)
-            out.append(u)
-    return out
-
-
-def _expand_arxiv(url: str) -> list[str]:
-    aid = arxiv_id_from_url(url)
-    if not aid:
-        return [url]
-    ulow = url.lower()
-    alts = [url]
-    if "arxiv.org/pdf/" in ulow or "export.arxiv.org" in ulow:
-        alts.append(f"https://arxiv.org/abs/{aid}")
-        alts.append(f"https://export.arxiv.org/pdf/{aid}.pdf")
-    elif "arxiv.org/abs/" in ulow:
-        alts.append(f"https://export.arxiv.org/pdf/{aid}.pdf")
-    return alts
-
-
 def fetch_url(url: str, timeout: int = 60) -> tuple[bytes, str]:
     req = urllib.request.Request(
         url,
-        headers={
-            "User-Agent": UA,
-            "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
-        },
+        headers=browser_headers(),
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         data = resp.read()
@@ -91,6 +52,18 @@ def load_pm_year() -> dict[str, str]:
                 continue
             wid = oid if oid.startswith("W") else "W" + oid
             by_id[wid] = (r.get("year") or "").strip()
+    return by_id
+
+
+def load_pm_doi() -> dict[str, str]:
+    by_id: dict[str, str] = {}
+    with PM.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            oid = (r.get("openalex_id") or "").strip()
+            if not oid:
+                continue
+            wid = oid if oid.startswith("W") else "W" + oid
+            by_id[wid] = (r.get("doi") or "").replace("https://doi.org/", "").strip()
     return by_id
 
 
@@ -133,6 +106,7 @@ def main() -> int:
         status_rows = list(rdr_s)
 
     pm_year = load_pm_year()
+    pm_doi = load_pm_doi()
     by_oid: dict[str, dict] = {r["openalex_id"].strip(): r for r in status_rows}
 
     allowed_status = {"", "pending"}
@@ -143,7 +117,7 @@ def main() -> int:
     for r in status_rows:
         if r.get("abstract_status") != "ingested":
             continue
-        url = (r.get("oa_url_cached") or "").strip()
+        url = canonicalize_url((r.get("oa_url_cached") or "").strip())
         if not url.lower().startswith("http"):
             continue
         if args.skip_pdf_primary and url.lower().split("?", 1)[0].endswith(".pdf"):
@@ -169,6 +143,17 @@ def main() -> int:
         if (cur.get("fulltext_html_status") or "").strip() not in allowed_status:
             continue
 
+        policy_skip = classify_policy_skip(url, pm_doi.get(wid, ""))
+        if policy_skip:
+            cur["fulltext_html_status"] = "skipped_policy"
+            cur["fulltext_html_artifact"] = ""
+            cur["last_fetch_utc"] = now
+            cur["notes"] = (
+                (cur.get("notes", "") + f"; T203_policy_skip={policy_skip}")
+            )[:240]
+            by_oid[oid_key] = cur
+            continue
+
         data: bytes | None = None
         ctype_hdr = ""
         used_url = ""
@@ -178,15 +163,35 @@ def main() -> int:
                 data, ctype_hdr = fetch_url(attempt)
                 used_url = attempt
                 break
+            except urllib.error.HTTPError as e:
+                last_err = f"HTTP {e.code}: {e.reason}"[:180]
+                # 403 on a direct PDF or DOI landing is usually durable, not transient.
+                if e.code == 403:
+                    skip = classify_policy_skip(attempt, pm_doi.get(wid, ""))
+                    if skip:
+                        policy_skip = skip
+                        break
             except Exception as e:
                 last_err = str(e)[:180]
                 time.sleep(args.sleep)
         time.sleep(args.sleep)
 
+        if policy_skip:
+            cur["fulltext_html_status"] = "skipped_policy"
+            cur["fulltext_html_artifact"] = ""
+            cur["notes"] = (
+                (cur.get("notes", "") + f"; T203_policy_skip={policy_skip}")
+            )[:240]
+            cur["last_fetch_utc"] = now
+            by_oid[oid_key] = cur
+            continue
+
         if data is None:
             cur["fulltext_html_status"] = "error"
             cur["fulltext_html_artifact"] = ""
-            cur["notes"] = (cur.get("notes", "") + f"; batch_fetch_error={last_err}")[:240]
+            cur["notes"] = (
+                (cur.get("notes", "") + f"; batch_fetch_error={last_err}")
+            )[:240]
             cur["last_fetch_utc"] = now
             by_oid[oid_key] = cur
             continue

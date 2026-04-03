@@ -10,9 +10,10 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from fetch_policy import api_headers
+
 ROOT = Path(__file__).resolve().parents[1]
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
 
 
 def main() -> int:
@@ -39,7 +40,7 @@ def main() -> int:
             continue
         wid = oid if oid.startswith("W") else f"W{oid}"
         url = f"https://api.openalex.org/works/{wid}"
-        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        req = urllib.request.Request(url, headers=api_headers())
         try:
             with urllib.request.urlopen(req, timeout=45) as resp:
                 w = json.loads(resp.read().decode())

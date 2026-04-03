@@ -4,6 +4,52 @@
 
 ---
 
+## 2026-04-03 — Layer B policy repair + fetch strategy tightening
+
+- Added shared fetch policy helper `scripts/fetch_policy.py`:
+  - browser-like headers for publisher/OA landing fetches
+  - API-oriented headers for OpenAlex / Europe PMC style JSON endpoints
+  - source-specific URL canonicalization and landing-page fallback helpers
+  - policy skip classification for known high-friction publisher/PDF routes
+- Updated full-text / enrichment scripts to use the shared policy module:
+  - `batch_fetch_oa_html.py`
+  - `pilot_fetch_oa_html.py`
+  - `ingest_openalex_abstracts.py`
+  - `enrich_oa_url_openalex.py`
+  - `enrich_oa_url_epmc.py`
+  - `fetch_epmc_fulltext_pilot.py`
+  - `t212_openalex_policy_gate.py`
+- Added `scripts/reclassify_layerb_policy_skips.py` and reclassified historical Layer B terminal errors:
+  - **949** rows moved from `fulltext_html_status=error` to `skipped_policy`
+  - status distribution after repair:
+    - `skipped_policy`: **2472**
+    - `pending`: **1916**
+    - `error`: **170**
+    - `pdf_cached`: **1545**
+    - `ingested`: **480**
+- Remaining `error` rows are now concentrated in a much smaller tail (`doi.org`, `mdpi.com`, `jamanetwork.com`, `academic.oup.com`, repository mirrors), instead of obvious blocked PDF routes repeatedly retried.
+- `fetch_case_pmc_fulltext_pilot.py` is now **disabled by default** and requires explicit `--allow-case-report-fetch` opt-in, matching the current policy of not proactively crawling case-report full text.
+- Updated `SOURCE_POLICY.md`:
+  - prioritize research literature for **medical + AI** trend / gap finding
+  - keep case reports as optional weak-signal metadata rather than default full-text crawl targets
+  - prefer metadata / abstracts / structured XML/HTML over brittle publisher PDF fetches
+
+## Implication
+
+- The repo is now less likely to waste retries on publisher-blocked OA/PDF routes.
+- The current frontier for useful expansion is:
+  1. stronger OpenAlex / metadata spine completion (`T127`)
+  2. better OA routing for ambiguous DOI rows (e.g. `T217` / Unpaywall)
+  3. remaining true-error hosts instead of re-hitting known blocked URLs
+- For the stated research goal (find gaps + trends in medical + AI), the best default crawl targets remain:
+  - OpenAlex metadata / abstracts
+  - Europe PMC / PMC OA structured full text
+  - core medical-imaging / clinical-AI journals
+  - selective frontier preprints as metadata-first signals
+  - **not** bulk case-report full-text crawling by default
+
+---
+
 ## 2026-04-01 — Batch close-out: T204–T211, T209, T213 + corpus 6583
 
 - **T204**–**T212**, **T208**, **T214**–**T216**: prior entries below; this run added scripts + CSV updates end-to-end.

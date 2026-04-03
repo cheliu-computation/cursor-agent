@@ -16,15 +16,15 @@
 - Blocking Dependencies：API 成本与速率
 
 ## Completed In This Run（摘要）
-- **T204–T212、T208、T214–T216**：见 `RUN_LOG.md` 顶部条目（PDF 校验、EPMC、Crossref、FTS、policy gate、retry、footprint）
-- **T209**：`audit_priority_list` / `repro_audit` 增加 **`read_priority=high`**（50 行）
-- **T210**：`pilot_section_extract_html.py` → **10** 条 naive 分段 JSONL（gitignored）
-- **T211**：**20** 病例 `fullTextXML` + `case_reading_status.csv` + manifest
-- **T213**：`harvest_openalex_year_slice.py` — **2017** ×7 刊 ×35 → **+182** `papers_master`；`ingest_openalex_abstracts` **2017** 摘要 **92** ingested；**FTS 6671** 行；Crossref 再 **+139** `oa_url`；T212 二遍 **+80** `skipped_policy`
+- **T218**：统一抓取策略模块 `scripts/fetch_policy.py`，修复无效 `User-Agent`/请求头，给 OA HTML / OpenAlex / Europe PMC 相关脚本复用
+- **T219**：默认禁用 `fetch_case_pmc_fulltext_pilot.py`；只有显式 `--allow-case-report-fetch` 才允许抓 case-report 全文
+- **T220**：`reclassify_layerb_policy_skips.py` 将 **949** 条明显高阻拦 / 持续 403 的 Layer-B 旧错误改标为 `skipped_policy`
+- **当前 Layer-B 状态**：`error` **1119 → 170**；`skipped_policy` **1523 → 2472**
 
 ## Key Findings So Far
 - **Crossref** 仍是缺 OpenAlex `oa_url` 时的主力补链；**T212** 对「无 URL」行用 OpenAlex `is_oa=false` 打 **`skipped_policy`**，避免误抓付费墙
-- **6583** 行 `paper_reading_status` 与主表对齐；**~2364** manifest 数据行（含论文 Layer B、EPMC、病例 XML）
+- Layer-B 里大量旧 `error` 实际属于 **publisher 403 / 高阻拦来源 / 不应直抓的 PDF 直链**，应归类为策略跳过而不是无限重试
+- 对当前目标而言，**研究文献（medical + AI）** 优先级明显高于 case-report 全文；case report 默认只保留 metadata / 弱信号定位
 
 ## Current Assets
 - `scripts/harvest_openalex_year_slice.py` — 按 **年 × source_id** 拉取并 merge
@@ -32,14 +32,15 @@
 - `paper_epmc_fulltext_pilot.csv`、`case_reading_status.csv`
 
 ## Risks / Blockers
-- Publisher ToS / 429；`cache/pdfs` 体量大（见 RUN_LOG T216）
+- Publisher ToS / 403 / 429；部分 publisher landing/PDF 直链仍不适合脚本直抓
+- `cache/pdfs` 体量大（见 RUN_LOG T216）
 
 ## Next Best Task
-- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ **T214** 续跑（可选）
+- **T127**（MedIA/TMI 全量分页）→ **T217**（Unpaywall，需 email key）→ 对剩余 **170** 条 `error` 做来源专项分流（尤其 `doi.org` / `mdpi` / `jamanetwork`）
 
 ## Immediate Follow-ups
-- 新入库 **2017** 行：可再跑 `batch_fetch_oa_html.py` 消化带 URL 的 `pending`
-- 重建本地摘要索引：`build_abstract_fts.py`（已在 T213 后执行）
+- 对剩余 `doi.org` / `mdpi` / `jamanetwork` 错误行，优先走更稳的 OA 路由补链，而不是继续撞 publisher 直链
+- 保持 case reports 为 metadata-only 默认策略，除非有明确需求再显式 opt-in 全文抓取
 
 ## Working Rules For This Run
 - manifest 先行；删缓存前核对 `LICENSE_POLICY.md`

@@ -17,6 +17,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from fetch_policy import api_headers
+
 ROOT = Path(__file__).resolve().parents[1]
 PM = ROOT / "research_ops/02_papers/papers_master.csv"
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
@@ -98,7 +100,8 @@ def main() -> int:
                 wid = oid if oid.startswith("W") else f"W{oid}"
                 url = f"https://api.openalex.org/works/{wid}"
                 try:
-                    with urllib.request.urlopen(url, timeout=45) as resp:
+                    req = urllib.request.Request(url, headers=api_headers())
+                    with urllib.request.urlopen(req, timeout=45) as resp:
                         w = json.loads(resp.read().decode())
                 except Exception as e:
                     rec = by_rs.get(oid, {})

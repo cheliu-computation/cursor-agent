@@ -18,6 +18,35 @@
 3. Plain text / HTML snapshots  
 4. PDF only when necessary for extraction not available elsewhere  
 
+## Current research focus (operational)
+- Prioritize **research literature** for **medical + AI** discovery work:
+  - medical imaging AI
+  - clinical AI / translational AI
+  - multimodal biomedical AI
+  - agent / retrieval / scientific-discovery methods that plausibly transfer to medicine
+- Prefer sources that help answer:
+  - where the field is moving
+  - which tasks are saturated vs still open
+  - which benchmarks, datasets, and validation gaps define the frontier
+
+## Case report policy (current)
+- **Do not proactively fetch case-report full text by default.**
+- Case reports may remain a **discovery signal** for:
+  - rare disease / atypical presentation trend detection
+  - hypothesis generation
+  - identifying long-tail evaluation opportunities
+- Default handling for case reports:
+  1. keep metadata / registry-level signals only
+  2. do not expand to bulk full-text crawling unless explicitly requested
+  3. do not let case-report harvesting compete with the main literature spine
+
+## Full-text policy by source type
+- Prefer **OpenAlex / Europe PMC / PMC OA / Crossref** for metadata, OA routing, and structured full text.
+- For publisher-hosted landing pages, treat direct fetch as **opportunistic**, not guaranteed:
+  - high-friction publishers often block scripted PDF/landing fetches
+  - when a reliable API / PMC route exists, use that instead of direct site fetches
+- When the goal is **trend / gap finding**, metadata + abstract coverage is often more valuable than forcing brittle PDF fetches.
+
 ## Signal vs noise (default)
 - Prefer **structured fields** (title, abstract, affiliations, references) over unstructured scrapes.
 - Treat **press releases and secondary blogs** as low priority unless they point to primary artifacts.

@@ -13,12 +13,13 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from fetch_policy import api_headers
+
 ROOT = Path(__file__).resolve().parents[1]
 PM = ROOT / "research_ops/02_papers/papers_master.csv"
 MNF = ROOT / "research_ops/manifests/download_manifest.csv"
 REG = ROOT / "research_ops/02_papers/paper_epmc_fulltext_pilot.csv"
 CACHE = ROOT / "research_ops/cache/fulltext"
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
 
 
 def manifest_next_id(rows: list[dict]) -> int:
@@ -31,13 +32,13 @@ def manifest_next_id(rows: list[dict]) -> int:
 
 
 def fetch_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers=api_headers())
     with urllib.request.urlopen(req, timeout=60) as resp:
         return json.loads(resp.read().decode())
 
 
 def fetch_bytes(url: str) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers=api_headers())
     with urllib.request.urlopen(req, timeout=120) as resp:
         return resp.read()
 

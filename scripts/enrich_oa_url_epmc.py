@@ -11,14 +11,15 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from fetch_policy import api_headers
+
 ROOT = Path(__file__).resolve().parents[1]
 PM = ROOT / "research_ops/02_papers/papers_master.csv"
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
 
 
 def fetch_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    req = urllib.request.Request(url, headers=api_headers())
     with urllib.request.urlopen(req, timeout=45) as resp:
         return json.loads(resp.read().decode())
 

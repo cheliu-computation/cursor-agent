@@ -5,17 +5,18 @@ from __future__ import annotations
 import csv
 import hashlib
 import re
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+
+from fetch_policy import browser_headers, canonicalize_url, classify_policy_skip, url_attempts
 
 ROOT = Path(__file__).resolve().parents[1]
 RS = ROOT / "research_ops/02_papers/paper_reading_status.csv"
 MNF = ROOT / "research_ops/manifests/download_manifest.csv"
 CACHE_FT = ROOT / "research_ops/cache/fulltext"
 CACHE_PDF = ROOT / "research_ops/cache/pdfs"
-
-UA = "Mozilla/5.0 (compatible; research-ops-bot/1.0; +https://example.invalid)"
 
 
 def main() -> int:
@@ -54,7 +55,7 @@ def main() -> int:
     for r in status_rows:
         if r.get("abstract_status") != "ingested":
             continue
-        url = (r.get("oa_url_cached") or "").strip()
+        url = canonicalize_url((r.get("oa_url_cached") or "").strip())
         if not url.lower().startswith("http"):
             continue
         oid = r["openalex_id"].strip()
@@ -81,6 +82,14 @@ def main() -> int:
         cur = by_oid.get(oid_key, rec)
         if cur.get("fulltext_html_status") not in ("", "pending"):
             continue
+        policy_skip = classify_policy_skip(url)
+        if policy_skip:
+            cur["fulltext_html_status"] = "skipped_policy"
+            cur["fulltext_html_artifact"] = ""
+            cur["notes"] = (cur.get("notes", "") + f"; T202_policy_skip={policy_skip}")[:240]
+            cur["last_fetch_utc"] = now
+            by_oid[oid_key] = cur
+            continue
         short = wid.replace(":", "_")
         is_pdf = url.lower().split("?", 1)[0].endswith(".pdf")
         if is_pdf:
@@ -92,16 +101,40 @@ def main() -> int:
             mime = "text/html"
             parse_path = "research_ops/cache/fulltext/"
 
-        req = urllib.request.Request(url, headers={"User-Agent": UA})
-        try:
-            with urllib.request.urlopen(req, timeout=60) as resp:
-                data = resp.read()
-                ctype = resp.headers.get("Content-Type", mime)
-        except Exception as e:
+        data = None
+        ctype = mime
+        used_url = url
+        last_err = ""
+        for attempt in url_attempts(url):
+            req = urllib.request.Request(attempt, headers=browser_headers())
+            try:
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    data = resp.read()
+                    ctype = resp.headers.get("Content-Type", mime)
+                    used_url = attempt
+                    break
+            except urllib.error.HTTPError as e:
+                last_err = f"HTTP Error {e.code}: {e.reason}"
+                if e.code == 403:
+                    skip = classify_policy_skip(attempt)
+                    if skip:
+                        policy_skip = skip
+                        break
+            except Exception as e:
+                last_err = str(e)
+        if policy_skip:
+            rec = by_oid.get(oid_key, rec)
+            rec["fulltext_html_status"] = "skipped_policy"
+            rec["fulltext_html_artifact"] = ""
+            rec["notes"] = (rec.get("notes", "") + f"; T202_policy_skip={policy_skip}")[:240]
+            rec["last_fetch_utc"] = now
+            by_oid[oid_key] = rec
+            continue
+        if data is None:
             rec = by_oid.get(oid_key, rec)
             rec["fulltext_html_status"] = "error"
             rec["fulltext_html_artifact"] = ""
-            rec["notes"] = (rec.get("notes", "") + f"; fetch_error={e}")[:240]
+            rec["notes"] = (rec.get("notes", "") + f"; fetch_error={last_err}")[:240]
             rec["last_fetch_utc"] = now
             by_oid[oid_key] = rec
             continue
@@ -112,7 +145,7 @@ def main() -> int:
         mid = f"DL{last:05d}"
         new_manifest.append({
             "manifest_id": mid,
-            "source_url": url[:900],
+            "source_url": used_url[:900],
             "retrieval_time_utc": now,
             "local_path": str(local.relative_to(ROOT)),
             "file_hash": h,
@@ -129,7 +162,10 @@ def main() -> int:
         rec["fulltext_html_status"] = "ingested" if not is_pdf else "pdf_cached"
         rec["fulltext_html_artifact"] = str(local.relative_to(ROOT))
         rec["last_fetch_utc"] = now
-        rec["notes"] = (rec.get("notes", "") + "; T202_fetched")[:220]
+        note = "; T202_fetched"
+        if used_url != url:
+            note += f"; url_fallback={used_url[:80]}"
+        rec["notes"] = (rec.get("notes", "") + note)[:220]
         by_oid[oid_key] = rec
 
     rows_m.extend(new_manifest)
