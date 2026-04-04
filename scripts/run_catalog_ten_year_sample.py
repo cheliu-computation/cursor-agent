@@ -307,7 +307,10 @@ def read_csv(path: Path) -> list[SampleRow]:
     return rows
 
 
-def aggregate_rows(rows: list[SampleRow]) -> list[dict[str, object]]:
+def aggregate_rows(
+    rows: list[SampleRow],
+    catalog_rows: list[HarvestSource] | None = None,
+) -> list[dict[str, object]]:
     grouped: dict[tuple[str, str], dict[str, int]] = defaultdict(
         lambda: {
             "total": 0,
@@ -316,6 +319,9 @@ def aggregate_rows(rows: list[SampleRow]) -> list[dict[str, object]]:
             "fulltext_ok": 0,
         }
     )
+    if catalog_rows:
+        for item in catalog_rows:
+            grouped[(item.source_kind, item.source_name)]
     for row in rows:
         key = (row.source_kind, row.source_name)
         grouped[key]["total"] += 1
@@ -431,11 +437,11 @@ def build_report(
 
 def main() -> int:
     args = parse_args()
+    catalog_rows = load_harvest_source_ids(args.catalog, source_kind="all")
     if args.from_csv:
         probed = read_csv(args.from_csv)
         output_csv = args.from_csv
     else:
-        catalog_rows = load_harvest_source_ids(args.catalog, source_kind="all")
         harvested = harvest_sample(
             catalog_rows=catalog_rows,
             start_year=args.start_year,
@@ -450,7 +456,7 @@ def main() -> int:
         )
         write_csv(probed, args.output_csv)
         output_csv = args.output_csv
-    aggregate = aggregate_rows(probed)
+    aggregate = aggregate_rows(probed, catalog_rows=catalog_rows)
     report = build_report(
         rows=probed,
         aggregate=aggregate,
