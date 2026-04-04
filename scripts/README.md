@@ -6,8 +6,9 @@ All paths are relative to the repository root. Heavy outputs go to `research_ops
 
 | Script | Role |
 |--------|------|
-| `harvest_openalex_monthly.py` | One calendar month per `source_id` (T182). |
-| `harvest_openalex_year_slice.py` | One publication year × several journal `source_id`s (T213-style). |
+| `harvest_openalex_monthly.py` | One calendar month per `source_id`; can resolve `--source-name` from `research_ops/01_sources/fetch_source_catalog.csv`. |
+| `harvest_openalex_year_slice.py` | One publication year × all active journal/conference rows in `research_ops/01_sources/fetch_source_catalog.csv`, or a filtered subset. |
+| `source_catalog.py` | Load and resolve entries from the unified journal/conference fetch catalog. |
 
 ## Abstracts (Layer A)
 

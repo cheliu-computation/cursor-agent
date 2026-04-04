@@ -14,6 +14,9 @@ Research operations live under **`research_ops/`**. Automation lives under
   - `fulltext_read_pipeline.md`: title/abstract/fulltext processing notes.
   - `2026-04-04_source_success_report.md`: per-source success-rate report.
   - `2026-04-04_5.4_fix_record.md`: cleanup and 5.4 fix record.
+- `research_ops/01_sources/`
+  - `source_registry.csv`: broad cross-layer source registry.
+  - `fetch_source_catalog.csv`: unified journal/conference harvest list used by OpenAlex source-based fetch scripts.
 - `research_ops/manifests/`
   - `download_manifest.csv`: provenance for downloaded artifacts.
 - `scripts/`

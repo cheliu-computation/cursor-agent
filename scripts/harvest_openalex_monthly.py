@@ -21,6 +21,9 @@ import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
+
+from source_catalog import resolve_harvest_source
 
 
 def author_string(w: dict, max_authors: int = 10) -> str:
@@ -100,13 +103,36 @@ def fetch_month(source_id: str, year_month: str, limit: int) -> list[dict]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--source-id", required=True, help="OpenAlex source id without URL prefix, e.g. S116571295")
+    ap.add_argument(
+        "--source-id",
+        help="OpenAlex source id without URL prefix, e.g. S116571295",
+    )
+    ap.add_argument(
+        "--source-name",
+        help=(
+            "Optional unified-catalog source selector. May match catalog_id, "
+            "source_name, openalex_display_name, or openalex_source_id."
+        ),
+    )
+    ap.add_argument(
+        "--catalog",
+        default="research_ops/01_sources/fetch_source_catalog.csv",
+        help="Path to the unified journal/conference fetch catalog.",
+    )
     ap.add_argument("--year-month", required=True, help="YYYY-MM")
     ap.add_argument("--limit", type=int, default=200)
     ap.add_argument("--append", required=True, help="Path to papers_master.csv")
     args = ap.parse_args()
 
-    new_rows = fetch_month(args.source_id, args.year_month, args.limit)
+    if not args.source_id and not args.source_name:
+        ap.error("one of --source-id or --source-name is required")
+
+    source_id = args.source_id
+    if args.source_name:
+        resolved = resolve_harvest_source(Path(args.catalog), args.source_name)
+        source_id = resolved.openalex_source_id
+
+    new_rows = fetch_month(source_id, args.year_month, args.limit)
     with open(args.append, newline="", encoding="utf-8") as f:
         rdr = csv.DictReader(f)
         fields = rdr.fieldnames

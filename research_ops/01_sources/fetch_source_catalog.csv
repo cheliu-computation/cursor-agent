@@ -1,0 +1,38 @@
+catalog_id,source_name,source_kind,openalex_source_id,openalex_display_name,openalex_source_type,fetch_mode,enabled_for_harvest,priority,notes
+J001,Medical Image Analysis,journal,S116571295,Medical Image Analysis,journal,openalex_source_id,true,P1,Current core imaging journal
+J002,IEEE Transactions on Medical Imaging,journal,S58069681,IEEE Transactions on Medical Imaging,journal,openalex_source_id,true,P1,Current core imaging journal
+J003,Radiology,journal,S50280174,Radiology,journal,openalex_source_id,true,P1,Current core clinical imaging journal
+J004,Radiology Artificial Intelligence,journal,S4210219523,Radiology Artificial Intelligence,journal,openalex_source_id,true,P1,Clinical AI imaging venue
+J005,Nature Medicine,journal,S203256638,Nature Medicine,journal,openalex_source_id,true,P1,High-value translational journal
+J006,npj Digital Medicine,journal,S4210195431,npj Digital Medicine,journal,openalex_source_id,true,P1,Digital medicine journal
+J007,Cell Systems,journal,S2764739556,Cell Systems,journal,openalex_source_id,true,P1,Systems and methods journal
+J008,Nature Machine Intelligence,journal,S2912241403,Nature Machine Intelligence,journal,openalex_source_id,true,P1,Method frontier journal
+J009,The Lancet Digital Health,journal,S4210237014,The Lancet Digital Health,journal,openalex_source_id,true,P1,Clinical digital health journal
+J010,Nature Computational Science,journal,S4210228084,Nature Computational Science,journal,openalex_source_id,true,P2,Computational science journal
+J011,JAMA Network Open,journal,S4210217848,JAMA Network Open,journal,openalex_source_id,true,P2,Open clinical journal
+J012,JAMA,journal,S172573765,JAMA,journal,openalex_source_id,true,P2,High-friction clinical journal
+J013,New England Journal of Medicine,journal,S62468778,New England Journal of Medicine,journal,openalex_source_id,true,P2,High-friction clinical journal
+J014,The Lancet,journal,S49861241,The Lancet,journal,openalex_source_id,true,P2,High-friction clinical journal
+J015,Nature,journal,S137773608,Nature,journal,openalex_source_id,true,P2,High-impact science journal
+J016,Science,journal,S3880285,Science,journal,openalex_source_id,true,P2,High-impact science journal
+J017,Communications Medicine,journal,S4210167893,Communications Medicine,journal,openalex_source_id,true,P2,Springer Nature medicine journal
+J018,Nature Biomedical Engineering,journal,S2764624792,Nature Biomedical Engineering,journal,openalex_source_id,true,P2,Biomedical engineering journal
+J019,IEEE Access,journal,S2485537415,IEEE Access,journal,openalex_source_id,true,P3,Broad engineering journal
+J020,BMJ,journal,S192814187,BMJ,journal,openalex_source_id,true,P3,Broad clinical journal; OpenAlex has multiple BMJ source records
+J021,Healthcare,journal,S4210214101,Healthcare,journal,openalex_source_id,true,P3,MDPI healthcare journal
+J022,Sensors,journal,S101949793,Sensors,journal,openalex_source_id,true,P3,MDPI sensors journal
+J023,Bioengineering,journal,S4210179121,Bioengineering,journal,openalex_source_id,true,P3,MDPI bioengineering journal
+J024,Information Fusion,journal,S7560371,Information Fusion,journal,openalex_source_id,true,P2,Multimodal methods journal
+J025,Artificial Intelligence Review,journal,S122814990,Artificial Intelligence Review,journal,openalex_source_id,true,P3,Survey journal
+J026,Cell,journal,S110447773,Cell,journal,openalex_source_id,true,P2,High-impact biology journal
+J027,Nature Communications,journal,S64187185,Nature Communications,journal,openalex_source_id,true,P2,Large OA science journal
+C001,MICCAI,conference,S4306420499,Medical Image Computing and Computer-Assisted Intervention,conference,openalex_source_id,true,P1,Flagship medical imaging conference
+C002,MIDL,conference,S4306519517,Medical Imaging with Deep Learning,journal,openalex_source_id,true,P1,OpenAlex labels this proceedings source as journal
+C003,IPMI,conference,S4306418889,Information Processing in Medical Imaging,conference,openalex_source_id,true,P1,Medical imaging conference
+C004,ISBI,conference,S4306420100,International Symposium on Biomedical Imaging,conference,openalex_source_id,true,P1,Generic series source
+C005,NeurIPS,conference,S4306420609,Neural Information Processing Systems,conference,openalex_source_id,true,P2,Generic series source
+C006,ICML,conference,S4306419644,International Conference on Machine Learning,conference,openalex_source_id,true,P2,Generic series source
+C007,ICLR,conference,S4306419637,International Conference on Learning Representations,conference,openalex_source_id,true,P2,Generic series source
+C008,CVPR,conference,S4306417987,Computer Vision and Pattern Recognition,conference,openalex_source_id,true,P2,Prefer generic series source over year-specific CVPR records
+C009,ICCV,conference,S4306419272,International Conference on Computer Vision,conference,openalex_source_id,true,P2,Prefer generic series source over year-specific ICCV records
+C010,ECCV,conference,S4306418318,European Conference on Computer Vision,conference,openalex_source_id,true,P2,Generic series source

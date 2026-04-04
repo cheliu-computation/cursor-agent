@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T213: fetch works per source + publication_year (OpenAlex cursor), merge into papers_master."""
+"""Fetch works per source + publication_year using the unified source catalog."""
 from __future__ import annotations
 
 import argparse
@@ -9,6 +9,9 @@ import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
+
+from source_catalog import load_harvest_source_ids, resolve_harvest_source
 
 
 def author_string(w: dict, max_authors: int = 10) -> str:
@@ -85,21 +88,37 @@ def main() -> int:
     ap.add_argument("--year", type=int, required=True)
     ap.add_argument("--limit-per-source", type=int, default=35)
     ap.add_argument("--append", required=True)
+    ap.add_argument(
+        "--catalog",
+        default="research_ops/01_sources/fetch_source_catalog.csv",
+        help="Path to the unified journal/conference fetch catalog.",
+    )
+    ap.add_argument(
+        "--source-kind",
+        choices=("all", "journal", "conference"),
+        default="all",
+        help="Filter the catalog by source kind before harvesting.",
+    )
+    ap.add_argument(
+        "--source-name",
+        action="append",
+        default=[],
+        help=(
+            "Optional source selector. May be repeated and may match catalog_id, "
+            "source_name, openalex_display_name, or openalex_source_id."
+        ),
+    )
     args = ap.parse_args()
+    catalog_path = Path(args.catalog)
 
-    sources = [
-        "S116571295",   # MedIA
-        "S58069681",    # TMI
-        "S50280174",    # Radiology
-        "S203256638",   # Nature Medicine
-        "S4210195431",  # npj Digital Medicine
-        "S2764739556",  # Cell Systems
-        "S2912241403",  # Nature MI
-    ]
+    if args.source_name:
+        selected_sources = [resolve_harvest_source(catalog_path, token) for token in args.source_name]
+    else:
+        selected_sources = load_harvest_source_ids(catalog_path, source_kind=args.source_kind)
 
     new_rows: list[dict] = []
-    for sid in sources:
-        new_rows.extend(fetch_year(sid, args.year, args.limit_per_source))
+    for item in selected_sources:
+        new_rows.extend(fetch_year(item.openalex_source_id, args.year, args.limit_per_source))
 
     with open(args.append, newline="", encoding="utf-8") as f:
         rdr = csv.DictReader(f)
@@ -121,7 +140,10 @@ def main() -> int:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
         w.writerows(existing)
-    print(f"year {args.year} fetched {len(new_rows)} merged {merged} total {len(existing)}")
+    print(
+        f"year {args.year} sources {len(selected_sources)} "
+        f"fetched {len(new_rows)} merged {merged} total {len(existing)}"
+    )
     return 0
 
 
