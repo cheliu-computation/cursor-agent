@@ -1,0 +1,9 @@
+link_id,trend_signal_id,problem_or_failure_id,rationale,notes
+TTL001,frontier_multi_agent_clinical,PP001,Multi-agent stacks may triage inbox-scale imaging/lab results if grounded in structured EHR feeds,T076 heuristic
+TTL002,frontier_multi_agent_clinical,PP003,Agent orchestration mirrors cross-specialty handoff pain; needs provenance + escalation paths,
+TTL003,frontier_self_evolving_sim,FM002,Self-evolving simulators may bake in dataset co-occurrence biases noted for medical WSSS,C-CAM failure link
+TTL004,frontier_rare_disease_agent,PP010,Rare disease agents target diagnostic delay when paired with case+literature corpora,
+TTL005,frontier_ai_hospital_sim,PP017,Multilingual simulated encounters may ease consent/education if policy aligned,
+TTL006,frontier_genetic_perturb_agent,PP009,Perturbation-planning agents reduce manual eligibility screening when tied to trial graphs,
+TTL007,frontier_hypothesis_llm,PP005,Hypothesis LLMs may accelerate guideline-to-EHR gap closure if outputs are CDS-governed,
+TTL008,frontier_virtual_lab,PP015,Closed-loop lab agents attack multimodal synthesis burden for tumor boards,

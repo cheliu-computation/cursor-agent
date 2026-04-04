@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# Raw download cache — do not commit bulk artifacts
+research_ops/cache/**/*
+!research_ops/cache/**/.gitkeep
+
+# Parsed temp blobs (if any large binaries land here)
+research_ops/parsed/**/*.bin
+research_ops/parsed/**/*.pdf
+
+# Bulk abstract JSONL (regenerate via scripts; keep paper_reading_status.csv in git)
+research_ops/parsed/abstracts/openalex_abstracts_*.jsonl
+research_ops/parsed/abstracts/abstract_index.sqlite
+research_ops/parsed/section_extractions_pilot.jsonl
+research_ops/parsed/pdfs/*.txt

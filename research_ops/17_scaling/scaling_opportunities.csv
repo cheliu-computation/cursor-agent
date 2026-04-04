@@ -1,0 +1,6 @@
+opp_id,title,clinical_pull_ref,data_ref,scaling_rationale,risk,notes
+SO001,Inbox-scale imaging/lab summarization,PP001,EHR+OpenAlex+TCIA,Retrieval+synthesis scales with corpus; agents can route to protocols,governance+hallucination,T078 from clinical pull
+SO002,Rare disease case retrieval + phenotyping,PP010,Europe PMC case lake + ORDO,Large corpora unlock tail coverage; weak labels from case reports,bias+privacy,Uses T062 harvest
+SO003,Trial-to-patient matching copilot,PP009,ClinicalTrials.gov+papers_master,Structured trial metadata + NLP over notes,regulatory friction,Links T043 trials_master
+SO004,Multimodal oncology board packets,PP015,TCIA+notes+path,Foundation multimodal models compress prep time,annotation drift,Requires figure/table extraction
+SO005,Closed-loop method bench from stale challenges,PP015,Grand Challenge+papers+TCIA,Revive ended tasks with new backbones,data shift,T078 ties to T058 resurrection_candidates

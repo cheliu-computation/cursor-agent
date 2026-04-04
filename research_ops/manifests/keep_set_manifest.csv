@@ -1,0 +1,3 @@
+keep_id,manifest_id,rationale,reviewer,notes
+KEEP001,,Curated OA methods papers for benchmark forensics (to be linked after manifest row exists),human,T098 placeholder — populate manifest_id when PDF retained
+KEEP002,,Representative clinical AI high-impact PDFs for red-team / clinician review,human,T098 small canonical keep-set policy
