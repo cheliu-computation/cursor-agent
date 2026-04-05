@@ -1,0 +1,20 @@
+repo_id,paper_id,url,language,last_checked,notes
+GH001,openalex:W4391899415,https://github.com/LibertFan/AI_Hospital,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH002,openalex:W3101246443,https://github.com/Scalsol/RepPointsV2,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH003,openalex:W2970657225,https://github.com/snudatalab/KegNet,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH004,openalex:W4313181443,https://github.com/Tian-lab/C-CAM,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH005,openalex:W4312436424,https://github.com/FBLADL/ACPL,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH006,openalex:W4312694282,https://github.com/cwmok/C2FViT,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH007,openalex:W4214961286,https://github.com/BWGZK/CycleMix,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH008,openalex:W4313166273,https://github.com/wannature/BoostMIS,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH009,openalex:W4307972630,https://github.com/JLiangLab/DiRA,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH010,openalex:W4312465577,https://github.com/zzzqzhou/Dual-Normalization,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH011,openalex:W3217084439,https://github.com/HealthML/ContIG,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH012,openalex:W4312289809,https://github.com/choubo/DRA,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH013,openalex:W4286908677,https://github.com/Kangningthu/ADELE,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH014,openalex:W4312567394,https://github.com/Siwensun/Neural_Diffeomorphic_Flow-NDF,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH015,openalex:W4312478457,https://github.com/jfm15/ContourHuggingHeatmaps.git,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH016,openalex:W4312233661,https://github.com/XAIMI-Lab/McMRSR,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH017,openalex:W3196792593,https://github.com/Luchixiang/PCRL,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH018,openalex:W3196927126,https://github.com/Optimization-AI/LibAUC,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index
+GH019,openalex:W3158643607,https://github.com/awreed/DynamicCTReconstruction,,2026-03-31,T051 extracted from OpenAlex abstract_inverted_index

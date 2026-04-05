@@ -1,0 +1,6 @@
+hypothesis_id,statement,cheap_test_ref,evidence_gap_ref,priority,notes
+H001,Agentic summarization reduces imaging/lab inbox time without harming safety,CT001,EG001,P1,Maps to SO001 / PP001
+H002,Rare disease retrieval over 200-case Europe PMC seed beats keyword baseline on RDRET queries,CT002,EG002,P1,Uses T067 seed
+H003,Resurrected Grand Challenge tasks gain >5 Dice with 2024 backbones vs original leaderboards,CT003,EG003,P2,Uses T058 candidates
+H004,Trial matching copilot cuts manual screening time in synthetic cohorts,CT004,EG004,P1,Uses trials_master
+H005,Multimodal tumor board packet generation preserves oncologist-relevant facts (human eval),CT005,EG005,P1,Maps to SO004

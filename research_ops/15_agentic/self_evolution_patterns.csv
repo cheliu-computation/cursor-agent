@@ -1,0 +1,13 @@
+pattern_id,name,mechanism,validation_approach,risk_notes,notes
+SEP001,Prompt template library,Versioned prompts in repo; diffable,A/B on fixed benchmark tasks,unmeasured subjective gains,
+SEP002,Tool recipe accumulation,Saved JSON/YAML tool chains,Replay on gold tasks; success rate delta,
+SEP003,Retrieval index refresh,Periodic re-embed corpus subset,Retrieval recall@k on labeled queries,
+SEP004,Schema / extraction checklist updates,Structured fields added to parsers,Inter-annotator agreement on sample,
+SEP005,Reflection log distilled into rules,RUN_LOG → DECISIONS entries,Error recurrence rate drops,
+SEP006,Skill promotion via promotion_tests,Tests in promotion_tests.csv must pass,CI or manual eval harness,
+SEP007,Planner policy learning from traces,Offline RL / bandit on logged actions,Regret vs baseline on sim,
+SEP008,Memory summarization policies,Compress episodic to semantic memory,Downstream QA accuracy retained,
+SEP009,Self-modifying code (unsafe default),Code writes own source,FORBIDDEN unless sandbox + human review — mark as hype risk,
+SEP010,Weight fine-tuning,Model weights change,Holdout eval + safety suite,
+SEP011,Benchmark task expansion,New tasks added from failures,Coverage of prior failure modes,
+SEP012,Multi-agent role specialization,Emergent division of labor,Task success vs single-agent baseline,
