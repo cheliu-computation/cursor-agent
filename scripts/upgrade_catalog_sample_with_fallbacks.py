@@ -13,9 +13,12 @@ from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date
+from html import unescape
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
+
+import fitz
 
 from fetch_policy import (
     api_headers,
@@ -44,6 +47,42 @@ ALT_HOST_KEYWORDS = {
     "pmc.ncbi.nlm.nih.gov",
     "europepmc.org",
 }
+FAST_SKIP_HOSTS = {
+    "doi.org",
+    "pubmed.ncbi.nlm.nih.gov",
+    "doaj.org",
+}
+NON_FULLTEXT_HOSTS = {
+    "doi.org",
+    "pubmed.ncbi.nlm.nih.gov",
+    "doaj.org",
+    "ieeexplore.ieee.org",
+    "openreview.net",
+    "proceedings.mlr.press",
+    "papers.nips.cc",
+    "proceedings.neurips.cc",
+    "openaccess.thecvf.com",
+}
+FULLTEXT_SECTION_MARKERS = (
+    "introduction",
+    "methods",
+    "materials and methods",
+    "results",
+    "discussion",
+    "conclusion",
+    "references",
+    "acknowledg",
+)
+ARTICLE_HTML_HOST_HINTS = {
+    "pmc.ncbi.nlm.nih.gov",
+}
+MAX_PROBE_URLS_PER_ROW = 10
+MAX_ROW_SECONDS = 25.0
+MIN_FULLTEXT_HTML_CHARS = 6000
+MIN_FULLTEXT_HTML_MARKERS = 3
+MIN_FULLTEXT_PDF_TOTAL_CHARS = 4000
+MIN_FULLTEXT_PDF_PAGE_CHARS = 80
+MIN_FULLTEXT_PDF_PAGE_RATIO = 0.6
 
 
 @dataclass
@@ -70,6 +109,7 @@ class UpgradedRow:
     final_oa_url: str
     fulltext_detail: str
     fulltext_used_url: str
+    same_work_urls_json: str
 
 
 def parse_args() -> argparse.Namespace:
@@ -120,6 +160,27 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=20,
         help="Timeout in seconds for each fulltext request.",
+    )
+    parser.add_argument(
+        "--start-year",
+        type=int,
+        help="Optional inclusive year filter for chunked runs.",
+    )
+    parser.add_argument(
+        "--end-year",
+        type=int,
+        help="Optional inclusive year filter for chunked runs.",
+    )
+    parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=500,
+        help="Write checkpoint CSV every N completed rows.",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from an existing upgraded CSV if present.",
     )
     return parser.parse_args()
 
@@ -192,9 +253,48 @@ def read_baseline_rows(path: Path) -> list[UpgradedRow]:
                     final_oa_url=(item.get("oa_url") or "").strip(),
                     fulltext_detail=(item.get("fulltext_detail") or "").strip(),
                     fulltext_used_url=(item.get("fulltext_used_url") or "").strip(),
+                    same_work_urls_json=(item.get("same_work_urls_json") or "").strip(),
                 )
             )
     return rows
+
+
+def read_upgraded_rows(path: Path) -> list[UpgradedRow]:
+    rows: list[UpgradedRow] = []
+    with path.open(newline="", encoding="utf-8") as handle:
+        for item in csv.DictReader(handle):
+            rows.append(
+                UpgradedRow(
+                    catalog_id=(item.get("catalog_id") or "").strip(),
+                    source_name=(item.get("source_name") or "").strip(),
+                    source_kind=(item.get("source_kind") or "").strip(),
+                    year=int(item.get("year") or 0),
+                    rank_within_source_year=int(item.get("rank_within_source_year") or 0),
+                    openalex_id=(item.get("openalex_id") or "").strip(),
+                    title=(item.get("title") or "").strip(),
+                    doi=(item.get("doi") or "").strip(),
+                    baseline_oa_url=(item.get("baseline_oa_url") or "").strip(),
+                    baseline_title_status=(item.get("baseline_title_status") or "").strip(),
+                    baseline_abstract_status=(item.get("baseline_abstract_status") or "").strip(),
+                    baseline_fulltext_status=(item.get("baseline_fulltext_status") or "").strip(),
+                    upgraded_title_status=(item.get("upgraded_title_status") or "").strip(),
+                    upgraded_abstract_status=(item.get("upgraded_abstract_status") or "").strip(),
+                    upgraded_fulltext_status=(item.get("upgraded_fulltext_status") or "").strip(),
+                    abstract_strategy=(item.get("abstract_strategy") or "").strip(),
+                    fulltext_strategy=(item.get("fulltext_strategy") or "").strip(),
+                    fallback_source_label=(item.get("fallback_source_label") or "").strip(),
+                    fallback_host=(item.get("fallback_host") or "").strip(),
+                    final_oa_url=(item.get("final_oa_url") or "").strip(),
+                    fulltext_detail=(item.get("fulltext_detail") or "").strip(),
+                    fulltext_used_url=(item.get("fulltext_used_url") or "").strip(),
+                    same_work_urls_json=(item.get("same_work_urls_json") or "").strip(),
+                )
+            )
+    return rows
+
+
+def row_key(row: UpgradedRow) -> tuple[str, int, int, str]:
+    return (row.catalog_id, row.year, row.rank_within_source_year, row.openalex_id)
 
 
 def write_rows(rows: list[UpgradedRow], path: Path) -> None:
@@ -221,6 +321,7 @@ def write_rows(rows: list[UpgradedRow], path: Path) -> None:
         "final_oa_url",
         "fulltext_detail",
         "fulltext_used_url",
+        "same_work_urls_json",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
@@ -326,25 +427,152 @@ def probe_candidate_urls(
     timeout: int,
 ) -> tuple[str, str, str, str, str]:
     last_err = ""
-    for url, label in candidates:
+    queue: list[tuple[str, str]] = list(candidates)
+    seen: set[str] = set()
+    processed = 0
+    while queue and processed < MAX_PROBE_URLS_PER_ROW:
+        url, label = queue.pop(0)
         policy = classify_policy_skip(url, row.doi)
         if policy:
             last_err = policy
             continue
         for attempt in url_attempts(url):
+            clean_attempt = canonicalize_url(attempt)
+            if clean_attempt in seen:
+                continue
+            seen.add(clean_attempt)
+            processed += 1
             try:
-                req = urllib.request.Request(attempt, headers=browser_headers())
+                req = urllib.request.Request(clean_attempt, headers=browser_headers())
                 with urllib.request.urlopen(req, timeout=timeout) as resp:
+                    final_url = canonicalize_url(resp.geturl())
                     ctype = (resp.headers.get("Content-Type") or "").lower()
-                    _ = resp.read(2048)
-                status = "success_pdf" if ("pdf" in ctype or attempt.lower().split("?", 1)[0].endswith(".pdf")) else "success_html"
-                return status, ctype[:120], attempt, label, host_label(attempt)
+                    body = resp.read(50000)
+                final_host = host_label(final_url)
+                if "pdf" in ctype or final_url.lower().split("?", 1)[0].endswith(".pdf"):
+                    pdf_req = urllib.request.Request(final_url, headers=browser_headers())
+                    with urllib.request.urlopen(pdf_req, timeout=timeout) as pdf_resp:
+                        pdf_body = pdf_resp.read()
+                    pdf_ok, pdf_detail = pdf_has_readable_fulltext(pdf_body)
+                    if pdf_ok:
+                        return "success_pdf", pdf_detail[:120], final_url, label, final_host
+                    last_err = f"non_parseable_pdf:{pdf_detail}"[:120]
+                    continue
+                if "html" in ctype or ctype.startswith("text/"):
+                    html = decode_html(body)
+                    if html_looks_like_fulltext(final_url, html):
+                        text = extract_readable_html_text(html)
+                        marker_hits = sum(token in text for token in FULLTEXT_SECTION_MARKERS)
+                        detail = f"html_chars={len(text)}; marker_hits={marker_hits}"
+                        return "success_html", detail[:120], final_url, label, final_host
+                    for follow_url in extract_followup_urls(final_url, html):
+                        if follow_url not in seen:
+                            queue.append((follow_url, f"{label}->followup"))
+                    last_err = "non_fulltext_html"
+                    continue
+                last_err = ctype[:120] or "unsupported_content_type"
             except urllib.error.HTTPError as exc:
                 last_err = f"HTTP {exc.code}: {exc.reason}"
             except Exception as exc:  # noqa: BLE001
                 last_err = str(exc)[:180]
     terminal = classify_terminal_error(row.final_oa_url or row.baseline_oa_url, last_err, row.doi)
     return "skipped_policy" if terminal else "error", terminal or last_err[:120], "", "", ""
+
+
+def decode_html(body: bytes) -> str:
+    return unescape(body.decode("utf-8", "ignore")).lower()
+
+
+def extract_readable_html_text(html: str) -> str:
+    text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html)
+    text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
+    text = re.sub(r"(?is)<noscript[^>]*>.*?</noscript>", " ", text)
+    text = re.sub(r"(?is)<svg[^>]*>.*?</svg>", " ", text)
+    text = re.sub(r"(?is)<[^>]+>", " ", text)
+    text = unescape(text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def pdf_has_readable_fulltext(body: bytes) -> tuple[bool, str]:
+    try:
+        doc = fitz.open(stream=body, filetype="pdf")
+    except Exception as exc:  # noqa: BLE001
+        return False, f"pdf_open_error:{str(exc)[:80]}"
+
+    total_chars = 0
+    pages_with_text = 0
+    try:
+        page_count = doc.page_count
+        for page_index in range(page_count):
+            page_text = (doc.load_page(page_index).get_text("text") or "").strip()
+            page_chars = sum(1 for ch in page_text if not ch.isspace())
+            total_chars += page_chars
+            if page_chars >= MIN_FULLTEXT_PDF_PAGE_CHARS:
+                pages_with_text += 1
+    finally:
+        doc.close()
+
+    page_ratio = pages_with_text / max(page_count, 1)
+    ok = (
+        total_chars >= MIN_FULLTEXT_PDF_TOTAL_CHARS
+        and page_ratio >= MIN_FULLTEXT_PDF_PAGE_RATIO
+    )
+    return ok, f"pages={page_count}; chars={total_chars}; readable_ratio={page_ratio:.2f}"
+
+
+def html_looks_like_fulltext(final_url: str, html: str) -> bool:
+    host = host_of(final_url)
+    path = urlparse(final_url).path.lower()
+    if host in NON_FULLTEXT_HOSTS:
+        return False
+    if host == "arxiv.org" and "/abs/" in path:
+        return False
+    if host == "nature.com" and "cookies_not_supported" in final_url:
+        return False
+    if host == "ncbi.nlm.nih.gov" and "/pmc/articles/" not in path:
+        return False
+    if host == "pmc.ncbi.nlm.nih.gov" and "/articles/" not in path:
+        return False
+
+    text = extract_readable_html_text(html)
+    if host in ARTICLE_HTML_HOST_HINTS and len(text) > MIN_FULLTEXT_HTML_CHARS:
+        return True
+    marker_hits = sum(token in text for token in FULLTEXT_SECTION_MARKERS)
+    if marker_hits >= MIN_FULLTEXT_HTML_MARKERS and len(text) > MIN_FULLTEXT_HTML_CHARS:
+        return True
+    if "<article" in html and marker_hits >= 2 and len(text) > 5000:
+        return True
+    return False
+
+
+def extract_followup_urls(final_url: str, html: str) -> list[str]:
+    candidates: list[str] = []
+
+    def add(url: str) -> None:
+        clean = canonicalize_url(urljoin(final_url, url.strip()))
+        if clean.lower().startswith("http"):
+            candidates.append(clean)
+
+    for match in re.findall(
+        r'<meta[^>]+name=["\']citation_pdf_url["\'][^>]+content=["\']([^"\']+)["\']',
+        html,
+        re.I,
+    ):
+        add(match)
+    for match in re.findall(r'href=["\']([^"\']+\.pdf(?:\?[^"\']*)?)["\']', html, re.I):
+        add(match)
+    for match in re.findall(r'href=["\']([^"\']+/pdf(?:/[^"\']*)?)["\']', html, re.I):
+        add(match)
+    for match in re.findall(r'href=["\']([^"\']+/pmc/articles/pmc\d+/?)["\']', html, re.I):
+        add(match)
+    for match in re.findall(r'href=["\']([^"\']*pdf\?id=[^"\']+)["\']', html, re.I):
+        add(match)
+
+    dedup: dict[str, None] = {}
+    for url in candidates:
+        dedup.setdefault(url, None)
+    return sorted(dedup, key=alt_host_rank)
 
 
 def upgrade_single(row: UpgradedRow, detail_timeout: int, fulltext_timeout: int) -> UpgradedRow:
@@ -355,16 +583,27 @@ def upgrade_single(row: UpgradedRow, detail_timeout: int, fulltext_timeout: int)
 
     detail: dict[str, Any] | None = None
     detail_error = ""
-    try:
-        detail = openalex_detail(row.openalex_id, detail_timeout)
-    except Exception as exc:  # noqa: BLE001
-        detail_error = str(exc)[:180]
+    same_work_candidates: list[tuple[str, str]] = []
+    if row.same_work_urls_json:
+        try:
+            for idx, url in enumerate(json.loads(row.same_work_urls_json)):
+                clean = canonicalize_url(str(url))
+                if clean.lower().startswith("http"):
+                    same_work_candidates.append((clean, f"same_work_cached[{idx}]"))
+        except Exception:  # noqa: BLE001
+            same_work_candidates = []
+
+    if not same_work_candidates:
+        try:
+            detail = openalex_detail(row.openalex_id, detail_timeout)
+        except Exception as exc:  # noqa: BLE001
+            detail_error = str(exc)[:180]
 
     if detail and needs_abstract and detail.get("abstract_inverted_index"):
         row.upgraded_abstract_status = "success"
         row.abstract_strategy = "same_work_detail"
 
-    all_candidates: list[tuple[str, str]] = []
+    all_candidates: list[tuple[str, str]] = list(same_work_candidates)
     if detail:
         all_candidates.extend(collect_urls_from_work(detail, fallback_only=False))
 
@@ -418,7 +657,15 @@ def upgrade_single(row: UpgradedRow, detail_timeout: int, fulltext_timeout: int)
     return row
 
 
-def upgrade_rows(rows: list[UpgradedRow], detail_timeout: int, fulltext_timeout: int, workers: int) -> list[UpgradedRow]:
+def upgrade_rows(
+    rows: list[UpgradedRow],
+    detail_timeout: int,
+    fulltext_timeout: int,
+    workers: int,
+    checkpoint_path: Path | None = None,
+    checkpoint_every: int = 0,
+    checkpoint_callback: Any | None = None,
+) -> list[UpgradedRow]:
     upgraded: list[UpgradedRow] = []
     with ThreadPoolExecutor(max_workers=max(workers, 1)) as executor:
         future_map = {
@@ -427,6 +674,14 @@ def upgrade_rows(rows: list[UpgradedRow], detail_timeout: int, fulltext_timeout:
         }
         for future in as_completed(future_map):
             upgraded.append(future.result())
+            if checkpoint_path and checkpoint_every > 0 and len(upgraded) % checkpoint_every == 0:
+                snapshot = sorted(
+                    upgraded,
+                    key=lambda row: (row.source_kind, row.source_name, row.year, row.rank_within_source_year),
+                )
+                write_rows(snapshot, checkpoint_path)
+                if checkpoint_callback:
+                    checkpoint_callback(snapshot)
     upgraded.sort(key=lambda row: (row.source_kind, row.source_name, row.year, row.rank_within_source_year))
     return upgraded
 
@@ -516,6 +771,7 @@ def build_report(
         "## 升级策略",
         "",
         "- 基于基线样本 `research_ops/02_papers/catalog_10yr_sample_status.csv` 做二次增强，不改变样本集合。",
+        f"- 本次运行年份范围：**{min((row.year for row in rows), default=0)}–{max((row.year for row in rows), default=0)}**。",
         "- 当 abstract 或正文缺失时，先看同一篇 work 的 `locations` / `best_oa_location`。",
         "- 若仍缺失，再按标题搜索 OpenAlex 中的同题/同 DOI 备用版本，优先接受 arXiv、bioRxiv/medRxiv、ResearchGate、PMC/Europe PMC 与机构仓库副本。",
         f"- 升级后样本明细：`{csv_label}`。",
@@ -567,14 +823,59 @@ def main() -> int:
     args = parse_args()
     catalog_rows = load_harvest_source_ids(args.catalog, source_kind="all")
     rows = read_baseline_rows(args.input_csv)
+    if args.start_year is not None:
+        rows = [row for row in rows if row.year >= args.start_year]
+    if args.end_year is not None:
+        rows = [row for row in rows if row.year <= args.end_year]
     baseline_counts = aggregate_baseline(rows)
-    upgraded = upgrade_rows(rows, args.detail_timeout, args.fulltext_timeout, args.workers)
-    write_rows(upgraded, args.output_csv)
-    aggregate_rows = aggregate(upgraded, catalog_rows)
-    report = build_report(upgraded, aggregate_rows, baseline_counts, args.output_csv)
+    checkpoint_every = max(200, min(1000, len(rows) // 50 or 200))
+    existing: list[UpgradedRow] = []
+    if args.resume and args.output_csv.exists():
+        try:
+            existing = read_upgraded_rows(args.output_csv)
+        except Exception:  # noqa: BLE001
+            existing = []
+    existing_map = {row_key(row): row for row in existing}
+    pending = [row for row in rows if row_key(row) not in existing_map]
+
+    def write_partial(snapshot: list[UpgradedRow]) -> None:
+        combined_map = dict(existing_map)
+        for row in snapshot:
+            combined_map[row_key(row)] = row
+        combined = sorted(
+            combined_map.values(),
+            key=lambda row: (row.source_kind, row.source_name, row.year, row.rank_within_source_year),
+        )
+        write_rows(combined, args.output_csv)
+        partial_aggregate = aggregate(combined, catalog_rows)
+        partial_report = build_report(combined, partial_aggregate, baseline_counts, args.output_csv)
+        args.output_md.parent.mkdir(parents=True, exist_ok=True)
+        args.output_md.write_text(partial_report, encoding="utf-8")
+
+    upgraded = upgrade_rows(
+        pending,
+        args.detail_timeout,
+        args.fulltext_timeout,
+        args.workers,
+        checkpoint_path=None,
+        checkpoint_every=checkpoint_every,
+        checkpoint_callback=write_partial,
+    )
+    combined_map = dict(existing_map)
+    for row in upgraded:
+        combined_map[row_key(row)] = row
+    combined = sorted(
+        combined_map.values(),
+        key=lambda row: (row.source_kind, row.source_name, row.year, row.rank_within_source_year),
+    )
+    write_rows(combined, args.output_csv)
+    aggregate_rows = aggregate(combined, catalog_rows)
+    report = build_report(combined, aggregate_rows, baseline_counts, args.output_csv)
     args.output_md.parent.mkdir(parents=True, exist_ok=True)
     args.output_md.write_text(report, encoding="utf-8")
-    print(f"upgraded_rows {len(upgraded)}")
+    print(f"existing_rows {len(existing)}")
+    print(f"processed_now {len(upgraded)}")
+    print(f"upgraded_rows {len(combined)}")
     print(f"report {args.output_md}")
     return 0
 

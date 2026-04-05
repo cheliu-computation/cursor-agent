@@ -50,6 +50,7 @@ class SampleRow:
     fulltext_status: str
     fulltext_detail: str
     fulltext_used_url: str
+    same_work_urls_json: str
 
 
 def parse_args() -> argparse.Namespace:
@@ -118,6 +119,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Reuse an existing sample-status CSV instead of re-running network fetches.",
     )
+    parser.add_argument(
+        "--metadata-only",
+        action="store_true",
+        help="Only sample OpenAlex metadata and candidate URLs; skip baseline fulltext probes.",
+    )
     return parser.parse_args()
 
 
@@ -130,16 +136,49 @@ def format_metric(ok_count: int, total: int) -> str:
 
 
 def openalex_works(source_id: str, year: int, limit: int) -> list[dict]:
-    params = {
-        "filter": f"primary_location.source.id:{source_id},publication_year:{year}",
-        "per_page": limit,
-        "sort": "cited_by_count:desc",
-    }
-    url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers=api_headers())
-    with urllib.request.urlopen(req, timeout=60) as resp:
-        payload = json.loads(resp.read().decode())
-    return list(payload.get("results", []))
+    rows: list[dict] = []
+    cursor = "*"
+    while len(rows) < limit and cursor:
+        n = min(200, limit - len(rows))
+        params: dict[str, str | int] = {
+            "filter": f"primary_location.source.id:{source_id},publication_year:{year}",
+            "per_page": n,
+            "sort": "cited_by_count:desc",
+        }
+        if cursor != "*":
+            params["cursor"] = cursor
+        url = "https://api.openalex.org/works?" + urllib.parse.urlencode(params)
+        req = urllib.request.Request(url, headers=api_headers())
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            payload = json.loads(resp.read().decode())
+        batch = list(payload.get("results", []))
+        rows.extend(batch)
+        cursor = payload.get("meta", {}).get("next_cursor")
+        if not batch:
+            break
+    return rows[:limit]
+
+
+def same_work_candidate_urls(work: dict) -> list[str]:
+    urls: list[str] = []
+
+    def add(url: str) -> None:
+        clean = canonicalize_url((url or "").strip())
+        if clean.lower().startswith("http"):
+            urls.append(clean)
+
+    add(((work.get("open_access") or {}).get("oa_url") or ""))
+    best = work.get("best_oa_location") or {}
+    add(best.get("pdf_url") or "")
+    add(best.get("landing_page_url") or "")
+    for location in work.get("locations") or []:
+        add(location.get("pdf_url") or "")
+        add(location.get("landing_page_url") or "")
+
+    dedup: dict[str, None] = {}
+    for url in urls:
+        dedup.setdefault(url, None)
+    return list(dedup)
 
 
 def harvest_sample(
@@ -178,6 +217,7 @@ def harvest_sample(
                         fulltext_status="pending",
                         fulltext_detail="",
                         fulltext_used_url="",
+                        same_work_urls_json=json.dumps(same_work_candidate_urls(work), ensure_ascii=True),
                     )
                 )
             time.sleep(sleep_seconds)
@@ -259,6 +299,7 @@ def write_csv(rows: list[SampleRow], path: Path) -> None:
         "fulltext_status",
         "fulltext_detail",
         "fulltext_used_url",
+        "same_work_urls_json",
     ]
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -279,6 +320,7 @@ def write_csv(rows: list[SampleRow], path: Path) -> None:
                 "fulltext_status": row.fulltext_status,
                 "fulltext_detail": row.fulltext_detail,
                 "fulltext_used_url": row.fulltext_used_url,
+                "same_work_urls_json": row.same_work_urls_json,
             })
 
 
@@ -302,6 +344,7 @@ def read_csv(path: Path) -> list[SampleRow]:
                     fulltext_status=(item.get("fulltext_status") or "").strip(),
                     fulltext_detail=(item.get("fulltext_detail") or "").strip(),
                     fulltext_used_url=(item.get("fulltext_used_url") or "").strip(),
+                    same_work_urls_json=(item.get("same_work_urls_json") or "").strip(),
                 )
             )
     return rows
@@ -449,11 +492,14 @@ def main() -> int:
             per_source_per_year=args.per_source_per_year,
             sleep_seconds=args.sleep,
         )
-        probed = probe_fulltext(
-            rows=harvested,
-            timeout=args.fulltext_timeout,
-            workers=args.workers,
-        )
+        if args.metadata_only:
+            probed = harvested
+        else:
+            probed = probe_fulltext(
+                rows=harvested,
+                timeout=args.fulltext_timeout,
+                workers=args.workers,
+            )
         write_csv(probed, args.output_csv)
         output_csv = args.output_csv
     aggregate = aggregate_rows(probed, catalog_rows=catalog_rows)
